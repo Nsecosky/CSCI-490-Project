@@ -1,0 +1,55 @@
+Database package log
+	Tables:
+		Stores Mavcards/people info
+		Stores packages
+		stored dorms
+
+		
+		Mavcard table
+			600 mavcard numbber
+			name first
+			name last
+			desk attendant access
+			cordinator accesss
+			email
+			dorm(foreign ref dorm)
+			room location
+			active
+			
+		Packages Table
+			unique id (auto incriment)
+			name 
+			descripton 
+			room 
+			dorm(foreign ref dorm)
+			date timestamp in (auto input)
+			date timestamp out (auto input)
+			DA in (foreign refmavcard table)
+			DA out (foreign ref mavcard table )
+			
+		Dorm Table 
+			unique id (auto incriment)
+			name
+			address
+			
+Front end
+	Cordinator
+		add student to mavcard table
+		edit student in mavcard table
+		deactivate student in mavcard table
+		package history (searchable)
+		Jodie area (password protected)
+			mass add students to mavcard table
+			mass deactivate 
+			edit dorm table (add, delete, edit)
+	
+	Desk attendant
+		add package 
+		checkout package
+		student roster
+		package display (sub)
+			--name and descripton
+	
+	TV 
+		package display(main)
+			--Name of student only
