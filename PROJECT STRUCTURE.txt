@@ -53,3 +53,6 @@ Front end
 	TV 
 		package display(main)
 			--Name of student only
+			
+	SECURITY CHECKS!!!
+	
