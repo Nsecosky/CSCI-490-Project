@@ -55,4 +55,4 @@ Front end
 			--Name of student only
 			
 	SECURITY CHECKS!!!
-	
+	Consider Using Angular JS
