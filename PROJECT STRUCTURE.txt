@@ -6,6 +6,7 @@ Database package log
 
 		
 		Mavcard table
+			unique id (auto incriment)
 			600 mavcard numbber
 			name first
 			name last
