@@ -1,0 +1,108 @@
+/*CSS Style Design for Package System at CMU
+Designed by Adam Childs
+1.27.17*/
+@import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz|Francois+One|Maven+Pro);
+
+header
+{
+	font-family: "Yanone Kaffeesatz", "Francois One";
+	font-size:30px;
+	width:100%;
+	padding:1%;
+	background-color: #5D0022;
+	text-align: center;
+}
+img.CMULogo
+{
+	position: center;
+	margin-top:15px;
+}
+footer
+{
+	font-family: "Verdana";
+	width:100%;
+	background-color:#6D5E51;
+	color:#FFFFFF;
+	font-weight:bold;
+	text-align:center;
+	padding:1%;
+	margin:auto;
+}
+body.indexBody
+{
+	text-align:center;
+}
+.Form
+{
+	width:60%;
+	padding: 1%;
+	margin-left:25%;
+	margin-right:auto;
+	margin-top:auto;
+	margin-bottom:auto;
+}
+.FormCoordPacks
+{
+    width:60%;
+	padding: 1%;
+	margin-left:15%;
+	margin-right:auto;
+	margin-top:auto;
+	margin-bottom:auto;
+}
+.FormAdd
+{
+	width:60%;
+	padding: 1%;
+	margin-left:35%;
+	margin-right:auto;
+	margin-top:auto;
+	margin-bottom:auto;
+}
+
+nav
+{
+	line-height:20px;
+	width:100%;
+	margin-left:-5%;
+	margin-right:auto;
+	margin-top:-13px;
+	padding:0px;
+}
+
+nav ul{
+	width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+nav ul li
+{
+	margin:0px;
+	width:25px;
+	padding:0px;
+	border:25px maroon;
+	list-style-type:none;	
+	display:inline;
+}
+nav ul li a:link, nav ul li a:visited
+{
+display:inline-block;
+text-decoration:none;
+border:2px;
+border-radius:3px;
+font-weight:bold;
+color:white;
+text-align:center;
+padding:4px;
+}
+
+nav ul li a:hover
+{
+background-color:black;
+}
+
+nav ul li a:active
+{
+background-color:#6D5E51;
+}
