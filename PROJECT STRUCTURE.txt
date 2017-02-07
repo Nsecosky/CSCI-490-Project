@@ -55,6 +55,8 @@ Front end
 	TV 
 		package display(main)
 			--Name of student only
+			
+			display int top right corner dorm name/ address (EG Garfield A 1600 Cannel Ave. Grand Junction Co, 81501)
 Back End comunication/anything we forgot the backend does.
 	email
 	text
