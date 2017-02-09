@@ -1,7 +1,7 @@
 <?php
 
 function dbConnect() {
-    return mysqli_connect("host", "user", "password", "database");
+    return mysqli_connect("localhost", "root", "password", "package_system");
 }
 
 function addPerson($n600, $first, $last, $email, $did, $room, $da, $coor, $phone = '') {
@@ -14,9 +14,10 @@ function addPeople($people) {
     $res = mysqli_query($con, "QUERY");
 }
 
-function addPackage($first, $last, $description, $did, $room, $datein, $dateout, $sidin, $sidout) {
+function addPackage($first, $last, $own, $description, $room, $did, $sidin) {
     $con = dbConnect();
-    $res = mysqli_query($con, "QUERY");
+    $datein = time();
+    $res = mysqli_query($con, "INSERT INTO packages VALUES (0, $first, $last, $own, $description, $room, $did, $datein, NULL, $sidin, NULL);");
 }
 
 function addDorm($name, $address) {
@@ -44,10 +45,10 @@ function removeDorm($did) {
     $res = mysqli_query($con, "QUERY");
 }
 
-function modifyPerson(...) {
-    $con = dbConnect();
-    $res = mysqli_query($con, "QUERY");
-}
+//function modifyPerson(...) {
+//    $con = dbConnect();
+//    $res = mysqli_query($con, "QUERY");
+//}
 
 function getStudentPackages($n600) {
     $con = dbConnect();
@@ -69,8 +70,17 @@ function getPackageHistory() {
     $res = mysqli_query($con, "QUERY");
 }
 
+function login() {
+    $con = dbConnect();
+}
+
+$da = 0;
+$logged = true;
+
 
 switch ($_GET['a']) {
-    
+    case "addp": {
+        if (logged) addPackage($_GET['first'], $_GET['last'], $_GET['own'], $_GET['desc'], $_GET['room'], $_GET['did'], $da);
+    }
 }
 ?>
