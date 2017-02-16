@@ -36,8 +36,17 @@ CREATE TABLE IF NOT EXISTS `dorms` (
 --
 
 INSERT INTO `dorms` (`Unique_ID`, `Dorm_Name`, `Address`) VALUES
-(1, 'Dorm 1', 'ADRESSSSS'),
-(2, 'Dorm 2', '999 Some Rd');
+(1, 'Bunting', '1280 Cannell Ave'),
+(2, 'Garfield', '1600 Cannell Ave'),
+(3, 'Grand Mesa', '1200 Houston Ave'),
+(4, 'Monument', '1102 Elm Ave'),
+(5, 'Piñon', '1159 Mesa Ave'),
+(6, 'Mary Rait', '1115 Texas Ave'),
+(7, 'Jay Tolman', '1140 Texas Ave'),
+(8, 'Wingate', '1601 Cannell Ave'),
+(9, 'North Avenue', '936 North Ave'),
+(10, 'Orchard Avenue', '1062 Orchard Ave');
+(11, 'Walnut Ridge', '1120 Texas Ave');
 
 -- --------------------------------------------------------
 

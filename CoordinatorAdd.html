@@ -1,17 +1,55 @@
 <!DOCTYPE HTML>
 <html>
     <head>
-        <title class = "headtitle">Desk Attendant Portal</title>
+        <title class="headtitle">Desk Attendant Portal</title>
         <link rel="stylesheet" href="PackageSysStyle.css">
+        <script src="https://unpkg.com/vue/dist/vue.js"></script>
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+        <!--<script src="functions.php?a=getd"></script>-->
         <script>
             function sayName(cinfo) {
                 info = /(?:%E\?;E\?|\%(\d+)\^(\w+), (\w+) (\w)\s*\?;(\d+)=(\d+)\?)\+E\?/.exec(cinfo);
-                if (info != null) alert("Hello " + info[3] + " " + info[2]);
+                if (info != null) {
+                    if (info[1] != null) {
+                        alert("Hello " + info[3] + " " + info[2]);
+                    } else {
+                        alert("Error reading card");
+                    }
+                }
+            }
+            
+            function login(cinfo) {
+                info = /(?:%E\?;E\?|\%(\d+)\^(\w+), (\w+) (\w)\s*\?;(\d+)=(\d+)\?)\+E\?/.exec(cinfo);
+                if (info != null) {
+                    if (info[1] != null) {
+                        $("#overlay").hide();
+                    } else {
+                        alert("Error reading card");
+                    }
+                }
+            }
+            
+            var curcard = "";
+            function silentLogin(event) {
+                curcard += String.fromCharCode(event.charCode);
+            }
+            function silentLoginGo(event) {
+                if (event.keyCode == 13) {
+                    login(curcard);
+                    curcard = "";
+                }
             }
         </script>
     </head>
 
     <body class="indexBody">
+        
+        <div id="overlay" onkeypress="silentLogin(event)" onkeydown="silentLoginGo(event)" tabindex="1" style="background: rgba(0, 0, 0, 0.67); position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;">
+            <div style="background: #FFFFFF; position: absolute; top: 45%; left: 25%; width: 500px; height: 50px;">
+                Swipe Mavcard to log back in to system
+            </div>
+        </div>
+        
         <header>
             <img class = "CMULogo" alt="Colorado Mesa Unversity" src="cmu_white.png">
             <nav>
@@ -24,46 +62,44 @@
         </header>
 
         Welcome to the Hall Coordinator Form. Please type a students first and last name to add them to the dorm roster.<br>
-        <em><small>Note: This will add a student to the dorm database.</small> </em>
-        <div class = "FormAdd">
+        <em><small>Note: This will add a student to the dorm database.</small></em>
+        <div class="FormAdd">
             <br>
-            <form>
+            <!--<form>-->
                 <table>
                     <tr>
-                        <th>First Name:</th>
-                        <td><input type="text" name="fname" onkeypress="if (event.keyCode == 13) sayName(this.value);"/></td>
-                    </tr>
-                    <tr>
-                        <th>Last Name:</th>
-                        <td><input type="text" name ="lname" required /></td>
+                        <th>Name:</th>
+                        <td><input type="password" name="fname" onkeypress="if (event.keyCode == 13) sayName(this.value);"/></td>
                     </tr>
                     <tr>
 			<th>Dorm:</th>
-				<td>							
-					<select>
-						  <option value="Bunting">Bunting</option>
-						  <option value="Garfield">Garfield</option>
-						  <option value="Grand Mesa">Grand Mesa</option>
-						  <option value="North Ave">North Ave</option>
-						  <option value="Orchard Mesa">Orchard Mesa</option>
-						  <option value="Pinion">Pinion</option>
-						  <option value="Rait">Rait</option>
-						  <option value="Tolman">Tolman</option>
-						  <option value="Wingate">Wingate</option>
-					</select>
-				</td>
+                        <td>
+                            <select id="dorms" name="dorms" required >
+                                <option v-for="dorm in dorms" :value="dorm.Unique_ID">{{dorm.Dorm_Name}} - {{dorm.Address}}</option>
+                            </select>
+                        </td>
                     </tr>
                     <tr>
                         <th><input type= "submit" value = "Submit" /></th>
                         <td><input type = "reset" value = "Reset" /></td>
                     </tr>
                 </table>
-            </form>
+            <!--</form>-->
         </div>
 
         <footer>
             &copy; Colorado Mesa University
         </footer>
+        
+        <script type="text/javascript">
+            var dvm = new Vue({
+                el: '#dorms',
+                data: {
+                    dorms: []
+                }
+            });
+            $("#overlay").focus();
+        </script>
     </body>
 </html>
 
