@@ -1,39 +1,111 @@
 <!DOCTYPE HTML>
 <html>
-<head>
-<title class = "headtitle">Desk Attendant Portal</title>
-<link rel="stylesheet" href="PackageSysStyle.css">
-</head>
-<header>
-	<img class = "CMULogo" alt="Colorado Mesa Unversity" src="cmu_white.png":></img>
-	<nav>
-		<ul>
-			<li> <a href="CoordinatorAdd.html">Add Student</a></li>
-			<li> <a href="CoordinatorRemove.html">Remove Student</a></li>
-			<li> <a href="CoordinatorPackage.html" style="background-color: rgb(237,247,250); color:maroon;">Add Packages</a></li>
-		</ul>
-	</nav>
-</header>
+    <head>
+        <title class = "headtitle">Desk Attendant Portal</title>
+        <link rel="stylesheet" href="PackageSysStyle.css">
+        <script src="https://unpkg.com/vue/dist/vue.js"></script>
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+        <script src="functions.php?a=getp"></script>
+        <script src="functions.php?a=getd"></script>
+        <script>
+            function doSearch(name) {
+                $.get(
+                    "functions.php",
+                    {"a": "search", "name": name},
+                    function (response) {
+                        svm.results = response;
+                    },
+                    "json"
+                );
+            }
+        </script>
+    </head>
 
-<body class = "indexBody">
-	Welcome to the Package Portal. 
-	Please insert the students first name, last name and package description below.
-	
-	<div class = "FormCoordPacks"
-	</br>
-	<em><small>Note: This form will input the First and Last name into the package Database.</small> </em>
-	<table>
-		<tr><th>First Name:</th><td> <input type="text" name ="fname" required /></td></tr>
-		<tr><th>Last Name:</th><td> <input type="text" name ="lname" required /></td></tr>
-		<tr><th>Room Number:</th><td> <input type="text" name ="roomnum" required /></td></tr>
-		<tr><th>Package Description: </th><td> <textarea name ="package" rows ="3" cols ="50" required></textarea></td></tr>
-		<td><th><input type= "submit" value = "Submit" />
-		<input type = "reset" value = "Reset" /> </td></th>
-	</form>
-	</table>
-	</div>
-</body>
+    <body class="indexBody">
+        <header>
+            <img class = "CMULogo" alt="Colorado Mesa Unversity" src="cmu_white.png">
+            <nav>
+                <ul>
+                    <li> <a href="CoordinatorAdd.html">Add Student</a></li>
+                    <li> <a href="CoordinatorRemove.html">Remove Student</a></li>
+                    <li> <a href="CoordinatorPackage.html" style="background-color: rgb(237,247,250); color:maroon;">Add Packages</a></li>
+                </ul>
+            </nav>
+        </header>
+        Welcome to the Package Portal. 
+        Please insert the students first name, last name and package description below.
 
-<footer>
-&copy Colorado Mesa University
-</footer>
+        <div class="FormCoordPacks">
+            <br>
+            <em><small>Note: This form will input the First and Last name into the package Database.</small> </em>
+            <form>
+                <table>
+                    <tr>
+                        <th>Name:</th>
+                        <td> <input type="text" name="name" onkeypress="doSearch(this.value);"/></td>
+                        <td>
+                            <select id="results" name="results" required >
+                                <option v-for="result in results" :value="result.Unique_ID">{{result.First_Name}} {{result.Last_Name}}</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Room Number:</th>
+                        <td> <input type="text" name ="roomnum" required /></td>
+                    </tr>
+                    <tr>
+                        <th>Dorm:</th>
+                        <td>
+                            <select id="dorms" name="dorms" required >
+                                <option v-for="dorm in dorms" :value="dorm.Unique_ID">{{dorm.Dorm_Name}} - {{dorm.Address}}</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Package Description: </th>
+                        <td> <textarea name="package" rows="3" cols="50" required></textarea></td>
+                    </tr>
+                    <tr>
+                        <th><input type="submit" value="Submit" /></th>
+                        <td><input type="reset" value="Reset" /></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+
+        Current Packages
+        <center>
+            <div id="packages" style="border: 1px solid black; width: 500px;">
+                <div v-for="package in packages" style="border: 1px solid black; margin: 1px;">
+                    {{package.owner}} - {{package.Description}}
+                </div>
+            </div>
+        </center>
+        <br>
+    
+        <footer>
+            &copy; Colorado Mesa University
+        </footer>
+        
+        <script type="text/javascript">
+            var pvm = new Vue({
+                el: '#packages',
+                data: {
+                    packages: pdata
+                }
+            });
+            var dvm = new Vue({
+                el: '#dorms',
+                data: {
+                    dorms: ddata
+                }
+            });
+            var svm = new Vue({
+                el: '#results',
+                data: {
+                    results: []
+                }
+            });
+        </script>
+    </body>
+</html>
