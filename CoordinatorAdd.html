@@ -3,6 +3,12 @@
     <head>
         <title class = "headtitle">Desk Attendant Portal</title>
         <link rel="stylesheet" href="PackageSysStyle.css">
+        <script>
+            function sayName(cinfo) {
+                info = /(?:%E\?;E\?|\%(\d+)\^(\w+), (\w+) (\w)\s*\?;(\d+)=(\d+)\?)\+E\?/.exec(cinfo);
+                if (info != null) alert("Hello " + info[3] + " " + info[2]);
+            }
+        </script>
     </head>
 
     <body class="indexBody">
@@ -25,7 +31,7 @@
                 <table>
                     <tr>
                         <th>First Name:</th>
-                        <td><input type="text" name ="fname" required /></td>
+                        <td><input type="text" name="fname" onkeypress="if (event.keyCode == 13) sayName(this.value);"/></td>
                     </tr>
                     <tr>
                         <th>Last Name:</th>
