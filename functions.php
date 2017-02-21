@@ -3,7 +3,9 @@
 error_reporting(E_ERROR);
 
 function dbConnect() {
-    return mysqli_connect("localhost", "root", "", "PackageSystem");
+    $con = mysqli_connect("localhost", "root", "", "PackageSystem");
+    mysqli_set_charset($con, "utf8");
+    return $con;
 }
 
 function addPerson($n600, $first, $last, $email, $did, $room, $da, $coor, $phone = '') {
@@ -93,7 +95,7 @@ function searchPeople($name) {
     return mysqli_fetch_all($res, MYSQLI_ASSOC);
 }
 
-function login() {
+function login($n600) {
     $con = dbConnect();
     $res = mysqli_query($con, "QUERY");
 }

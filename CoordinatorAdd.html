@@ -5,14 +5,19 @@
         <link rel="stylesheet" href="PackageSysStyle.css">
         <script src="https://unpkg.com/vue/dist/vue.js"></script>
         <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-        <!--<script src="functions.php?a=getd"></script>-->
+        <script src="functions.php?a=getd"></script>
         <script>
-            function sayName(cinfo) {
+            function readCard(cinfo) {
                 info = /(?:%E\?;E\?|\%(\d+)\^(\w+), (\w+) (\w)\s*\?;(\d+)=(\d+)\?)\+E\?/.exec(cinfo);
                 if (info != null) {
                     if (info[1] != null) {
-                        alert("Hello " + info[3] + " " + info[2]);
+                        $("#600_number").val(info[5]);
+                        $("#first_name").val(info[3]);
+                        $("#last_name").val(info[2]);
                     } else {
+                        $("#600_number").val("");
+                        $("#first_name").val("");
+                        $("#last_name").val("");
                         alert("Error reading card");
                     }
                 }
@@ -32,8 +37,6 @@
             var curcard = "";
             function silentLogin(event) {
                 curcard += String.fromCharCode(event.charCode);
-            }
-            function silentLoginGo(event) {
                 if (event.keyCode == 13) {
                     login(curcard);
                     curcard = "";
@@ -44,7 +47,7 @@
 
     <body class="indexBody">
         
-        <div id="overlay" onkeypress="silentLogin(event)" onkeydown="silentLoginGo(event)" tabindex="1" style="background: rgba(0, 0, 0, 0.67); position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;">
+        <div id="overlay" onkeypress="silentLogin(event)" tabindex="1" style="background: rgba(0, 0, 0, 0.67); position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;">
             <div style="background: #FFFFFF; position: absolute; top: 45%; left: 25%; width: 500px; height: 50px;">
                 Swipe Mavcard to log back in to system
             </div>
@@ -65,17 +68,35 @@
         <em><small>Note: This will add a student to the dorm database.</small></em>
         <div class="FormAdd">
             <br>
-            <!--<form>-->
+            <table>
+                <tr>
+                    <th>Swipe Mavcard:</th>
+                    <td><input type="password" onkeypress="if (event.keyCode == 13) {readCard(this.value); this.value='';}"/></td>
+                </tr>
+            </table>
+            <form>
                 <table>
                     <tr>
+                        <th>600 #:</th>
+                        <td><input type="text" id="600_number" name="600_number" disabled/></td>
+                    </tr>
+                    <tr>
                         <th>Name:</th>
-                        <td><input type="password" name="fname" onkeypress="if (event.keyCode == 13) sayName(this.value);"/></td>
+                        <td><input type="text" id="first_name" name="first_name" disabled/></td>
+                        <td><input type="text" id="last_name" name="last_name" disabled/></td>
+                    </tr>
+                    <tr>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <th>Email:</th>
+                        <td><input type="text" name="email" /></td>
                     </tr>
                     <tr>
 			<th>Dorm:</th>
                         <td>
-                            <select id="dorms" name="dorms" required >
-                                <option v-for="dorm in dorms" :value="dorm.Unique_ID">{{dorm.Dorm_Name}} - {{dorm.Address}}</option>
+                            <select id="dorms" name="dorms">
+                                <option v-for="dorm in dorms" :value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
                             </select>
                         </td>
                     </tr>
@@ -84,7 +105,7 @@
                         <td><input type = "reset" value = "Reset" /></td>
                     </tr>
                 </table>
-            <!--</form>-->
+            </form>
         </div>
 
         <footer>
@@ -95,10 +116,14 @@
             var dvm = new Vue({
                 el: '#dorms',
                 data: {
-                    dorms: []
+                    dorms: ddata
                 }
             });
-            $("#overlay").focus();
+            $().ready(function() {$("#overlay").focus();});
+            
+            $("#600_number").val("");
+            $("#first_name").val("");
+            $("#last_name").val("");
         </script>
     </body>
 </html>
