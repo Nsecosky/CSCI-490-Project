@@ -62,7 +62,7 @@ function getStudentPackages($oid) {
 
 function getDormPackages($did) {
     $con = dbConnect();
-    $res = mysqli_query($con, "SELECT * FROM packages WHERE dorm = $did AND time_out IS NULL");
+    $res = mysqli_query($con, "SELECT * FROM packages INNER JOIN people ON people.unique_id = packages.owner WHERE dorm = $did AND time_out IS NULL");
     return mysqli_fetch_all($res, MYSQLI_ASSOC);
 }
 
