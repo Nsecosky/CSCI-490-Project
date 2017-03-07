@@ -1,6 +1,7 @@
 <?php
 
 error_reporting(E_ERROR);
+session_start();
 
 function dbConnect() {
     $con = mysqli_connect("localhost", "root", "", "PackageSystem");
@@ -95,19 +96,29 @@ function searchPeople($name) {
     return mysqli_fetch_all($res, MYSQLI_ASSOC);
 }
 
-function login($n600) {
+function login($first, $last, $n600) {
     $con = dbConnect();
-    $res = mysqli_query($con, "QUERY");
-}
-
-function hasTimedOut() {
+    $res = mysqli_query($con, "SELECT * FROM people WHERE first_name = '$first' AND last_name = '$last' AND 600_number = '$n600'");
+    if ($res) {
+        $_SESSION['id'] = mysqli_fetch_assoc($res)["unique_id"];
+        $_SESSION['logged'] = true;
+        $_SESSION['time'] = time();
+        return true;
+    }
     return false;
 }
 
-$da = 1;
- $logged = true;
+function loggedIn() {
+    return $_SESSION['logged'] && !hasTimedOut();
+}
 
-if (logged) {
+function hasTimedOut() {
+    return time() - $_SESSION['time'] > 30;
+}
+
+
+if (loggedIn()) {
+    $da = $_SESSION['id'];
     switch ($_GET['a']) {
         case "addp": {
             addPackage($_GET['first'], $_GET['last'], $_GET['oid'], $_GET['desc'], $_GET['room'], $_GET['did'], $da);
@@ -131,6 +142,13 @@ if (logged) {
         }
         case "search": {
             echo json_encode(searchPeople($_GET['name']));
+            break;
+        }
+    }
+} else {
+    switch ($_GET['a']) {
+        case "login": {
+            echo login($_POST['first'], $_POST['last'], $_POST['n600']) ? "succeed\n" : "fail\n";
             break;
         }
     }

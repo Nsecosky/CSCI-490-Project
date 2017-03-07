@@ -7,8 +7,11 @@
         <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
         <script src="functions.php?a=getd"></script>
         <script>
+            //%700^TALBOT, RICHARD J ?;6009951001783705=600000000?+E?
+
+            var cardrgx = /(?:%E\?;E\?|\%(\d+)\^(\w+), (\w+) (\w)\s*\?;(\d+)=(\d+)\?)\+E\?/;
             function readCard(cinfo) {
-                info = /(?:%E\?;E\?|\%(\d+)\^(\w+), (\w+) (\w)\s*\?;(\d+)=(\d+)\?)\+E\?/.exec(cinfo);
+                info = cardrgx.exec(cinfo);
                 if (info != null) {
                     if (info[1] != null) {
                         $("#600_number").val(info[5]);
@@ -24,17 +27,25 @@
             }
             
             function login(cinfo) {
-                info = /(?:%E\?;E\?|\%(\d+)\^(\w+), (\w+) (\w)\s*\?;(\d+)=(\d+)\?)\+E\?/.exec(cinfo);
+                info = cardrgx.exec(cinfo);
                 if (info != null) {
                     if (info[1] != null) {
-                        $("#overlay").hide();
+                        $.ajax("functions.php?a=login", {
+                            'method': 'POST',
+                            'data': {'first' : info[3], 'last' : info[2], 'n600' : info[5]},
+                            'success' : function(text) {
+                                if (text.contains("succeed")) {
+                                    $("#overlay").hide();
+                                }
+                            }
+                        });
                     } else {
                         alert("Error reading card");
                     }
                 }
             }
             
-            var curcard = "";
+            var curcard = "%700^TALBOT, RICHARD J ?;6009951001783705=600000000?+E?";
             function silentLogin(event) {
                 curcard += String.fromCharCode(event.charCode);
                 if (event.keyCode == 13) {
@@ -119,7 +130,9 @@
                     dorms: ddata
                 }
             });
-            $().ready(function() {$("#overlay").focus();});
+            $().ready(function() {
+                $("#overlay").focus();
+            });
             
             $("#600_number").val("");
             $("#first_name").val("");
