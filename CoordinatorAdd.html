@@ -75,8 +75,8 @@
             </nav>
         </header>
 
-        Welcome to the Hall Coordinator Form. Please type a students first and last name to add them to the dorm roster.<br>
-        <em><small>Note: This will add a student to the dorm database.</small></em>
+        Welcome to the Hall Coordinator Form. Please type a students first and last name to add them to the residence hall roster.<br>
+        <em><small>Note: This will add a student to the residence hall database.</small></em>
         <div class="FormAdd">
             <br>
             <table>
@@ -104,7 +104,7 @@
                         <td><input type="text" name="email" /></td>
                     </tr>
                     <tr>
-			<th>Dorm:</th>
+			<th>Residence Hall:</th>
                         <td>
                             <select id="dorms" name="dorms">
                                 <option v-for="dorm in dorms" :value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
