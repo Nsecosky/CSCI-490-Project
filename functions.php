@@ -11,7 +11,7 @@ function dbConnect() {
 
 function addPerson($n600, $first, $last, $email, $did, $room, $da, $coor, $phone = '') {
     $con = dbConnect();
-    $res = mysqli_query($con, "INSERT INTO people VALUES (DEFAULT, $n600, '$first', '$last', " . ($da + $coor * 2) . ", '$email', '$phone', 1, '$room', $did");
+    $res = mysqli_query($con, "INSERT INTO people VALUES (NULL, $n600, '$first', '$last', " . ($da + $coor * 2) . ", '$email', '$phone', 1, '$room', $did");
 }
 
 function addPeople($people) {
@@ -19,9 +19,9 @@ function addPeople($people) {
     $res = mysqli_query($con, "QUERY");
 }
 
-function addPackage($first, $last, $own, $description, $room, $did, $sidin) {
+function addPackage($own, $description, $sidin) {
     $con = dbConnect();
-    $res = mysqli_query($con, "INSERT INTO packages VALUES (DEFAULT, '$first', '$last', $own, '$description', '$room', $did, NOW(), NULL, $sidin, NULL);");
+    $res = mysqli_query($con, "INSERT INTO packages VALUES (NULL, $own, '$description', NOW(), NULL, $sidin, NULL);");
     echo mysqli_error($con);
 }
 
@@ -63,7 +63,7 @@ function getStudentPackages($oid) {
 
 function getDormPackages($did) {
     $con = dbConnect();
-    $res = mysqli_query($con, "SELECT * FROM packages WHERE dorm = $did AND time_out IS NULL");
+    $res = mysqli_query($con, "SELECT * FROM packages INNER JOIN people ON people.unique_id = packages.owner WHERE dorm = $did AND time_out IS NULL");
     return mysqli_fetch_all($res, MYSQLI_ASSOC);
 }
 
