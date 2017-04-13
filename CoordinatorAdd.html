@@ -5,7 +5,6 @@
         <link rel="stylesheet" href="PackageSysStyle.css">
         <script src="https://unpkg.com/vue/dist/vue.js"></script>
         <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-        <script src="functions.php?a=getd"></script>
         <script>
             //%700^TALBOT, RICHARD J ?;6009951001783705=600000000?+E?
 
@@ -25,7 +24,12 @@
                     }
                 }
             }
+<<<<<<< HEAD
 
+=======
+            
+            var dfetch = true;
+>>>>>>> 5b56da4f756731ff963a58ab1ed163240e45a2f5
             function login(cinfo) {
                 info = cardrgx.exec(cinfo);
                 if (info != null) {
@@ -33,8 +37,19 @@
                         $.ajax("functions.php?a=login", {
                             'method': 'POST',
                             'data': {'first' : info[3], 'last' : info[2], 'n600' : info[5]},
-                            'success' : function(text) {
-                                if (text.contains("succeed")) {
+                            'dataType': "json",
+                            'success' : function(json) {
+                                if (json.result) {
+                                    if (dfetch) {
+                                        dfetch = false;
+                                        $.ajax("functions.php?a=getd", {
+                                            'method': 'GET',
+                                            'dataType': "json",
+                                            'success' : function(json) {
+                                                dvm.dorms = json.result;
+                                            }
+                                        });
+                                    }
                                     $("#overlay").hide();
                                 }
                             }
@@ -44,8 +59,13 @@
                     }
                 }
             }
+<<<<<<< HEAD
 
             var curcard = "%700^TALBOT, RICHARD J ?;6009951001783705=600000000?+E?";
+=======
+            
+            var curcard = "";
+>>>>>>> 5b56da4f756731ff963a58ab1ed163240e45a2f5
             function silentLogin(event) {
                 curcard += String.fromCharCode(event.charCode);
                 if (event.keyCode == 13) {
@@ -101,7 +121,7 @@
                     </tr>
                     <tr>
                         <th>Email:</th>
-                        <td><input type="text" name="email" /></td>
+                        <td><input type="text" id="email" name="email" /></td>
                     </tr>
                     <tr>
 			<th>Residence Hall:</th>
@@ -112,8 +132,8 @@
                         </td>
                     </tr>
                     <tr>
-                        <th><input type= "submit" value = "Submit" /></th>
-                        <td><input type = "reset" value = "Reset" /></td>
+                        <th><input type="submit" value="Submit" /></th>
+                        <td><input type="button" value="Clear" onclick="clearFields();"/></td>
                     </tr>
                 </table>
             </form>
@@ -127,9 +147,10 @@
             var dvm = new Vue({
                 el: '#dorms',
                 data: {
-                    dorms: ddata
+                    dorms: []
                 }
             });
+<<<<<<< HEAD
             $().ready(function() {
                 $("#overlay").focus();
             });
@@ -137,6 +158,18 @@
             $("#600_number").val("");
             $("#first_name").val("");
             $("#last_name").val("");
+=======
+            
+            $().ready(function() {$("#overlay").focus();});
+            
+            function clearFields() {
+                $("#600_number").val("");
+                $("#first_name").val("");
+                $("#last_name").val("");
+                $("#email").val("");
+            }
+            clearFields();
+>>>>>>> 5b56da4f756731ff963a58ab1ed163240e45a2f5
         </script>
     </body>
 </html>

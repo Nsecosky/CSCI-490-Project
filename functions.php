@@ -14,10 +14,10 @@ function addPerson($n600, $first, $last, $email, $did, $room, $da, $coor, $phone
     $res = mysqli_query($con, "INSERT INTO people VALUES (NULL, $n600, '$first', '$last', " . ($da + $coor * 2) . ", '$email', '$phone', 1, '$room', $did");
 }
 
-function addPeople($people) {
-    $con = dbConnect();
-    $res = mysqli_query($con, "QUERY");
-}
+//function addPeople($people) {
+//    $con = dbConnect();
+//    $res = mysqli_query($con, "QUERY");
+//}
 
 function addPackage($own, $description, $sidin) {
     $con = dbConnect();
@@ -27,37 +27,43 @@ function addPackage($own, $description, $sidin) {
 
 function addDorm($name, $address) {
     $con = dbConnect();
-    $res = mysqli_query($con, "QUERY");
+    $res = mysqli_query($con, "INSERT INTO dorms VALUES (NULL, '$name', '$address');");
 }
 
 function removePerson($sid) {
     $con = dbConnect();
-    $res = mysqli_query($con, "QUERY");
+    $res = mysqli_query($con, "UPDATE people SET active = 0 WHERE unique_id = $sid;");
 }
 
 function removePeople() {
     $con = dbConnect();
-    $res = mysqli_query($con, "QUERY");
+    $res = mysqli_query($con, "UPDATE people SET active = 0");
 }
 
-function removePackage($pid) {
+function checkoutPackage($pid) {
     $con = dbConnect();
-    $res = mysqli_query($con, "QUERY");
+    $res = mysqli_query($con, "UPDATE packages SET time_out = NOW(), da_out = ${$_SESSION['id']} WHERE unique_id = $pid;");
 }
 
-function removeDorm($did) {
-    $con = dbConnect();
-    $res = mysqli_query($con, "QUERY");
-}
+//function removeDorm($did) {
+//    $con = dbConnect();
+//    $res = mysqli_query($con, "QUERY");
+//}
 
 //function updatePerson(...) {
 //    $con = dbConnect();
 //    $res = mysqli_query($con, "QUERY");
 //}
 
-function getStudentPackages($oid) {
+function getPackages() {
     $con = dbConnect();
-    $res = mysqli_query($con, "SELECT * FROM packages WHERE owner = $oid AND time_out IS NULL");
+    $res = mysqli_query($con, "SELECT * FROM packages INNER JOIN people ON people.unique_id = packages.owner WHERE time_out IS NULL");
+    return mysqli_fetch_all($res, MYSQLI_ASSOC);
+}
+
+function getDormTVPackages($did) {
+    $con = dbConnect();
+    $res = mysqli_query($con, "SELECT first_name, last_name, (SELECT COUNT(unique_id) FROM packages WHERE people.unique_id = packages.owner AND time_out IS NULL) AS pcount FROM people WHERE dorm = $did HAVING pcount > 1");
     return mysqli_fetch_all($res, MYSQLI_ASSOC);
 }
 
@@ -67,9 +73,9 @@ function getDormPackages($did) {
     return mysqli_fetch_all($res, MYSQLI_ASSOC);
 }
 
-function getPackages() {
+function getStudentPackages($oid) {
     $con = dbConnect();
-    $res = mysqli_query($con, "SELECT * FROM packages INNER JOIN people ON people.unique_id = packages.owner WHERE time_out IS NULL");
+    $res = mysqli_query($con, "SELECT * FROM packages WHERE owner = $oid AND time_out IS NULL");
     return mysqli_fetch_all($res, MYSQLI_ASSOC);
 }
 
@@ -116,28 +122,32 @@ function hasTimedOut() {
     return time() - $_SESSION['time'] > 30;
 }
 
-
+echo "{\"result\": ";
 if (loggedIn()) {
     $da = $_SESSION['id'];
     switch ($_GET['a']) {
+        case "login": {
+            echo "true";
+            break;
+        }
         case "addp": {
             addPackage($_GET['first'], $_GET['last'], $_GET['oid'], $_GET['desc'], $_GET['room'], $_GET['did'], $da);
             break;
         }
         case "getp": {
-            echo "var pdata = " . json_encode(getPackages()) . ";";
+            echo json_encode(getPackages());
             break;
         }
         case "getsp": {
-            echo "var pdata = " . json_encode(getStudentPackages($_GET['oid'])) . ";";
+            echo json_encode(getStudentPackages($_GET['oid']));
             break;
         }
         case "getdp": {
-            echo "var pdata = " . json_encode(getDormPackages($_GET['did'])) . ";";
+            echo json_encode(getDormPackages($_GET['did']));
             break;
         }
         case "getd": {
-            echo "var ddata = " . json_encode(getDorms()) . ";";
+            echo json_encode(getDorms());
             break;
         }
         case "search": {
@@ -148,9 +158,14 @@ if (loggedIn()) {
 } else {
     switch ($_GET['a']) {
         case "login": {
-            echo login($_POST['first'], $_POST['last'], $_POST['n600']) ? "succeed\n" : "fail\n";
+            echo login($_POST['first'], $_POST['last'], $_POST['n600']) ? "true" : "false";
+            break;
+        }
+        case "gettv": {
+            echo json_encode(ggetDormTVPackages($_GET['did']));
             break;
         }
     }
 }
+echo "}";
 ?>
