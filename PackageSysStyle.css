@@ -20,13 +20,15 @@ img.CMULogo
 footer
 {
     font-family: "Verdana";
-    width:95%;
+    width:100%;
     background-color:#6D5E51;
     color:#FFFFFF;
     font-weight:bold;
     text-align:center;
-    padding:1%;
-    margin:auto;
+    padding:0%;
+    line-height:30px;
+    margin-left:auto;
+    margin-right:auto;
 }
 body.indexBody
 {
@@ -63,10 +65,12 @@ body.indexBody
 nav
 {
     line-height:20px;
+    align:center;
     width:100%;
-    margin-left:-5%;
+    background-color:#6D5E51;
+    margin-left:auto;
     margin-right:auto;
-    margin-top:-13px;
+    margin-top:-17px;
     padding:0px;
 }
 
@@ -82,7 +86,7 @@ nav ul li
     width:25px;
     padding:0px;
     border:25px maroon;
-    list-style-type:none;	
+    list-style-type:none;
     display:inline;
 }
 nav ul li a:link, nav ul li a:visited
@@ -99,10 +103,11 @@ nav ul li a:link, nav ul li a:visited
 
 nav ul li a:hover
 {
-    background-color:black;
+    background-color:#ff9900;
+    color:black;
 }
 
 nav ul li a:active
 {
-    background-color:#6D5E51;
+    background-color:black;
 }
