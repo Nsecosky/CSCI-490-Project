@@ -8,15 +8,15 @@
     <body class = "indexBody">
 		<header>
 			<img class = "CMULogo" alt="Colorado Mesa Unversity" src="cmu_white.png":></img>
-
-      welcome to <//DORM FROM SELECTION//>.
-      PLEASE NOTE: MavCards are required to check out a package.
 	  </header>
-
-		Welcome to the Package Logging System, Please Select
-
-
-
+      <body>
+        <em><small> Please Select Residence Hall </small> </em>
+        <p><select id="dorms" name="dorms">
+            <option v-for="dorm in dorms" :value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
+        </select></p>
+        <p><font size="10">Packages</font></p>
+        <em><font size="5"> MavCards are required for package checkout. </font></em>
+      </body>
         <footer>
 			&copy; Colorado Mesa University
 		</footer>
