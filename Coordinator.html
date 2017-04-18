@@ -1,22 +1,22 @@
 <!DOCTYPE HTML>
 <html>
-    <head>
-        <title class = "headtitle">Coordinator</title>
-        <link rel="stylesheet" href="PackageSysStyle.css">
-        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-    </head>
+<head>
+    <title class = "headtitle">Desk Attendant Portal</title>
+    <link rel="stylesheet" href="PackageSysStyle.css">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+</head>
+<body class = "indexBody">
+<header>
+  <img class = "CMULogo" alt="Colorado Mesa Unversity" src="cmu_white.png":></img>
+</header>
+<nav>
+          <ul>
+              <li> <a name="nav" href="javascript:void" onclick = "$('a[name=nav]').removeClass('NavHighlight');$(this).addClass('NavHighlight');$('span').hide();$('#AddStudent').show()">Add Student</a></li>
+              <li> <a name="nav" href="javascript:void" onclick = "$('a[name=nav]').removeClass('NavHighlight');$(this).addClass('NavHighlight');$('span').hide();$('#EditStudent').show()" >Edit Student</a></li>
+              <li> <a name="nav" href="javascript:void" onclick = "$('a[name=nav]').removeClass('NavHighlight');$(this).addClass('NavHighlight');$('span').hide();$('#PackageList').show()" >Package List</a></li>
+          </ul>
+</nav>
 
-    <body class = "indexBody">
-		<header>
-			<img class = "CMULogo" alt="Colorado Mesa Unversity" src="cmu_white.png":></img>
-	  </header>
-    <nav>
-              <ul>
-                <li> <a name="nav" href="javascript:void" onclick = "$('a[name=nav]').removeClass('NavHighlight');$(this).addClass('NavHighlight');$('span').hide();$('#AddStudent').show()">Checkout Package</a></li>
-                <li> <a name="nav" href="javascript:void" onclick = "$('a[name=nav]').removeClass('NavHighlight');$(this).addClass('NavHighlight');$('span').hide();$('#EditStudent').show()" >Add Package</a></li>
-                <li> <a name="nav" href="javascript:void" onclick = "$('a[name=nav]').removeClass('NavHighlight');$(this).addClass('NavHighlight');$('span').hide();$('#PackageList').show()" >Student Roster</a></li>
-              </ul>
-    </nav>
     <span id = "AddStudent">
              Welcome to the Hall Coordinator Form. Please type a students first and last name to add them to the residence hall roster.<br>
         <em><small>Note: This will add a student to the residence hall database.</small></em>
