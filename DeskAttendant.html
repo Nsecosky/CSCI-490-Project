@@ -66,11 +66,7 @@
         </script>
     </head>
     <body class = "indexBody">
-      <div id="overlay" onkeypress="silentLogin(event)" tabindex="1" style="background: rgba(0, 0, 0, 0.67); position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;">
-          <div style="background: #FFFFFF; opacity: 1.00; position: absolute; top: 0%; left: 0%; width: 100%; height: 100%">
-              Swipe Mavcard to log back in to system
-          </div>
-      </div>
+      
 		<header>
 			<img class = "CMULogo" alt="Colorado Mesa Unversity" src="cmu_white.png":></img>
 		</header>
@@ -101,10 +97,16 @@
         </div>
     </span>
     <span id = "StuRoster">
-		Space for coding for showing the list of students in the database.
+      Query thet returns the roster
+      <input type="button" value="Sort by Hall" onclick="sortHall();"/>
+      <input type="button" value="Sort by last name" onclick="sortLname();"/>
+      <em><small> Please Select Residence Hall </small> </em>
+      <p><select id="dorms" name="dorms">
+          <option v-for="dorm in dorms" :value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
+      </select></p>
     </span>
     <span id = "CheckoutPkg">
-    Space for coding to checkout package
+    <input type="button" value="Checkout" onclick="Checkout();"/>
     </span>
         <footer>
 			&copy Colorado Mesa University
