@@ -23,6 +23,9 @@ function addPackage($own, $description, $sidin) {
     $con = dbConnect();
     $res = mysqli_query($con, "INSERT INTO packages VALUES (NULL, $own, '$description', NOW(), NULL, $sidin, NULL);");
     echo mysqli_error($con);
+    $res = mysqli_query($con, "SELECT email from people WHERE unique_id = $own")
+    echo mysqli_error($con):
+    mail(mysgli_fetch_row($res)['email'], "You have package(s) waiting.", "You have package(s) waiting at the front desk. Please note: MavCards are required for checkout.");
 }
 
 function addDorm($name, $address) {
@@ -162,7 +165,7 @@ if (loggedIn()) {
             break;
         }
         case "gettv": {
-            echo json_encode(ggetDormTVPackages($_GET['did']));
+            echo json_encode(getDormTVPackages($_GET['did']));
             break;
         }
     }

@@ -18,13 +18,85 @@
               </ul>
     </nav>
   <span id = "HallEdit">
-        Space for coding to edit/remove Reshall.
+    Welcome to the Residence Hall Edit/Add/Delete form.<br>
+    <em><small>Note: Please Fill in all information.</small></em>
+    <em><small>Once a submission is made it is added to database.</small></em>
+    <div class="FormAdd">
+        <br>
+        <table>
+            <tr>
+                    <th>Hall Name:</th>
+                    <td><input type="text" id="first_name" name="first_name" disabled/></td>
+              </tr>
+                <tr>
+                    <th></th>
+                </tr>
+                <tr>
+                    <th>Address:</th>
+                    <td><input type="text" id="email" name="email" /></td>
+                </tr>
+                <tr>
+                    <td><input type="button" value="Add" onclick="Add();"/></td>
+                    <td><input type="button" value="Edit" onclick="Edit();"/></td>
+                    <td><input type="button" value="Remove" onclick="Remove();"/></td>
+                    <td><input type="button" value="Clear" onclick="clearFields();"/></td>
+                </tr>
+            </table>
+        </form>
+    </div>
   </span>
     <span id = "CoordEdit">
-  Space for coding to edit/remove cordinator
+      Welcome to the Edit Coordinator Form.<br>
+      <em><small>Note: Please fill in all info.</small></em>
+      <em><small>Once a submission is made it added to database.</small></em>
+
+      <div class="FormAdd">
+          <br>
+          <table>
+              <tr>
+                  <th>Swipe Mavcard:</th>
+                  <td><input type="password" onkeypress="if (event.keyCode == 13) {readCard(this.value); this.value='';}"/></td>
+              </tr>
+          </table>
+          <form>
+              <table>
+                  <tr>
+                      <th>600 #:</th>
+                      <td><input type="text" id="600_number" name="600_number" disabled/></td>
+                  </tr>
+                  <tr>
+                      <th>Name:</th>
+                      <td><input type="text" id="first_name" name="first_name" disabled/></td>
+                      <td><input type="text" id="last_name" name="last_name" disabled/></td>
+                  </tr>
+                  <tr>
+                      <th></th>
+                  </tr>
+                  <tr>
+                      <th>Email:</th>
+                      <td><input type="text" id="email" name="email" /></td>
+                  </tr>
+                  <tr>
+    <th>Residence Hall:</th>
+                      <td>
+                          <select id="dorms" name="dorms">
+                              <option v-for="dorm in dorms" :value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
+                          </select>
+                      </td>
+                  </tr>
+                  <tr>
+                    <td><input type="button" value="Add" onclick="Add();"/></td>
+                    <td><input type="button" value="Edit" onclick="Edit();"/></td>
+                    <td><input type="button" value="Remove" onclick="Remove();"/></td>
+                    <td><input type="button" value="Clear" onclick="clearFields();"/></td>
+                  </tr>
+              </table>
+          </form>
+      </div>
   </span>
     <span id = "MasterClear">
-  Two Buttons, Clear MavCard Table, Clear Package Tabe
+  <input type="button" value="Clear Mavcrds" onclick="ClearMC();"/>
+  <input type="button" value="Clear packages" onclick="ClearPackages();"/>
     </span>
 
         <footer>
