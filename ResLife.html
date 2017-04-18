@@ -1,19 +1,31 @@
 <!DOCTYPE HTML>
 <html>
     <head>
-        <title class = "headtitle">RES-Life</title>
+        <title class = "headtitle">Res-Life</title>
         <link rel="stylesheet" href="PackageSysStyle.css">
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     </head>
 
     <body class = "indexBody">
 		<header>
 			<img class = "CMULogo" alt="Colorado Mesa Unversity" src="cmu_white.png":></img>
-
-      welcome to <//DORM FROM SELECTION//>.
 	  </header>
-
-		This Is the ResLife Page, Will contain Residence Hall list edit, master database delete. 
-
+    <nav>
+              <ul>
+                  <li> <a name="nav" href="javascript:void" onclick = "$('a[name=nav]').removeClass('NavHighlight');$(this).addClass('NavHighlight');$('span').hide();$('#HallEdit').show()">Edit Residence Halls</a></li>
+                  <li> <a name="nav" href="javascript:void" onclick = "$('a[name=nav]').removeClass('NavHighlight');$(this).addClass('NavHighlight');$('span').hide();$('#CoordEdit').show()">Edit Coordinators</a></li>
+                  <li> <a name="nav" href="javascript:void" onclick = "$('a[name=nav]').removeClass('NavHighlight');$(this).addClass('NavHighlight');$('span').hide();$('#MasterClear').show()">Master Clear</a></li>
+              </ul>
+    </nav>
+    <span id = "HallEdit">
+  Space for coding to edit/remove Reshall.
+    </span>
+    <span id = "CoordEdit">
+  Space for coding to edit/remove cordinator
+    </span>
+    <span id = "MasterClear">
+  Two Buttons, Clear MavCard Table, Clear Package Tabe
+    </span>
 
         <footer>
 			&copy Colorado Mesa University

@@ -1,0 +1,160 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title class = "headtitle">Coordinator</title>
+        <link rel="stylesheet" href="PackageSysStyle.css">
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    </head>
+
+    <body class = "indexBody">
+		<header>
+			<img class = "CMULogo" alt="Colorado Mesa Unversity" src="cmu_white.png":></img>
+	  </header>
+    <nav>
+              <ul>
+                <li> <a name="nav" href="javascript:void" onclick = "$('a[name=nav]').removeClass('NavHighlight');$(this).addClass('NavHighlight');$('span').hide();$('#AddStudent').show()">Checkout Package</a></li>
+                <li> <a name="nav" href="javascript:void" onclick = "$('a[name=nav]').removeClass('NavHighlight');$(this).addClass('NavHighlight');$('span').hide();$('#EditStudent').show()" >Add Package</a></li>
+                <li> <a name="nav" href="javascript:void" onclick = "$('a[name=nav]').removeClass('NavHighlight');$(this).addClass('NavHighlight');$('span').hide();$('#PackageList').show()" >Student Roster</a></li>
+              </ul>
+    </nav>
+    <span id = "AddStudent">
+             Welcome to the Hall Coordinator Form. Please type a students first and last name to add them to the residence hall roster.<br>
+        <em><small>Note: This will add a student to the residence hall database.</small></em>
+
+        <div class="FormAdd">
+            <br>
+            <table>
+                <tr>
+                    <th>Swipe Mavcard:</th>
+                    <td><input type="password" onkeypress="if (event.keyCode == 13) {readCard(this.value); this.value='';}"/></td>
+                </tr>
+            </table>
+            <form>
+                <table>
+                    <tr>
+                        <th>600 #:</th>
+                        <td><input type="text" id="600_number" name="600_number" disabled/></td>
+                    </tr>
+                    <tr>
+                        <th>Name:</th>
+                        <td><input type="text" id="first_name" name="first_name" disabled/></td>
+                        <td><input type="text" id="last_name" name="last_name" disabled/></td>
+                    </tr>
+                    <tr>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <th>Email:</th>
+                        <td><input type="text" id="email" name="email" /></td>
+                    </tr>
+                    <tr>
+			<th>Residence Hall:</th>
+                        <td>
+                            <select id="dorms" name="dorms">
+                                <option v-for="dorm in dorms" :value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><input type="submit" value="Submit" /></th>
+                        <td><input type="button" value="Clear" onclick="clearFields();"/></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+  </span>
+  <span id = "EditStudent">
+      Welcome to the Edit Student. Pleas Fill in all info EVEN IF FIELD HASN'T CHANGED<br>
+      <em><small>Note: This will UPDATE/DELETE a student from the dorm database.</small> </em>
+      <div class = "FormAdd">
+          <br>
+          <form>
+              <table>
+                  <tr>
+                      <th>First Name:</th>
+                      <td><input type="text" name ="fname" required /></td>
+                  </tr>
+                  <tr>
+                      <th>Last Name:</th>
+                      <td><input type="text" name ="lname" required /></td>
+                  </tr>
+                  <tr>
+      <th>Residence Hall:</th>
+      <td>
+        <select>
+            <option value="Bunting">Bunting</option>
+            <option value="Garfield">Garfield</option>
+            <option value="Grand Mesa">Grand Mesa</option>
+            <option value="North Ave">North Ave</option>
+            <option value="Orchard Mesa">Orchard Mesa</option>
+            <option value="Pinion">Pinion</option>
+            <option value="Rait">Rait</option>
+            <option value="Tolman">Tolman</option>
+            <option value="Wingate">Wingate</option>
+        </select>
+      </td>
+                  </tr>
+                  <tr>
+                      <th><input type= "submit" value = "Submit" /></th>
+                      <td><input type = "reset" value = "Reset" /> </td>
+                  </tr>
+              </table>
+          </form>
+      </div>
+  </span>
+  <span id = "MasterClear">
+      Welcome to the Package Portal.
+        Please insert the students first name, last name and package description below.
+
+        <div class="FormCoordPacks">
+            <br>
+            <em><small>Note: This form will input the First and Last name into the package Database.</small> </em>
+            <form>
+                <table>
+                    <tr>
+                        <th>Name:</th>
+                        <td> <input type="text" name="name" onkeypress="doSearch(this.value);"/></td>
+                        <td>
+                            <select id="results" name="results" required >
+                                <option v-for="result in results" :value="result.Unique_ID">{{result.First_Name}} {{result.Last_Name}}</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Room Number:</th>
+                        <td> <input type="text" name ="roomnum" required /></td>
+                    </tr>
+                    <tr>
+                        <th>Residence Hall:</th>
+                        <td>
+                            <select id="dorms" name="dorms" required >
+                                <option v-for="dorm in dorms" :value="dorm.Unique_ID">{{dorm.Dorm_Name}} - {{dorm.Address}}</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Package Description: </th>
+                        <td> <textarea name="package" rows="3" cols="50" required></textarea></td>
+                    </tr>
+                    <tr>
+                        <th><input type="submit" value="Submit" /></th>
+                        <td><input type="reset" value="Reset" /></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+
+        Current Packages
+        <center>
+            <div id="packages" style="border: 2px solid black; width: 800px;">
+                <div v-for="package in packages" style="border: 1px solid black; margin: 1px;">
+                    {{package.First_Name}} {{package.Last_Name}} - {{package.Description}}
+                </div>
+            </div>
+        </center>
+        <br>
+    <footer>
+			&copy Colorado Mesa University
+		</footer>
+    </body>
+</html>
