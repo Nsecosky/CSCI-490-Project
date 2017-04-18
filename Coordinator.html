@@ -3,69 +3,97 @@
 <head>
     <title class = "headtitle">Desk Attendant Portal</title>
     <link rel="stylesheet" href="PackageSysStyle.css">
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script>
+
+
+        var cardrgx = /(?:%E\?;E\?|\%(\d+)\^(\w+), (\w+) (\w)\s*\?;(\d+)=(\d+)\?)\+E\?/;
+        function readCard(cinfo) {
+            info = cardrgx.exec(cinfo);
+            if (info != null) {
+                if (info[1] != null) {
+                    $("#600_number").val(info[5]);
+                    $("#first_name").val(info[3]);
+                    $("#last_name").val(info[2]);
+                } else {
+                    $("#600_number").val("");
+                    $("#first_name").val("");
+                    $("#last_name").val("");
+                    alert("Error reading card");
+                }
+            }
+        }
+        var dfetch = true;
+        function login(cinfo) {
+            info = cardrgx.exec(cinfo);
+            if (info != null) {
+                if (info[1] != null) {
+                    $.ajax("functions.php?a=login", {
+                        'method': 'POST',
+                        'data': {'first' : info[3], 'last' : info[2], 'n600' : info[5]},
+                        'dataType': "json",
+                        'success' : function(json) {
+                            if (json.result) {
+                                if (dfetch) {
+                                    dfetch = false;
+                                    $.ajax("functions.php?a=getd", {
+                                        'method': 'GET',
+                                        'dataType': "json",
+                                        'success' : function(json) {
+                                            dvm.dorms = json.result;
+                                        }
+                                    });
+                                }
+                                $("#overlay").hide();
+                            }
+                        }
+                    });
+                } else {
+                    alert("Error reading card");
+                }
+            }
+        }
+
+        var curcard = "";
+        function silentLogin(event) {
+            curcard += String.fromCharCode(event.charCode);
+            if (event.keyCode == 13) {
+                login(curcard);
+                curcard = "";
+            }
+        }
+    </script>
 </head>
 <body class = "indexBody">
+  <div id="overlay" onkeypress="silentLogin(event)" tabindex="1" style="background: rgba(0, 0, 0, 0.67); position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;">
+      <div style="background: #FFFFFF; opacity: 1.00; position: absolute; top: 0%; left: 0%; width: 100%; height: 100%">
+          Swipe Mavcard to log back in to system
+      </div>
+  </div>
 <header>
   <img class = "CMULogo" alt="Colorado Mesa Unversity" src="cmu_white.png":></img>
 </header>
 <nav>
           <ul>
-              <li> <a name="nav" href="javascript:void" onclick = "$('a[name=nav]').removeClass('NavHighlight');$(this).addClass('NavHighlight');$('span').hide();$('#AddStudent').show()">Add Student</a></li>
+              <li> <a name="nav" href="javascript:void" onclick = "$('a[name=nav]').removeClass('NavHighlight');$(this).addClass('NavHighlight');$('span').hide();$('#Roster').show()">Roster</a></li>
               <li> <a name="nav" href="javascript:void" onclick = "$('a[name=nav]').removeClass('NavHighlight');$(this).addClass('NavHighlight');$('span').hide();$('#EditStudent').show()" >Edit Student</a></li>
               <li> <a name="nav" href="javascript:void" onclick = "$('a[name=nav]').removeClass('NavHighlight');$(this).addClass('NavHighlight');$('span').hide();$('#PackageList').show()" >Package List</a></li>
           </ul>
 </nav>
 
-    <span id = "AddStudent">
-             Welcome to the Hall Coordinator Form. Please type a students first and last name to add them to the residence hall roster.<br>
-        <em><small>Note: This will add a student to the residence hall database.</small></em>
-
-        <div class="FormAdd">
-            <br>
-            <table>
-                <tr>
-                    <th>Swipe Mavcard:</th>
-                    <td><input type="password" onkeypress="if (event.keyCode == 13) {readCard(this.value); this.value='';}"/></td>
-                </tr>
-            </table>
-            <form>
-                <table>
-                    <tr>
-                        <th>600 #:</th>
-                        <td><input type="text" id="600_number" name="600_number" disabled/></td>
-                    </tr>
-                    <tr>
-                        <th>Name:</th>
-                        <td><input type="text" id="first_name" name="first_name" disabled/></td>
-                        <td><input type="text" id="last_name" name="last_name" disabled/></td>
-                    </tr>
-                    <tr>
-                        <th></th>
-                    </tr>
-                    <tr>
-                        <th>Email:</th>
-                        <td><input type="text" id="email" name="email" /></td>
-                    </tr>
-                    <tr>
-			<th>Residence Hall:</th>
-                        <td>
-                            <select id="dorms" name="dorms">
-                                <option v-for="dorm in dorms" :value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th><input type="submit" value="Submit" /></th>
-                        <td><input type="button" value="Clear" onclick="clearFields();"/></td>
-                    </tr>
-                </table>
-            </form>
-        </div>
+  <span id = "Roster">
+      Query thet returns the roster
+      <input type="button" value="Sort by Hall" onclick="sortHall();"/>
+      <input type="button" value="Sort by last name" onclick="sortLname();"/>
+      <em><small> Please Select Residence Hall </small> </em>
+      <p><select id="dorms" name="dorms">
+          <option v-for="dorm in dorms" :value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
+      </select></p>
   </span>
   <span id = "EditStudent">
       Welcome to the Edit Student. Pleas Fill in all info EVEN IF FIELD HASN'T CHANGED<br>
-      <em><small>Note: This will UPDATE/DELETE a student from the dorm database.</small> </em>
+      <em><small>Note: all changes will be added to database.</small> </em>
       <div class = "FormAdd">
           <br>
           <form>
@@ -81,17 +109,9 @@
                   <tr>
       <th>Residence Hall:</th>
       <td>
-        <select>
-            <option value="Bunting">Bunting</option>
-            <option value="Garfield">Garfield</option>
-            <option value="Grand Mesa">Grand Mesa</option>
-            <option value="North Ave">North Ave</option>
-            <option value="Orchard Mesa">Orchard Mesa</option>
-            <option value="Pinion">Pinion</option>
-            <option value="Rait">Rait</option>
-            <option value="Tolman">Tolman</option>
-            <option value="Wingate">Wingate</option>
-        </select>
+          <select id="dorms" name="dorms">
+              <option v-for="dorm in dorms" :value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
+          </select>
       </td>
                   </tr>
                   <tr>
@@ -104,57 +124,21 @@
           </form>
       </div>
   </span>
-  <span id = "MasterClear">
+  <span id = "PackageList">
       Welcome to the Package Portal.
-        Please insert the students first name, last name and package description below.
-
-        <div class="FormCoordPacks">
-            <br>
-            <em><small>Note: This form will input the First and Last name into the package Database.</small> </em>
-            <form>
-                <table>
-                    <tr>
-                        <th>Name:</th>
-                        <td> <input type="text" name="name" onkeypress="doSearch(this.value);"/></td>
-                        <td>
-                            <select id="results" name="results" required >
-                                <option v-for="result in results" :value="result.Unique_ID">{{result.First_Name}} {{result.Last_Name}}</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Room Number:</th>
-                        <td> <input type="text" name ="roomnum" required /></td>
-                    </tr>
-                    <tr>
-                        <th>Residence Hall:</th>
-                        <td>
-                            <select id="dorms" name="dorms" required >
-                                <option v-for="dorm in dorms" :value="dorm.Unique_ID">{{dorm.Dorm_Name}} - {{dorm.Address}}</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Package Description: </th>
-                        <td> <textarea name="package" rows="3" cols="50" required></textarea></td>
-                    </tr>
-                    <tr>
-                        <th><input type="submit" value="Submit" /></th>
-                        <td><input type="reset" value="Reset" /></td>
-                    </tr>
-                </table>
-            </form>
-        </div>
-
-        Current Packages
+      Current Packages
         <center>
             <div id="packages" style="border: 2px solid black; width: 800px;">
+              <em><small> Please Select Residence Hall </small> </em>
+              <p><select id="dorms" name="dorms">
+                  <option v-for="dorm in dorms" :value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
+              </select></p>
                 <div v-for="package in packages" style="border: 1px solid black; margin: 1px;">
                     {{package.First_Name}} {{package.Last_Name}} - {{package.Description}}
                 </div>
             </div>
         </center>
-        <br>
+  </span>
     <footer>
 			&copy Colorado Mesa University
 		</footer>

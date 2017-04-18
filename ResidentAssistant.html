@@ -3,9 +3,74 @@
 <head>
     <title class = "headtitle">Desk Attendant Portal</title>
     <link rel="stylesheet" href="PackageSysStyle.css">
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script>
+
+
+        var cardrgx = /(?:%E\?;E\?|\%(\d+)\^(\w+), (\w+) (\w)\s*\?;(\d+)=(\d+)\?)\+E\?/;
+        function readCard(cinfo) {
+            info = cardrgx.exec(cinfo);
+            if (info != null) {
+                if (info[1] != null) {
+                    $("#600_number").val(info[5]);
+                    $("#first_name").val(info[3]);
+                    $("#last_name").val(info[2]);
+                } else {
+                    $("#600_number").val("");
+                    $("#first_name").val("");
+                    $("#last_name").val("");
+                    alert("Error reading card");
+                }
+            }
+        }
+        var dfetch = true;
+        function login(cinfo) {
+            info = cardrgx.exec(cinfo);
+            if (info != null) {
+                if (info[1] != null) {
+                    $.ajax("functions.php?a=login", {
+                        'method': 'POST',
+                        'data': {'first' : info[3], 'last' : info[2], 'n600' : info[5]},
+                        'dataType': "json",
+                        'success' : function(json) {
+                            if (json.result) {
+                                if (dfetch) {
+                                    dfetch = false;
+                                    $.ajax("functions.php?a=getd", {
+                                        'method': 'GET',
+                                        'dataType': "json",
+                                        'success' : function(json) {
+                                            dvm.dorms = json.result;
+                                        }
+                                    });
+                                }
+                                $("#overlay").hide();
+                            }
+                        }
+                    });
+                } else {
+                    alert("Error reading card");
+                }
+            }
+        }
+
+        var curcard = "";
+        function silentLogin(event) {
+            curcard += String.fromCharCode(event.charCode);
+            if (event.keyCode == 13) {
+                login(curcard);
+                curcard = "";
+            }
+        }
+    </script>
 </head>
 <body class = "indexBody">
+  <div id="overlay" onkeypress="silentLogin(event)" tabindex="1" style="background: rgba(0, 0, 0, 0.67); position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;">
+      <div style="background: #FFFFFF; opacity: 1.00; position: absolute; top: 0%; left: 0%; width: 100%; height: 100%">
+          Swipe Mavcard to log back in to system
+      </div>
+  </div>
 <header>
   <img class = "CMULogo" alt="Colorado Mesa Unversity" src="cmu_white.png":></img>
 </header>

@@ -3,10 +3,49 @@
     <head>
         <title class = "headtitle">Res-Life</title>
         <link rel="stylesheet" href="PackageSysStyle.css">
+        <script src="https://unpkg.com/vue/dist/vue.js"></script>
         <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+        <script>
+
+
+        var dfetch = true;
+        function login(Fname, Lname, Key) {
+                    $.ajax("functions.php?a=login", {
+                        'method': 'POST',
+                        'data': {'first' : Fname, 'last' : Lname, 'n600' : Key},
+                        'dataType': "json",
+                        'success' : function(json) {
+                            if (json.result) {
+                                if (dfetch) {
+                                    dfetch = false;
+                                    $.ajax("functions.php?a=getd", {
+                                        'method': 'GET',
+                                        'dataType': "json",
+                                        'success' : function(json) {
+                                            dvm.dorms = json.result;
+                                        }
+                                    });
+
+                                }
+                                $("#overlay").hide();
+                            }
+                        }
+                    });
+            }
+    </script>
     </head>
 
     <body class = "indexBody">
+      <div id="overlay" onkeypress="silentLogin(event)" tabindex="1" style="background: rgba(0, 0, 0, 0.67); position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;">
+          <div style="background: #FFFFFF; opacity: 1.00; position: absolute; top: 0%; left: 0%; width:100%; height: 100%">
+              First Name: <input type="text" id="Fname"/>
+            </br>
+              Last Name: <input type="text" id="Lname"/>
+            </br>
+              Enter Key: <input type="text" id="Key"/>
+            </br>
+              <input type="button" value="Login" onclick="login($('#Fname').value, $('#Lname').value, $('#Key').value)"/>
+          </div>
 		<header>
 			<img class = "CMULogo" alt="Colorado Mesa Unversity" src="cmu_white.png":></img>
 	  </header>
