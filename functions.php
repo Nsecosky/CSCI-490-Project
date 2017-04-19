@@ -55,10 +55,10 @@ function PackageClear(){
 
 }
 
-function StudentClear(){
+function PeopleClear($n600, $first, $last, $email, $did, $room, $da, $coor, $phone = ''){
   $con = dbConnect();
   $res = mysqli_query($con, 'TRUNCATE TABLE people');
-  $res = mysqli_query($con, INSERT INTO `people` (`Unique_ID`, `600_Number`, `First_Name`, `Last_Name`, `Access`, `Email`, `Active`, `Room_Number`, `Dorm`) VALUES (NULL, '6004083854', 'Master', 'Admin', '4', 'IT@mavs.coloradomesa.edu', '1', '1', '14'))
+  $res = mysqli_query($con, "INSERT INTO people VALUES (NULL, '6004083854', 'Master', 'Admin', '4', 'IT@mavs.coloradomesa.edu', '1', '1', '14')")
 
 }
 //function removeDorm($did) {
