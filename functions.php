@@ -33,8 +33,24 @@ function hasTimedOut() {
 
 function addPerson($n600, $first, $last, $email, $did, $room, $da, $coor, $phone = '') {
     $con = dbConnect();
-    $res = mysqli_query($con, "INSERT INTO people VALUES (NULL, $n600, '$first', '$last', " . ($da + $coor * 2) . ", '$email', '$phone', 1, '$room', $did");
+    $res = mysqli_query($con, "INSERT INTO people VALUES (NULL, $n600, '$first', '$last', 1, '$email', '$phone', 1, '$room', $did");
 }
+
+function addCoordinator($n600, $first, $last, $email, $did, $room, $da, $coor, $phone = '') {
+    $con = dbConnect();
+    $res = mysqli_query($con, "INSERT INTO people VALUES (NULL, $n600, '$first', '$last', 4, '$email', '$phone', 1, '$room', $did");
+}
+
+function addRA($n600, $first, $last, $email, $did, $room, $da, $coor, $phone = '') {
+    $con = dbConnect();
+    $res = mysqli_query($con, "INSERT INTO people VALUES (NULL, $n600, '$first', '$last', 3, '$email', '$phone', 1, '$room', $did");
+}
+
+function addDA($n600, $first, $last, $email, $did, $room, $da, $coor, $phone = '') {
+    $con = dbConnect();
+    $res = mysqli_query($con, "INSERT INTO people VALUES (NULL, $n600, '$first', '$last', 2, '$email', '$phone', 1, '$room', $did");
+}
+
 
 function removePerson($sid) {
     $con = dbConnect();
@@ -84,7 +100,7 @@ function checkoutPackage($pid) {
     $res = mysqli_query($con, "UPDATE packages SET time_out = NOW(), da_out = ${$_SESSION['id']} WHERE unique_id = $pid;");
 }
 
-function PackageClear(){
+function clearPackages(){
   $con = dbConnect();
   $res = mysqli_query($con, 'TRUNCATE TABLE packages');
 
@@ -152,7 +168,7 @@ if (loggedIn()) {
     switch (getPerson($own)['access']) {
         case 3: {
             switch ($_GET['a']) {
-                
+
             }
         }
         case 2: {
