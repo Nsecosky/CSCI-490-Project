@@ -36,21 +36,6 @@ function addPerson($n600, $first, $last, $email, $did, $room, $da, $coor, $phone
     $res = mysqli_query($con, "INSERT INTO people VALUES (NULL, $n600, '$first', '$last', " . ($da + $coor * 2) . ", '$email', '$phone', 1, '$room', $did");
 }
 
-function addCoordinator($n600, $first, $last, $email, $did, $room, $da, $coor, $phone = '') {
-    $con = dbConnect();
-    $res = mysqli_query($con, "INSERT INTO people VALUES (NULL, $n600, '$first', '$last', " . ($da + $coor * 2) . ", '$email', '$phone', 1, '$room', $did");
-}
-
-function addRA($n600, $first, $last, $email, $did, $room, $da, $coor, $phone = '') {
-    $con = dbConnect();
-    $res = mysqli_query($con, "INSERT INTO people VALUES (NULL, $n600, '$first', '$last', " . ($da + $coor * 2) . ", '$email', '$phone', 1, '$room', $did");
-}
-
-function addDA($n600, $first, $last, $email, $did, $room, $da, $coor, $phone = '') {
-    $con = dbConnect();
-    $res = mysqli_query($con, "INSERT INTO people VALUES (NULL, $n600, '$first', '$last', " . ($da + $coor * 2) . ", '$email', '$phone', 1, '$room', $did");
-}
-
 function removePerson($sid) {
     $con = dbConnect();
     $res = mysqli_query($con, "UPDATE people SET active = 0 WHERE unique_id = $sid;");
@@ -68,16 +53,22 @@ function searchPeople($name) {
 //}
 
 //NOTE: THIS CLEARS ALL ENTRIES IN THE PEOPLE TABLE AND ADDS A "MASTER ADMIN" USE CAUTION WHEN CALLING
-function clearPeople($n600, $first, $last, $email, $did, $room, $da, $coor, $phone = ''){
-  $con = dbConnect();
-  $res = mysqli_query($con, 'TRUNCATE TABLE people');
-  $res = mysqli_query($con, "INSERT INTO people VALUES (NULL, '6004083854', 'Master', 'Admin', '4', 'IT@mavs.coloradomesa.edu', '1', '1', '14')")
-
+function clearPeople(){
+    $con = dbConnect();
+    $res = mysqli_query($con, 'TRUNCATE TABLE people');
+    $res = mysqli_query($con, "INSERT INTO people VALUES (NULL, 6004083854, 'Master', 'Admin', '4', 'IT@mavs.coloradomesa.edu', 1, '1', '14')");
 }
 //NOTE: This is not necessary reslife wants to just clear people database and start fresh, I know its cringy but its what the client wants.
 //function removePeople() {
 //    $con = dbConnect();
 //    $res = mysqli_query($con, "UPDATE people SET active = 0");
+//}
+
+function getPerson($id) {
+    $con = dbConnect();
+    $res = mysqli_query($con, "SELECT * from people WHERE unique_id = $id");
+    echo mysqli_error($con);
+    return mysgli_fetch_row($res);
 }
 
 //NOTE: All Packages Table Functions ********************************************************************************************************
@@ -85,9 +76,7 @@ function addPackage($own, $description, $sidin) {
     $con = dbConnect();
     $res = mysqli_query($con, "INSERT INTO packages VALUES (NULL, $own, '$description', NOW(), NULL, $sidin, NULL);");
     echo mysqli_error($con);
-    $res = mysqli_query($con, "SELECT email from people WHERE unique_id = $own")
-    echo mysqli_error($con):
-    mail(mysgli_fetch_row($res)['email'], "You have package(s) waiting.", "You have package(s) waiting at the front desk. Please note: MavCards are required for checkout.");
+    mail(getPerson($own)['email'], "You have package(s) waiting.", "You have package(s) waiting at the front desk. Please note: MavCards are required for checkout.");
 }
 
 function checkoutPackage($pid) {
@@ -95,7 +84,7 @@ function checkoutPackage($pid) {
     $res = mysqli_query($con, "UPDATE packages SET time_out = NOW(), da_out = ${$_SESSION['id']} WHERE unique_id = $pid;");
 }
 
-function clearPackage(){
+function PackageClear(){
   $con = dbConnect();
   $res = mysqli_query($con, 'TRUNCATE TABLE packages');
 
@@ -149,6 +138,7 @@ function removeDorm($name, $address) {
 
 function editDorm(){
   //NOTE: Needs QUERY
+}
 
 function getDorms() {
     $con = dbConnect();
@@ -159,44 +149,61 @@ function getDorms() {
 echo "{\"result\": ";
 if (loggedIn()) {
     $da = $_SESSION['id'];
-    switch ($_GET['a']) {
-        case "login": {
-            echo "true";
-            break;
+    switch (getPerson($own)['access']) {
+        case 3: {
+            switch ($_GET['a']) {
+                
+            }
         }
-        case "addp": {
-            addPackage($_GET['first'], $_GET['last'], $_GET['oid'], $_GET['desc'], $_GET['room'], $_GET['did'], $da);
-            break;
+        case 2: {
+            switch ($_GET['a']) {
+                case "getp": {
+                    echo json_encode(getPackages());
+                    break;
+                }
+            }
         }
-        case "getp": {
-            echo json_encode(getPackages());
-            break;
+        case 1: {
+            switch ($_GET['a']) {
+                case "addp": {
+                    addPackage($_GET['first'], $_GET['last'], $_GET['oid'], $_GET['desc'], $_GET['room'], $_GET['did'], $da);
+                    break;
+                }
+                case "getsp": {
+                    echo json_encode(getStudentPackages($_GET['oid']));
+                    break;
+                }
+                case "getdp": {
+                    echo json_encode(getDormPackages($_GET['did']));
+                    break;
+                }
+                case "getd": {
+                    echo json_encode(getDorms());
+                    break;
+                }
+                case "search": {
+                    echo json_encode(searchPeople($_GET['name']));
+                    break;
+                }
+            }
         }
-        case "getsp": {
-            echo json_encode(getStudentPackages($_GET['oid']));
-            break;
-        }
-        case "getdp": {
-            echo json_encode(getDormPackages($_GET['did']));
-            break;
-        }
-        case "getd": {
-            echo json_encode(getDorms());
-            break;
-        }
-        case "search": {
-            echo json_encode(searchPeople($_GET['name']));
-            break;
+        case 0: {
+            switch ($_GET['a']) {
+                case "login": {
+                        echo "true";
+                    break;
+                }
+                case "gettv": {
+                    echo json_encode(getDormTVPackages($_GET['did']));
+                    break;
+                }
+            }
         }
     }
 } else {
     switch ($_GET['a']) {
         case "login": {
             echo login($_POST['first'], $_POST['last'], $_POST['n600']) ? "true" : "false";
-            break;
-        }
-        case "gettv": {
-            echo json_encode(getDormTVPackages($_GET['did']));
             break;
         }
     }
