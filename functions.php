@@ -9,6 +9,7 @@ function dbConnect() {
     return $con;
 }
 
+
 function addPerson($n600, $first, $last, $email, $did, $room, $da, $coor, $phone = '') {
     $con = dbConnect();
     $res = mysqli_query($con, "INSERT INTO people VALUES (NULL, $n600, '$first', '$last', " . ($da + $coor * 2) . ", '$email', '$phone', 1, '$room', $did");
@@ -48,6 +49,18 @@ function checkoutPackage($pid) {
     $res = mysqli_query($con, "UPDATE packages SET time_out = NOW(), da_out = ${$_SESSION['id']} WHERE unique_id = $pid;");
 }
 
+function PackageClear(){
+  $con = dbConnect();
+  $res = mysqli_query($con, 'TRUNCATE TABLE packages');
+
+}
+
+function StudentClear(){
+  $con = dbConnect();
+  $res = mysqli_query($con, 'TRUNCATE TABLE people');
+  $res = mysqli_query($con, INSERT INTO `people` (`Unique_ID`, `600_Number`, `First_Name`, `Last_Name`, `Access`, `Email`, `Active`, `Room_Number`, `Dorm`) VALUES (NULL, '6004083854', 'Master', 'Admin', '4', 'IT@mavs.coloradomesa.edu', '1', '1', '14'))
+
+}
 //function removeDorm($did) {
 //    $con = dbConnect();
 //    $res = mysqli_query($con, "QUERY");
