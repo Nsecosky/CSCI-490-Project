@@ -2,120 +2,11 @@
 
 error_reporting(E_ERROR);
 session_start();
-
+//NOTE: Set Up Functions ******************************************************************************************************************
 function dbConnect() {
     $con = mysqli_connect("localhost", "root", "", "PackageSystem");
     mysqli_set_charset($con, "utf8");
     return $con;
-}
-
-
-function addPerson($n600, $first, $last, $email, $did, $room, $da, $coor, $phone = '') {
-    $con = dbConnect();
-    $res = mysqli_query($con, "INSERT INTO people VALUES (NULL, $n600, '$first', '$last', " . ($da + $coor * 2) . ", '$email', '$phone', 1, '$room', $did");
-}
-
-//function addPeople($people) {
-//    $con = dbConnect();
-//    $res = mysqli_query($con, "QUERY");
-//}
-
-function addPackage($own, $description, $sidin) {
-    $con = dbConnect();
-    $res = mysqli_query($con, "INSERT INTO packages VALUES (NULL, $own, '$description', NOW(), NULL, $sidin, NULL);");
-    echo mysqli_error($con);
-    $res = mysqli_query($con, "SELECT email from people WHERE unique_id = $own")
-    echo mysqli_error($con):
-    mail(mysgli_fetch_row($res)['email'], "You have package(s) waiting.", "You have package(s) waiting at the front desk. Please note: MavCards are required for checkout.");
-}
-
-function addDorm($name, $address) {
-    $con = dbConnect();
-    $res = mysqli_query($con, "INSERT INTO dorms VALUES (NULL, '$name', '$address');");
-}
-
-function removePerson($sid) {
-    $con = dbConnect();
-    $res = mysqli_query($con, "UPDATE people SET active = 0 WHERE unique_id = $sid;");
-}
-
-function removePeople() {
-    $con = dbConnect();
-    $res = mysqli_query($con, "UPDATE people SET active = 0");
-}
-
-function checkoutPackage($pid) {
-    $con = dbConnect();
-    $res = mysqli_query($con, "UPDATE packages SET time_out = NOW(), da_out = ${$_SESSION['id']} WHERE unique_id = $pid;");
-}
-
-function PackageClear(){
-  $con = dbConnect();
-  $res = mysqli_query($con, 'TRUNCATE TABLE packages');
-
-}
-
-function PeopleClear($n600, $first, $last, $email, $did, $room, $da, $coor, $phone = ''){
-  $con = dbConnect();
-  $res = mysqli_query($con, 'TRUNCATE TABLE people');
-  $res = mysqli_query($con, "INSERT INTO people VALUES (NULL, '6004083854', 'Master', 'Admin', '4', 'IT@mavs.coloradomesa.edu', '1', '1', '14')")
-
-}
-//function removeDorm($did) {
-//    $con = dbConnect();
-//    $res = mysqli_query($con, "QUERY");
-//}
-
-//function updatePerson(...) {
-//    $con = dbConnect();
-//    $res = mysqli_query($con, "QUERY");
-//}
-
-function getPackages() {
-    $con = dbConnect();
-    $res = mysqli_query($con, "SELECT * FROM packages INNER JOIN people ON people.unique_id = packages.owner WHERE time_out IS NULL");
-    return mysqli_fetch_all($res, MYSQLI_ASSOC);
-}
-
-function getDormTVPackages($did) {
-    $con = dbConnect();
-    $res = mysqli_query($con, "SELECT first_name, last_name, (SELECT COUNT(unique_id) FROM packages WHERE people.unique_id = packages.owner AND time_out IS NULL) AS pcount FROM people WHERE dorm = $did HAVING pcount > 1");
-    return mysqli_fetch_all($res, MYSQLI_ASSOC);
-}
-
-function getDormPackages($did) {
-    $con = dbConnect();
-    $res = mysqli_query($con, "SELECT * FROM packages INNER JOIN people ON people.unique_id = packages.owner WHERE dorm = $did AND time_out IS NULL");
-    return mysqli_fetch_all($res, MYSQLI_ASSOC);
-}
-
-function getStudentPackages($oid) {
-    $con = dbConnect();
-    $res = mysqli_query($con, "SELECT * FROM packages WHERE owner = $oid AND time_out IS NULL");
-    return mysqli_fetch_all($res, MYSQLI_ASSOC);
-}
-
-function checkoutPackages($oid) {
-    $con = dbConnect();
-    $res = mysqli_query($con, "UPDATE packages SET time_out = NOW() WHERE own = $oid AND time_out IS NULL");
-}
-
-function getPackageHistory() {
-    $con = dbConnect();
-    $res = mysqli_query($con, "SELECT * FROM packages WHERE time_out IS NOT NULL");
-    return $res;
-}
-
-function getDorms() {
-    $con = dbConnect();
-    $res = mysqli_query($con, "SELECT * FROM dorms");
-    return mysqli_fetch_all($res, MYSQLI_ASSOC);
-}
-
-function searchPeople($name) {
-    $con = dbConnect();
-    $res = mysqli_query($con, "SELECT * FROM people WHERE first_name LIKE '{$name}%' OR last_name LIKE '{$name}%'");
-    return mysqli_fetch_all($res, MYSQLI_ASSOC);
 }
 
 function login($first, $last, $n600) {
@@ -184,4 +75,118 @@ if (loggedIn()) {
     }
 }
 echo "}";
+
+
+ //NOTE: All People Table Functions *******************************************************************************************************
+
+function addPerson($n600, $first, $last, $email, $did, $room, $da, $coor, $phone = '') {
+    $con = dbConnect();
+    $res = mysqli_query($con, "INSERT INTO people VALUES (NULL, $n600, '$first', '$last', " . ($da + $coor * 2) . ", '$email', '$phone', 1, '$room', $did");
+}
+
+function removePerson($sid) {
+    $con = dbConnect();
+    $res = mysqli_query($con, "UPDATE people SET active = 0 WHERE unique_id = $sid;");
+}
+
+function searchPeople($name) {
+    $con = dbConnect();
+    $res = mysqli_query($con, "SELECT * FROM people WHERE first_name LIKE '{$name}%' OR last_name LIKE '{$name}%'");
+    return mysqli_fetch_all($res, MYSQLI_ASSOC);
+}
+
+//function updatePerson(...) {
+//    $con = dbConnect();
+//    $res = mysqli_query($con, "QUERY");
+//}
+
+//NOTE: THIS CLEARS ALL ENTRIES IN THE PEOPLE TABLE AND ADDS A "MASTER ADMIN" USE CAUTION WHEN CALLING
+function PeopleClear($n600, $first, $last, $email, $did, $room, $da, $coor, $phone = ''){
+  $con = dbConnect();
+  $res = mysqli_query($con, 'TRUNCATE TABLE people');
+  $res = mysqli_query($con, "INSERT INTO people VALUES (NULL, '6004083854', 'Master', 'Admin', '4', 'IT@mavs.coloradomesa.edu', '1', '1', '14')")
+
+}
+//NOTE: This is not necessary reslife wants to just clear people database and start fresh, I know its cringy but its what the client wants.
+//function removePeople() {
+//    $con = dbConnect();
+//    $res = mysqli_query($con, "UPDATE people SET active = 0");
+}
+
+//NOTE: All Packages Table Functions ********************************************************************************************************
+function addPackage($own, $description, $sidin) {
+    $con = dbConnect();
+    $res = mysqli_query($con, "INSERT INTO packages VALUES (NULL, $own, '$description', NOW(), NULL, $sidin, NULL);");
+    echo mysqli_error($con);
+    $res = mysqli_query($con, "SELECT email from people WHERE unique_id = $own")
+    echo mysqli_error($con):
+    mail(mysgli_fetch_row($res)['email'], "You have package(s) waiting.", "You have package(s) waiting at the front desk. Please note: MavCards are required for checkout.");
+}
+
+function checkoutPackage($pid) {
+    $con = dbConnect();
+    $res = mysqli_query($con, "UPDATE packages SET time_out = NOW(), da_out = ${$_SESSION['id']} WHERE unique_id = $pid;");
+}
+
+function PackageClear(){
+  $con = dbConnect();
+  $res = mysqli_query($con, 'TRUNCATE TABLE packages');
+
+}
+
+function getPackages() {
+    $con = dbConnect();
+    $res = mysqli_query($con, "SELECT * FROM packages INNER JOIN people ON people.unique_id = packages.owner WHERE time_out IS NULL");
+    return mysqli_fetch_all($res, MYSQLI_ASSOC);
+}
+
+function getDormTVPackages($did) {
+    $con = dbConnect();
+    $res = mysqli_query($con, "SELECT first_name, last_name, (SELECT COUNT(unique_id) FROM packages WHERE people.unique_id = packages.owner AND time_out IS NULL) AS pcount FROM people WHERE dorm = $did HAVING pcount > 1");
+    return mysqli_fetch_all($res, MYSQLI_ASSOC);
+}
+
+function getDormPackages($did) {
+    $con = dbConnect();
+    $res = mysqli_query($con, "SELECT * FROM packages INNER JOIN people ON people.unique_id = packages.owner WHERE dorm = $did AND time_out IS NULL");
+    return mysqli_fetch_all($res, MYSQLI_ASSOC);
+}
+
+function getStudentPackages($oid) {
+    $con = dbConnect();
+    $res = mysqli_query($con, "SELECT * FROM packages WHERE owner = $oid AND time_out IS NULL");
+    return mysqli_fetch_all($res, MYSQLI_ASSOC);
+}
+
+function checkoutPackages($oid) {
+    $con = dbConnect();
+    $res = mysqli_query($con, "UPDATE packages SET time_out = NOW() WHERE own = $oid AND time_out IS NULL");
+}
+
+function getPackageHistory() {
+    $con = dbConnect();
+    $res = mysqli_query($con, "SELECT * FROM packages WHERE time_out IS NOT NULL");
+    return $res;
+}
+
+//All Dorms Table Functions******************************************************************************************************************
+function addDorm($name, $address) {
+    $con = dbConnect();
+    $res = mysqli_query($con, "INSERT INTO dorms VALUES (NULL, '$name', '$address');");
+}
+
+function removeDorm($name, $address) {
+   $con = dbConnect();
+   $res = mysqli_query($con, "DELETE FROM `dorms` VALUES(NULL,'$name', '$address' )");
+}
+
+
+function getDorms() {
+    $con = dbConnect();
+    $res = mysqli_query($con, "SELECT * FROM dorms");
+    return mysqli_fetch_all($res, MYSQLI_ASSOC);
+}
+
+
+
 ?>
