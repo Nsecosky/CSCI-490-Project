@@ -67,10 +67,15 @@
 </head>
 <body class = "indexBody">
   <div id="overlay" onkeypress="silentLogin(event)" tabindex="1" style="background: rgba(0, 0, 0, 0.67); position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;">
-      <div style="background: #FFFFFF; opacity: 1.00; position: absolute; top: 0%; left: 0%; width: 100%; height: 100%">
-          Swipe Mavcard to log back in to system
-      </div>
-  </div>
+    <div style="background: #FFFFFF; opacity: 1.00; position: absolute; top: 0%; left: 0%; width:100%; height: 100%">
+        First Name: <input type="text" id="Fname"/>
+      </br>
+        Last Name: <input type="text" id="Lname"/>
+      </br>
+        Enter Key: <input type="text" id="Key"/>
+      </br>
+        <input type="button" value="Login" onclick="login($('#Fname').value, $('#Lname').value, $('#Key').value)"/>
+    </div>
 <header>
   <img class = "CMULogo" alt="Colorado Mesa Unversity" src="cmu_white.png":></img>
 </header>
@@ -80,22 +85,16 @@ Welcome to the Hall Coordinator Form. Please type a students first and last name
 
 <div class="FormAdd">
 <br>
-<table>
-   <tr>
-       <th>Swipe Mavcard:</th>
-       <td><input type="password" onkeypress="if (event.keyCode == 13) {readCard(this.value); this.value='';}"/></td>
-   </tr>
-</table>
 <form>
    <table>
        <tr>
            <th>600 #:</th>
-           <td><input type="text" id="600_number" name="600_number" disabled/></td>
+           <td><input type="text" id="600_number" name="600_number"/></td>
        </tr>
        <tr>
            <th>Name:</th>
-           <td><input type="text" id="first_name" name="first_name" disabled/></td>
-           <td><input type="text" id="last_name" name="last_name" disabled/></td>
+           <td><input type="text" id="first_name" name="first_name"/></td>
+           <td><input type="text" id="last_name" name="last_name"/></td>
        </tr>
        <tr>
            <th></th>
@@ -113,7 +112,7 @@ Welcome to the Hall Coordinator Form. Please type a students first and last name
            </td>
        </tr>
        <tr>
-           <th><input type="submit" value="Submit" /></th>
+           <td><input type="button" value="Add Student" onclick="addStudent(), clearFields();"/></td>
            <td><input type="button" value="Clear" onclick="clearFields();"/></td>
        </tr>
    </table>

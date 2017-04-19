@@ -34,25 +34,25 @@
             }
     </script>
     </head>
+  <body class = "indexBody">
+    <div id="overlay" onkeypress="silentLogin(event)" tabindex="1" style="background: rgba(0, 0, 0, 0.67); position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;">
+      <div style="background: #FFFFFF; opacity: 1.00; position: absolute; top: 0%; left: 0%; width:100%; height: 100%">
+          First Name: <input type="text" id="Fname"/>
+        </br>
+          Last Name: <input type="text" id="Lname"/>
+        </br>
+          Enter Key: <input type="text" id="Key"/>
+        </br>
+          <input type="button" value="Login" onclick="login($('#Fname').value, $('#Lname').value, $('#Key').value)"/>
+      </div>
 
-    <body class = "indexBody">
-      <div id="overlay" onkeypress="silentLogin(event)" tabindex="1" style="background: rgba(0, 0, 0, 0.67); position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;">
-          <div style="background: #FFFFFF; opacity: 1.00; position: absolute; top: 0%; left: 0%; width:100%; height: 100%">
-              First Name: <input type="text" id="Fname"/>
-            </br>
-              Last Name: <input type="text" id="Lname"/>
-            </br>
-              Enter Key: <input type="text" id="Key"/>
-            </br>
-              <input type="button" value="Login" onclick="login($('#Fname').value, $('#Lname').value, $('#Key').value)"/>
-          </div>
 		<header>
 			<img class = "CMULogo" alt="Colorado Mesa Unversity" src="cmu_white.png":></img>
 	  </header>
     <nav>
               <ul>
                   <li> <a name="nav" href="javascript:void" onclick = "$('a[name=nav]').removeClass('NavHighlight');$(this).addClass('NavHighlight');$('span').hide();$('#HallEdit').show()">Edit Residence Halls</a></li>
-                  <li> <a name="nav" href="javascript:void" onclick = "$('a[name=nav]').removeClass('NavHighlight');$(this).addClass('NavHighlight');$('span').hide();$('#CoordEdit').show()">Edit Coordinators</a></li>
+                  <li> <a name="nav" href="javascript:void" onclick = "$('a[name=nav]').removeClass('NavHighlight');$(this).addClass('NavHighlight');$('span').hide();$('#PersonEdit').show()">Edit Person</a></li>
                   <li> <a name="nav" href="javascript:void" onclick = "$('a[name=nav]').removeClass('NavHighlight');$(this).addClass('NavHighlight');$('span').hide();$('#MasterClear').show()">Master Clear</a></li>
               </ul>
     </nav>
@@ -75,8 +75,8 @@
                     <td><input type="text" id="email" name="email" /></td>
                 </tr>
                 <tr>
-                    <td><input type="button" value="Add" onclick="Add();"/></td>
-                    <td><input type="button" value="Edit" onclick="Edit();"/></td>
+                    <td><input type="button" value="Add" onclick="addDorm();"/></td>
+                    <td><input type="button" value="Edit" onclick="editDorm();"/></td>
                     <td><input type="button" value="Remove" onclick="removeDorm();"/></td>
                     <td><input type="button" value="Clear" onclick="clearFields();"/></td>
                 </tr>
@@ -84,29 +84,23 @@
         </form>
     </div>
   </span>
-    <span id = "CoordEdit">
-      Welcome to the Edit Coordinator Form.<br>
+    <span id = "PersonEdit">
+      Welcome to the Edit/Add/Remove Person Form.<br>
       <em><small>Note: Please fill in all info.</small></em>
       <em><small>Once a submission is made it added to database.</small></em>
 
       <div class="FormAdd">
           <br>
-          <table>
-              <tr>
-                  <th>Swipe Mavcard:</th>
-                  <td><input type="password" onkeypress="if (event.keyCode == 13) {readCard(this.value); this.value='';}"/></td>
-              </tr>
-          </table>
           <form>
               <table>
                   <tr>
                       <th>600 #:</th>
-                      <td><input type="text" id="600_number" name="600_number" disabled/></td>
+                      <td><input type="text" id="600_number" name="600_number" </td>
                   </tr>
                   <tr>
                       <th>Name:</th>
-                      <td><input type="text" id="first_name" name="first_name" disabled/></td>
-                      <td><input type="text" id="last_name" name="last_name" disabled/></td>
+                      <td><input type="text" id="first_name" name="first_name" </td>
+                      <td><input type="text" id="last_name" name="last_name" </td>
                   </tr>
                   <tr>
                       <th></th>
@@ -124,9 +118,12 @@
                       </td>
                   </tr>
                   <tr>
-                    <td><input type="button" value="Add" onclick="Add();"/></td>
-                    <td><input type="button" value="Edit" onclick="Edit();"/></td>
-                    <td><input type="button" value="Remove" onclick="Remove();"/></td>
+                    <td><input type="button" value="Add Coordinator" onclick="addCoordinator(), clearFields();"/></td>
+                    <td><input type="button" value="Add Student" onclick="addStudent(), clearFields();"/></td>
+                    <td><input type="button" value="Add RA" onclick="addRA(), clearFields();"/></td>
+                    <td><input type="button" value="Add DA" onclick="addDA(), clearFields();"/></td>
+                    <td><input type="button" value="Edit" onclick="editPerson(), clearFields();"/></td>
+                    <td><input type="button" value="Remove" onclick="removePerson(), clearFields();"/></td>
                     <td><input type="button" value="Clear" onclick="clearFields();"/></td>
                   </tr>
               </table>
@@ -140,8 +137,8 @@
 </br>
 <em><large><font size="9">THIS CANNOT BE UNDONE! </font></large></em>
 </br>
-  <input type="button" value="Clear packages" onclick="PackageClear();"/>
-  <input type="button" value="Clear Mavcrds" onclick="PeopleClear();"/>
+  <input type="button" value="Clear packages" onclick="clearPackage();"/>
+  <input type="button" value="Clear Mavcrds" onclick="clearPeople();"/>
 
     </span>
 
