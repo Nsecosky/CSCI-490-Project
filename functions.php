@@ -40,7 +40,7 @@ function addCoordinator($n600, $first, $last, $email, $did, $room, $da, $coor, $
     $con = dbConnect();
     $res = mysqli_query($con, "INSERT INTO people VALUES (NULL, $n600, '$first', '$last', 4, '$email', '$phone', 1, '$room', $did");
 }
-
+//NOTE: RA, and DA need to behave as an edit student access level RA=3, DA=2.
 function addRA($n600, $first, $last, $email, $did, $room, $da, $coor, $phone = '') {
     $con = dbConnect();
     $res = mysqli_query($con, "INSERT INTO people VALUES (NULL, $n600, '$first', '$last', 3, '$email', '$phone', 1, '$room', $did");
@@ -63,10 +63,9 @@ function searchPeople($name) {
     return mysqli_fetch_all($res, MYSQLI_ASSOC);
 }
 
-//function updatePerson(...) {
-//    $con = dbConnect();
-//    $res = mysqli_query($con, "QUERY");
-//}
+function editPerson(){
+  //NOTE: Needs QUERY This doesnt changes access level to 1
+}
 
 //NOTE: THIS CLEARS ALL ENTRIES IN THE PEOPLE TABLE AND ADDS A "MASTER ADMIN" USE CAUTION WHEN CALLING
 function clearPeople(){
@@ -87,6 +86,17 @@ function getPerson($id) {
     return mysgli_fetch_row($res);
 }
 
+function getPersonhall(){
+  //NOTE: This returns the people table sorted by ResHall NOTE used in student roster pages
+}
+
+function getPersonLname(){
+  //NOTE: This returns the people table sorted by last name NOTE used in student roster pages
+}
+
+function getPersonresHall(){
+  //NOTE: this returns only people from the people table of a selected resHall NOTE used in student roster pages
+}
 //NOTE: All Packages Table Functions ********************************************************************************************************
 function addPackage($own, $description, $sidin) {
     $con = dbConnect();
