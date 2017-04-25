@@ -44,7 +44,7 @@ function removePerson($sid) {
 
 function searchPeople($name) {
     $con = dbConnect();
-    $res = mysqli_query($con, "SELECT * FROM people WHERE first_name LIKE '{$name}%' OR last_name LIKE '{$name}%'");
+    $res = mysqli_query($con, "SELECT * FROM people WHERE first_name LIKE '$name%' OR last_name LIKE '$name%'");
     return mysqli_fetch_all($res, MYSQLI_ASSOC);
 }
 
