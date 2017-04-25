@@ -4,97 +4,74 @@
         <title class = "headtitle">TV Display</title>
         <link rel="stylesheet" href="PackageSysStyle.css">
         <script src="https://unpkg.com/vue/dist/vue.js"></script>
-        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+        <script src="res/jquery-3.2.1-min.js"></script>
+        <script src="res/functions.js"></script>
         <script>
-
-
-        var dfetch = true;
-        function login(Fname, Lname, Key) {
-                    $.ajax("functions.php?a=login", {
-                        'method': 'POST',
-                        'data': {'first' : Fname, 'last' : Lname, 'n600' : Key},
-                        'dataType': "json",
-                        'success' : function(json) {
-                            if (json.result) {
-                                if (dfetch) {
-                                    dfetch = false;
-                                    $.ajax("functions.php?a=getd", {
-                                        'method': 'GET',
-                                        'dataType': "json",
-                                        'success' : function(json) {
-                                            dvm.dorms = json.result;
-                                        }
-                                    });
-                                    $.ajax("functions.php?a=gettv", {
-                                        'method': 'GET',
-                                        'dataType': "json",
-                                        'success' : function(json) {
-                                            pvm.Students = json.result;
-                                        }
-                                    });
-                                }
-                                $("#overlay").hide();
-                            }
-                        }
-                    });
+            function getPackages(dorm) {
+                $.ajax("res/functions.php?a=gettv&did=" + dorm, {
+                    'method': 'GET',
+                    'dataType': "json",
+                    'success': function (json) {
+                        pvm.students = json.result;
+                    }
+                });
             }
         </script>
     </head>
 
-    <body class = "indexBody">
-    <div id="overlay" onkeypress="silentLogin(event)" tabindex="1" style="background: rgba(0, 0, 0, 0.67); position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;">
-          <div style="background: #FFFFFF; opacity: 1.00; position: absolute; top: 0%; left: 0%; width:100%; height: 100%">
-              First Name: <input type="text" id="Fname"/>
-            </br>
-              Last Name: <input type="text" id="Lname"/>
-            </br>
-              Enter Key: <input type="text" id="Key"/>
-            </br>
-              <input type="button" value="Login" onclick="login($('#Fname').value, $('#Lname').value, $('#Key').value)"/>
-          </div>
+    <body>
+        <div id="overlay" style="background: rgba(0, 0, 0, 0.67); position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;">
+            <div style="background: #FFFFFF; opacity: 1.00; position: absolute; top: 0%; left: 0%; width:100%; height: 100%">
+                First Name: <input type="text" id="Fname"/>
+                </br>
+                Last Name: <input type="text" id="Lname"/>
+                </br>
+                Enter Key: <input type="text" id="Key"/>
+                </br>
+                <input type="button" value="Login" onclick="login($('#Fname')[0].value, $('#Lname')[0].value, $('#Key')[0].value)"/>
+            </div>
 
-    </div>
-		<header>
-			<img class = "CMULogo" alt="Colorado Mesa Unversity" src="cmu_white.png":></img>
-	  </header>
-      <body>
-        <em><small> Please Select Residence Hall </small> </em>
-        <p><select id="dorms" name="dorms">
-            <option v-for="dorm in dorms" :value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
-        </select></p>
-        <p><font size="10">Packages</font></p>
-        <em><font size="5"> MavCards are required for package checkout. </font></em>
+        </div>
+        
+        <header>
+            <img class="CMULogo" alt="Colorado Mesa Unversity" src="cmu_white.png">
+        </header>
+        
+        <em>
+            <small> Please Select Residence Hall </small>
+        </em>
+        <p>
+            <select id="dorms" name="dorms" onchange="getPackages(this.value)">
+                <option v-for="dorm in dorms" v-bind:value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
+            </select>
+        </p>
+        <p>
+            <font size="10">Packages</font>
+        </p>
+        <em>
+            <font size="5">MavCards are required for package checkout.</font>
+        </em>
         <!-- This is the display-->
         <table id="display">
-          <tr v-for="Student in Students" >
-              <td>
-                {{Student.first_name}}
-              </td>
-              <td>
-                {{Student.last_name}}
-              </td>
-              <td>
-                {{Student.pcount}}
-              </td>
+            <tr v-for="student in students">
+                <td style="padding: 5px;">
+                    {{student.first_name}} {{student.last_name}}
+                </td>
+                <td style="padding: 5px;">
+                    {{student.pcount}} packages
+                </td>
             </tr>
-          </table>
+        </table>
 
-      <footer>
-  			&copy; Colorado Mesa University
-  		</footer>
+        <footer>
+            &copy; Colorado Mesa University
+        </footer>
 
         <script type="text/javascript">
             var pvm = new Vue({
                 el: '#display',
                 data: {
-                    Students: []
-                }
-            });
-
-            var dvm = new Vue({
-                el: '#dorms',
-                data: {
-                    dorms: []
+                    students: []
                 }
             });
         </script>

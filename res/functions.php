@@ -68,8 +68,7 @@ function clearPeople(){
 function getPerson($id) {
     $con = dbConnect();
     $res = mysqli_query($con, "SELECT * from people WHERE unique_id = $id");
-    echo mysqli_error($con);
-    return mysgli_fetch_row($res);
+    return mysqli_fetch_row($res);
 }
 
 function getPersonhall(){
@@ -99,7 +98,6 @@ function checkoutPackage($pid) {
 function clearPackages(){
   $con = dbConnect();
   $res = mysqli_query($con, 'TRUNCATE TABLE packages');
-
 }
 
 function getPackages() {
@@ -157,11 +155,12 @@ function getDorms() {
     $res = mysqli_query($con, "SELECT * FROM dorms");
     return mysqli_fetch_all($res, MYSQLI_ASSOC);
 }
+
 //NOTE: QUERY Picker**************************************************************************************
 echo "{\"result\": ";
 if (loggedIn()) {
     $da = $_SESSION['id'];
-    switch (getPerson($own)['access']) {
+    switch (getPerson($da)['access']) {
         case 3: {
             switch ($_GET['a']) {
 
@@ -189,10 +188,6 @@ if (loggedIn()) {
                     echo json_encode(getDormPackages($_GET['did']));
                     break;
                 }
-                case "getd": {
-                    echo json_encode(getDorms());
-                    break;
-                }
                 case "search": {
                     echo json_encode(searchPeople($_GET['name']));
                     break;
@@ -208,6 +203,10 @@ if (loggedIn()) {
             switch ($_GET['a']) {
                 case "login": {
                         echo "true";
+                    break;
+                }
+                case "getd": {
+                    echo json_encode(getDorms());
                     break;
                 }
                 case "gettv": {

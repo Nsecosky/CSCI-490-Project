@@ -1,34 +1,33 @@
 <!DOCTYPE HTML>
 <html>
-<head>
-    <title class = "headtitle">Desk Attendant Portal</title>
-    <link rel="stylesheet" href="PackageSysStyle.css">
-    <script src="https://unpkg.com/vue/dist/vue.js"></script>
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-    <script>
-
-
-    var dfetch = true;
-    function login(Fname, Lname, Key) {
+    <head>
+        <title class = "headtitle">Desk Attendant Portal</title>
+        <link rel="stylesheet" href="res/PackageSysStyle.css">
+        <script src="res/jquery-3.2.1-min.js"></script>
+        <script src="https://unpkg.com/vue/dist/vue.js"></script>
+        <script src="res/functions.js"></script>
+        <script>
+            var dfetch = true;
+            function login(Fname, Lname, Key) {
                 $.ajax("functions.php?a=login", {
                     'method': 'POST',
-                    'data': {'first' : Fname, 'last' : Lname, 'n600' : Key},
+                    'data': {'first': Fname, 'last': Lname, 'n600': Key},
                     'dataType': "json",
-                    'success' : function(json) {
+                    'success': function (json) {
                         if (json.result) {
                             if (dfetch) {
                                 dfetch = false;
                                 $.ajax("functions.php?a=getd", {
                                     'method': 'GET',
                                     'dataType': "json",
-                                    'success' : function(json) {
+                                    'success': function (json) {
                                         dvm.dorms = json.result;
                                     }
                                 });
                                 $.ajax("functions.php?a=gettv", {
                                     'method': 'GET',
                                     'dataType': "json",
-                                    'success' : function(json) {
+                                    'success': function (json) {
                                         pvm.Students = json.result;
                                     }
                                 });
@@ -37,179 +36,191 @@
                         }
                     }
                 });
-        }
-        function doSearch(name) {
-            $.get(
-                "functions.php",
-                {"a": "search", "name": name},
-                function (response) {
-                    svm.results = response;
-                },
-                "json"
-            );
-        }
-        function getStudent(idx) {
-            $("#id").val(svm.results[idx].Unique_ID);
-            $("#600_number").val(svm.results[idx]["600_number"]);
-            $("#first_name").val(svm.results[idx].First_Name);
-            $("#last_name").val(svm.results[idx].Last_Name);
-            $("#email").val(svm.results[idx].Email);
-        }
-    </script>
-</head>
-<body class = "indexBody">
-<!--  <div id="overlay" onkeypress="silentLogin(event)" tabindex="1" style="background: rgba(0, 0, 0, 0.67); position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;">
-    <div style="background: #FFFFFF; opacity: 1.00; position: absolute; top: 0%; left: 0%; width:100%; height: 100%">
-        First Name: <input type="text" id="Fname"/>
-      </br>
-        Last Name: <input type="text" id="Lname"/>
-      </br>
-        Enter Key: <input type="text" id="Key"/>
-      </br>
-        <input type="button" value="Login" onclick="login($('#Fname').value, $('#Lname').value, $('#Key').value)"/>
-    </div>-->
-<header>
-  <img class = "CMULogo" alt="Colorado Mesa Unversity" src="cmu_white.png":></img>
-</header>
-<nav>
-          <ul>
-              <li> <a name="nav" href="javascript:void" onclick = "$('a[name=nav]').removeClass('NavHighlight');$(this).addClass('NavHighlight');$('span').hide();$('#Roster').show()">Roster</a></li>
-              <li> <a name="nav" href="javascript:void" onclick = "$('a[name=nav]').removeClass('NavHighlight');$(this).addClass('NavHighlight');$('span').hide();$('#AddStudent').show()" >Add Student</a></li>
-              <li> <a name="nav" href="javascript:void" onclick = "$('a[name=nav]').removeClass('NavHighlight');$(this).addClass('NavHighlight');$('span').hide();$('#EditStudent').show()" >Edit/Remove Student</a></li>
-              <li> <a name="nav" href="javascript:void" onclick = "$('a[name=nav]').removeClass('NavHighlight');$(this).addClass('NavHighlight');$('span').hide();$('#PackageList').show()" >Package List</a></li>
-          </ul>
-</nav>
-
-  <span id = "Roster">
-    <input type="button" value="Sort by Hall" onclick="getPersonhall();"/>
-    <input type="button" value="Sort by last name" onclick="getPersonLname();"/>
-  </br>
-    <p>Display Single Residence Hall Students: <select id="dorms" name="dorms">
-        <option v-for="dorm in dorms" :value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
-        <input type="button" value="Show Students in Residence Hall" onclick="getPersonresHall;"/>
-    </select></p>
-  </span>
-  <span id = "AddStudent">
-      Welcome to the Add Student. Pleas Fill in all info.<br>
-      <em><small>Note: all changes will be added to database.</small> </em>
-      <div class = "FormAdd">
-          <br>
-          <form>
-              <table>
-                <tr>
-                  <th>600 #:</th>
-                  <td><input type="text" id="600_number" name="600_number"/></td>
-                </tr>
-                  <tr>
-                      <th>First Name:</th>
-                      <td><input type="text" name ="fname" required /></td>
-                  </tr>
-                  <tr>
-                      <th>Last Name:</th>
-                      <td><input type="text" name ="lname" required /></td>
-                  </tr>
-      <tr>
-          <th>Email:</th>
-          <td><input type="text" id="email" name="email" /></td>
-      </tr>
-      <tr>
-<th>Residence Hall:</th>
-          <td>
-              <select id="dorms" name="dorms">
-                  <option v-for="dorm in dorms" :value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
-              </select>
-          </td>
-      </tr>
-                  </tr>
-                  <tr>
-                    <td><input type="button" value="Add Student" onclick="addPerson(), clearFields();"/></td>
-                    <td><input type="button" value="Add RA" onclick="addRA(), clearFields();"/></td>
-                    <td><input type="button" value="Add DA" onclick="addDA(), clearFields();"/></td>
-                    <td><input type="button" value="Clear" onclick="clearFields();"/></td>
-                  </tr>
-              </table>
-          </form>
-      </div>
-  </span>
-  <span id = "EditStudent">
-      Welcome to the Add Student. Pleas Fill in all info.<br>
-      <em><small>Note: all changes will be added to database.</small> </em>
-      <div class = "FormAdd">
-          <br>
-            <table>
-                <tr>
-                    <th>Name:</th>
-                    <td> <input type="text" name="name" onkeypress="doSearch(this.value);"/></td>
-                    <td>
-                        <select id="results" name="results" onchange="useStudent(this.value);">
-                            <option v-for="result in results" :value="$index">{{result.First_Name}} {{result.Last_Name}}</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td>600 #:</td>
-                    <td><input type="text" id="600_number" name="600_number"/></td>
-                </tr>
-                <tr>
-                    <td>First Name:</td>
-                    <td><input type="text" name ="fname" required /></td>
-                </tr>
-                <tr>
-                    <td>Last Name:</td>
-                    <td><input type="text" name ="lname" required /></td>
-                </tr>
-                <tr>
-                    <td>Email:</td>
-                    <td><input type="text" id="email" name="email" /></td>
-                </tr>
-                <tr>
-                    <td>Residence Hall:</td>
-                    <td>
-                        <select id="dorms" name="dorms">
-                            <option v-for="dorm in dorms" :value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <input type="hidden" id="id" name="id"/>
-                    <td><input type="button" value="Add Student" onclick="addPerson(), clearFields();"/></td>
-                    <td><input type="button" value="Add RA" onclick="addRA(), clearFields();"/></td>
-                    <td><input type="button" value="Add DA" onclick="addDA(), clearFields();"/></td>
-                    <td><input type="button" value="Clear" onclick="clearFields();"/></td>
-                </tr>
-            </table>
-      </div>
-  </span>
-  <span id = "PackageList">
-      Welcome to the Package Portal
-        <center>
-            <div id="packages" style="border: 2px solid black; width: 800px;">
-              <em><small> Please Select Residence Hall </small> </em>
-              <p><select id="dorms" name="dorms">
-                  <option v-for="dorm in dorms" :value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
-              </select></p>
-                <div v-for="package in packages" style="border: 1px solid black; margin: 1px;">
-                    {{package.First_Name}} {{package.Last_Name}} - {{package.Date_Recieved}}-{{package.Description}}-{{package.Date_Checkout}}-
-                </div>
-            </div>
-        </center>
-  </span>
-    <footer>
-			&copy Colorado Mesa University
-		</footer>
-    <script>
-        var svm = new Vue({
-            el: '#results',
-            data: {
-                results: []
             }
-        });
-        function clearFields() {
-            $("#600_number").val("");
-            $("#first_name").val("");
-            $("#last_name").val("");
-            $("#email").val("");
-        }
-    </script>
+            function doSearch(name) {
+                $.get(
+                        "functions.php",
+                        {"a": "search", "name": name},
+                        function (response) {
+                            svm.results = response;
+                        },
+                        "json"
+                        );
+            }
+            function getStudent(idx) {
+                $("#id").val(svm.results[idx].Unique_ID);
+                $("#600_number").val(svm.results[idx]["600_number"]);
+                $("#first_name").val(svm.results[idx].First_Name);
+                $("#last_name").val(svm.results[idx].Last_Name);
+                $("#email").val(svm.results[idx].Email);
+            }
+        </script>
+    </head>
+    <body>
+        <!--  <div id="overlay" onkeypress="silentLogin(event)" tabindex="1" style="background: rgba(0, 0, 0, 0.67); position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;">
+            <div style="background: #FFFFFF; opacity: 1.00; position: absolute; top: 0%; left: 0%; width:100%; height: 100%">
+                First Name: <input type="text" id="Fname"/>
+              </br>
+                Last Name: <input type="text" id="Lname"/>
+              </br>
+                Enter Key: <input type="text" id="Key"/>
+              </br>
+                <input type="button" value="Login" onclick="login($('#Fname').value, $('#Lname').value, $('#Key').value)"/>
+            </div>-->
+        <header>
+            <img class = "CMULogo" alt="Colorado Mesa Unversity" src="cmu_white.png">
+        </header>
+        <nav>
+            <ul>
+                <li> <a name="nav" href="javascript:void" onclick = "switchToTab(this, '#Roster');">Roster</a></li>
+                <li> <a name="nav" href="javascript:void" onclick = "switchToTab(this, '#AddStudent');" >Add Student</a></li>
+                <li> <a name="nav" href="javascript:void" onclick = "switchToTab(this, '#EditStudent');" >Edit/Remove Student</a></li>
+                <li> <a name="nav" href="javascript:void" onclick = "switchToTab(this, '#PackageList');" >Package List</a></li>
+            </ul>
+        </nav>
+
+        <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+        
+        <span id = "Roster">
+            <input type="button" value="Sort by Hall" onclick="getPersonhall();"/>
+            <input type="button" value="Sort by last name" onclick="getPersonLname();"/>
+            <br>
+            <p>
+                Display Single Residence Hall Students:
+                <select id="dorms" name="dorms">
+                    <option v-for="dorm in dorms" v-bind:value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
+                </select>
+                <input type="button" value="Show Students in Residence Hall" onclick="getPersonResHall();"/>
+            </p>
+        </span>
+
+        <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+        
+        <span id = "AddStudent">
+            Welcome to the Add Student. Pleas Fill in all info.<br>
+            <em><small>Note: all changes will be added to database.</small> </em>
+            <div>
+                <br>
+                <form>
+                    <table>
+                        <tr>
+                            <th>600 #:</th>
+                            <td><input type="text" id="600_number" name="600_number"/></td>
+                        </tr>
+                        <tr>
+                            <th>First Name:</th>
+                            <td><input type="text" name ="fname" required /></td>
+                        </tr>
+                        <tr>
+                            <th>Last Name:</th>
+                            <td><input type="text" name ="lname" required /></td>
+                        </tr>
+                        <tr>
+                            <th>Email:</th>
+                            <td><input type="text" id="email" name="email" /></td>
+                        </tr>
+                        <tr>
+                            <th>Residence Hall:</th>
+                            <td>
+                                <select id="dorms" name="dorms">
+                                    <option v-for="dorm in dorms" v-bind:value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
+                                </select>
+                            </td>
+                        </tr>
+                        </tr>
+                        <tr>
+                            <td><input type="button" value="Add Student" onclick="addPerson(), clearFields();"/></td>
+                            <td><input type="button" value="Add RA" onclick="addRA(), clearFields();"/></td>
+                            <td><input type="button" value="Add DA" onclick="addDA(), clearFields();"/></td>
+                            <td><input type="button" value="Clear" onclick="clearFields();"/></td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        </span>
+
+        <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+        
+        <span id="EditStudent">
+            Welcome to the Add Student. Pleas Fill in all info.<br>
+            <em><small>Note: all changes will be added to database.</small> </em>
+            <div>
+                <br>
+                <table>
+                    <tr>
+                        <th>Name:</th>
+                        <td> <input type="text" name="name" onkeypress="doSearch(this.value);"/></td>
+                        <td>
+                            <select id="results" name="results" onchange="useStudent(this.value);">
+                                <option v-for="result in results" v-bind:value="$index">{{result.First_Name}} {{result.Last_Name}}</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>600 #:</td>
+                        <td><input type="text" id="600_number" name="600_number"/></td>
+                    </tr>
+                    <tr>
+                        <td>First Name:</td>
+                        <td><input type="text" name ="fname" required /></td>
+                    </tr>
+                    <tr>
+                        <td>Last Name:</td>
+                        <td><input type="text" name ="lname" required /></td>
+                    </tr>
+                    <tr>
+                        <td>Email:</td>
+                        <td><input type="text" id="email" name="email" /></td>
+                    </tr>
+                    <tr>
+                        <td>Residence Hall:</td>
+                        <td>
+                            <select id="dorms" name="dorms">
+                                <option v-for="dorm in dorms" v-bind:value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                    <input type="hidden" id="id" name="id"/>
+                    <td><input type="button" value="Add Student" onclick="addPerson(); clearFields();"/></td>
+                    <td><input type="button" value="Add RA" onclick="addRA(); clearFields();"/></td>
+                    <td><input type="button" value="Add DA" onclick="addDA(); clearFields();"/></td>
+                    <td><input type="button" value="Clear" onclick="clearFields();"/></td>
+                    </tr>
+                </table>
+            </div>
+        </span>
+
+        <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+        
+        <span id = "PackageList">
+            Welcome to the Package Portal
+            <center>
+                <div id="packages" style="border: 2px solid black; width: 800px;">
+                    <em><small> Please Select Residence Hall </small> </em>
+                    <p><select id="dorms" name="dorms">
+                            <option v-for="dorm in dorms" v-bind:value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
+                        </select></p>
+                    <div v-for="package in packages" style="border: 1px solid black; margin: 1px;">
+                        {{package.First_Name}} {{package.Last_Name}} - {{package.Date_Recieved}}-{{package.Description}}-{{package.Date_Checkout}}
+                    </div>
+                </div>
+            </center>
+        </span>
+
+        <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+        
+        <footer>
+            &copy Colorado Mesa University
+        </footer>
+        
+        <script>
+            function clearFields() {
+                $("#600_number").val("");
+                $("#first_name").val("");
+                $("#last_name").val("");
+                $("#email").val("");
+            }
+        </script>
     </body>
 </html>

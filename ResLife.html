@@ -4,7 +4,7 @@
         <title class = "headtitle">Res-Life</title>
         <link rel="stylesheet" href="PackageSysStyle.css">
         <script src="https://unpkg.com/vue/dist/vue.js"></script>
-        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+        <script src="res/jquery-3.2.1-min.js"></script>
         <script>
 
 
@@ -40,7 +40,7 @@
             }
         </script>
     </head>
-  <body class = "indexBody">
+  <body>
     <div id="overlay" onkeypress="silentLogin(event)" tabindex="1" style="background: rgba(0, 0, 0, 0.67); position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;">
       <div style="background: #FFFFFF; opacity: 1.00; position: absolute; top: 0%; left: 0%; width:100%; height: 100%">
           First Name: <input type="text" id="Fname"/>
@@ -53,7 +53,7 @@
       </div>
 
 		<header>
-			<img class = "CMULogo" alt="Colorado Mesa Unversity" src="cmu_white.png":></img>
+			<img class = "CMULogo" alt="Colorado Mesa Unversity" src="cmu_white.png">
 	  </header>
     <nav>
               <ul>
@@ -119,7 +119,7 @@
     <th>Residence Hall:</th>
                       <td>
                           <select id="dorms" name="dorms">
-                              <option v-for="dorm in dorms" :value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
+                              <option v-for="dorm in dorms" v-bind:value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
                           </select>
                       </td>
                   </tr>

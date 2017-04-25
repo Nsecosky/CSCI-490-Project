@@ -2,75 +2,76 @@
 <html>
     <head>
         <title class = "headtitle">Desk Attendant Portal</title>
-        <link rel="stylesheet" href="PackageSysStyle.css">
+        <link rel="stylesheet" href="res/PackageSysStyle.css">
+        <script src="res/jquery-3.2.1-min.js"></script>
         <script src="https://unpkg.com/vue/dist/vue.js"></script>
-        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+        <script src="res/functions.js"></script>
         <script>
 
 
-            var cardrgx = /(?:%E\?;E\?|\%(\d+)\^(\w+), (\w+) (\w)\s*\?;(\d+)=(\d+)\?)\+E\?/;
-            function readCard(cinfo) {
-                info = cardrgx.exec(cinfo);
-                if (info != null) {
-                    if (info[1] != null) {
-                        $("#600_number").val(info[5]);
-                        $("#first_name").val(info[3]);
-                        $("#last_name").val(info[2]);
-                    } else {
-                        $("#600_number").val("");
-                        $("#first_name").val("");
-                        $("#last_name").val("");
-                        alert("Error reading card");
-                    }
-                }
-            }
-            var dfetch = true;
-            function login(cinfo) {
-                info = cardrgx.exec(cinfo);
-                if (info != null) {
-                    if (info[1] != null) {
-                        $.ajax("functions.php?a=login", {
-                            'method': 'POST',
-                            'data': {'first' : info[3], 'last' : info[2], 'n600' : info[5]},
-                            'dataType': "json",
-                            'success' : function(json) {
-                                if (json.result) {
-                                    if (dfetch) {
-                                        dfetch = false;
-                                        $.ajax("functions.php?a=getd", {
-                                            'method': 'GET',
-                                            'dataType': "json",
-                                            'success' : function(json) {
-                                                dvm.dorms = json.result;
-                                            }
-                                        });
-                                    }
-                                    $("#overlay").hide();
-                                }
-                            }
-                        });
-                    } else {
-                        alert("Error reading card");
-                    }
-                }
-            }
-
-            var curcard = "";
-            function silentLogin(event) {
-                curcard += String.fromCharCode(event.charCode);
-                if (event.keyCode == 13) {
-                    login(curcard);
-                    curcard = "";
-                }
-            }
+//            var cardrgx = /(?:%E\?;E\?|\%(\d+)\^(\w+), (\w+) (\w)\s*\?;(\d+)=(\d+)\?)\+E\?/;
+//            function readCard(cinfo) {
+//                info = cardrgx.exec(cinfo);
+//                if (info != null) {
+//                    if (info[1] != null) {
+//                        $("#600_number").val(info[5]);
+//                        $("#first_name").val(info[3]);
+//                        $("#last_name").val(info[2]);
+//                    } else {
+//                        $("#600_number").val("");
+//                        $("#first_name").val("");
+//                        $("#last_name").val("");
+//                        alert("Error reading card");
+//                    }
+//                }
+//            }
+//            var dfetch = true;
+//            function login(cinfo) {
+//                info = cardrgx.exec(cinfo);
+//                if (info != null) {
+//                    if (info[1] != null) {
+//                        $.ajax("res/functions.php?a=login", {
+//                            'method': 'POST',
+//                            'data': {'first': info[3], 'last': info[2], 'n600': info[5]},
+//                            'dataType': "json",
+//                            'success': function (json) {
+//                                if (json.result) {
+//                                    if (dfetch) {
+//                                        dfetch = false;
+//                                        $.ajax("res/functions.php?a=getd", {
+//                                            'method': 'GET',
+//                                            'dataType': "json",
+//                                            'success': function (json) {
+//                                                dvm.dorms = json.result;
+//                                            }
+//                                        });
+//                                    }
+//                                    $("#overlay").hide();
+//                                }
+//                            }
+//                        });
+//                    } else {
+//                        alert("Error reading card");
+//                    }
+//                }
+//            }
+//
+//            var curcard = "";
+//            function silentLogin(event) {
+//                curcard += String.fromCharCode(event.charCode);
+//                if (event.keyCode == 13) {
+//                    login(curcard);
+//                    curcard = "";
+//                }
+//            }
 
             var lastid;
             function getStudentPackages() {
-                $.ajax("functions.php?a=getsp", {
+                $.ajax("res/functions.php?a=getsp", {
                     'method': 'POST',
-                    'data': {'first' : $("#first"), 'last' : $("#last"), 'n600' : $("#n600")},
+                    'data': {'first': $("#first"), 'last': $("#last"), 'n600': $("#n600")},
                     'dataType': "json",
-                    'success' : function(json) {
+                    'success': function (json) {
                         if (json.result) {
                             pvm.packages = json.result;
                             lastid = pvm.packages[0].owner;
@@ -81,96 +82,108 @@
             }
 
             function getCheckoutPackages() {
-                $.ajax("functions.php?a=chkt", {
+                $.ajax("res/functions.php?a=chkt", {
                     'method': 'POST',
-                    'data': {'oid' : lastid},
+                    'data': {'oid': lastid},
                     'dataType': "json"
                 });
 
             }
         </script>
     </head>
-    <body class = "indexBody">
-      <!--<div id="overlay" onkeypress="silentLogin(event)" tabindex="1" style="background: rgba(0, 0, 0, 0.67); position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;">
-          <div style="background: #FFFFFF; opacity: 1.00; position: absolute; top: 0%; left: 0%; width: 100%; height: 100%">
-              Swipe Mavcard to log back in to system
-          </div>
-      </div>-->
-		<header>
-			<img class = "CMULogo" alt="Colorado Mesa Unversity" src="cmu_white.png":></img>
-		</header>
-    <nav>
-              <ul>
-                  <li> <a name="nav" href="javascript:void" onclick = "$('a[name=nav]').removeClass('NavHighlight');$(this).addClass('NavHighlight');$('span').hide();$('#CheckoutPkg').show()">Checkout Package</a></li>
-                  <li> <a name="nav" href="javascript:void" onclick = "$('a[name=nav]').removeClass('NavHighlight');$(this).addClass('NavHighlight');$('span').hide();$('#AddPkg').show()" >Add Package</a></li>
-                  <li> <a name="nav" href="javascript:void" onclick = "$('a[name=nav]').removeClass('NavHighlight');$(this).addClass('NavHighlight');$('span').hide();$('#StuRoster').show()" >Student Roster</a></li>
-              </ul>
-    </nav>
-
-  <span id = "AddPkg">
-    Welcome to the Package Portal.
-        Please insert the students first name, last name and package description below.
-
-        <div class = "Form"
-             </br>
-            <em><small>Note: This form will input the First and Last name into the package Database.</small> </em>
-            <table>
-                <tr><th>First Name:</th><td> <input type="text" name ="fname" required /></td></tr>
-                <tr><th>Last Name:</th><td> <input type="text" name ="lname" required /></td></tr>
-                <tr><th>Room Number:</th><td> <input type="text" name ="roomnum" required /></td></tr>
-                <tr><th>Package Description: </th><td> <textarea name ="package" rows ="3" cols ="50" required></textarea></td></tr>
-                <td><th><input type= "submit" value = "Submit" />
-						<input type = "reset" value = "Reset" /> </td></th>
-                </form>
-            </table>
+    <body>
+        <div id="overlay" onkeypress="silentLogin(event)" tabindex="1" style="background: rgba(0, 0, 0, 0.67); position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;">
+            <div style="background: #FFFFFF; opacity: 1.00; position: absolute; top: 0%; left: 0%; width: 100%; height: 100%">
+                Swipe Mavcard to log back in to system
+            </div>
         </div>
-    </span>
-    <span id = "StuRoster">
-      <input type="button" value="Sort by Hall" onclick="getPersonhall();"/>
-      <input type="button" value="Sort by last name" onclick="getPersonLname();"/>
-    </br>
-      <p>Display Single Residence Hall Students: <select id="dorms" name="dorms">
-          <option v-for="dorm in dorms" :value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
-          <input type="button" value="Show Students in Residence Hall" onclick="getPersonresHall;"/>
-      </select></p>
-    </span>
-    <span id = "CheckoutPkg">
-    <center>
-          <table>
-              <tr>
-                  <th>Swipe Mavcard:</th>
-                  <td><input type="password" onkeypress="if (event.keyCode == 13) {readCard(this.value); this.value='';}"/></td>
-              </tr>
-              <tr>
-                  <td><input type="text" id="first" disabled/></td>
-                  <td><input type="text" id="last" disabled/></td>
-                  <td><input type="text" id="n600" disabled/></td>
-                  <td><input type="button" value="Check for Packages" onclick="getStudentPackages();"/>
-              </tr>
-          </table>
-    </center>
-    <div v-for="package in packages" id="packages" style="border: 1px solid black; margin: 1px;">
-        {{package.First_Name}} {{package.Last_Name}} - {{package.Description}}
-    </div>
-    <input type="button" value="Checkout" onclick="checkoutPackages();"/>
-    </span>
-        <footer>
-			&copy Colorado Mesa University
-		</footer>
-    <script type="text/javascript">
-        var pvm = new Vue({
-            el: '#packages',
-            data: {
-                packages: []
-            }
-        });
+        <header>
+            <img class = "CMULogo" alt="Colorado Mesa Unversity" src="res/cmu_white.png" />
+        </header>
+        <nav>
+            <ul>
+                <li> <a name="nav" href="javascript:void" onclick="switchToTab(this, '#CheckoutPkg');">Checkout Package</a></li>
+                <li> <a name="nav" href="javascript:void" onclick = "switchToTab(this, '#AddPkg');" >Add Package</a></li>
+                <li> <a name="nav" href="javascript:void" onclick = "switchToTab(this, '#StuRoster');" >Student Roster</a></li>
+            </ul>
+        </nav>
 
-        function clearFields() {
-            $("#n600").val("");
-            $("#first").val("");
-            $("#last").val("");
-        }
-        clearFields();
-    </script>
+        <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+        
+        <span id = "AddPkg">
+            Welcome to the Package Portal.
+            Please insert the students first name, last name and package description below.
+
+            <div>
+                <br>
+                <em><small>Note: This form will input the First and Last name into the package Database.</small> </em>
+                <table>
+                    <tr><th>First Name:</th><td> <input type="text" name="fname" required /></td></tr>
+                    <tr><th>Last Name:</th><td> <input type="text" name="lname" required /></td></tr>
+                    <tr><th>Room Number:</th><td> <input type="text" name="roomnum" required /></td></tr>
+                    <tr><th>Package Description: </th><td> <textarea name="package" rows ="3" cols ="50" required></textarea></td></tr>
+                    <tr><th><input type= "submit" value = "Submit" /> <input type = "reset" value = "Reset" /></th></tr>
+                </table>
+            </div>
+        </span>
+        
+        <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+        
+        <span id="StuRoster">
+            <input type="button" value="Sort by Hall" onclick="getPersonhall();"/>
+            <input type="button" value="Sort by last name" onclick="getPersonLname();"/>
+            </br>
+            <p>Display Single Residence Hall Students:
+                <select id="dorms" name="dorms">
+                    <option v-for="dorm in dorms" v-bind:value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
+                </select>
+                <input type="button" value="Show Students in Residence Hall" onclick="getPersonResHall();" />
+            </p>
+        </span>
+        
+        <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+        
+        <span id="CheckoutPkg">
+            <center>
+                <table>
+                    <tr>
+                        <th>Swipe Mavcard:</th>
+                        <td><input type="password" onkeypress="if (event.keyCode == 13) {readCard(this.value);this.value = '';}"/></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" id="first_name" disabled/></td>
+                        <td><input type="text" id="last_name" disabled/></td>
+                        <td><input type="text" id="600_number" disabled/></td>
+                        <td><input type="button" value="Check for Packages" onclick="getStudentPackages();"/>
+                    </tr>
+                </table>
+            </center>
+            <div v-for="package in packages" id="packages" style="border: 1px solid black; margin: 1px;">
+                {{package.First_Name}} {{package.Last_Name}} - {{package.Description}}
+            </div>
+            <input type="button" value="Checkout" onclick="checkoutPackages();"/>
+        </span>
+        
+        <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+        
+        <footer>
+            &copy; Colorado Mesa University
+        </footer>
+        
+        <script type="text/javascript">
+            var pvm = new Vue({
+                el: '#packages',
+                data: {
+                    packages: []
+                }
+            });
+
+            function clearFields() {
+                $("#n600").val("");
+                $("#first").val("");
+                $("#last").val("");
+            }
+            clearFields();
+        </script>
     </body>
 </html>
