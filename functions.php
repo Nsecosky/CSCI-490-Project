@@ -31,24 +31,9 @@ function hasTimedOut() {
 
  //NOTE: All People Table Functions *******************************************************************************************************
 
-function addPerson($n600, $first, $last, $email, $did, $room, $da, $coor, $phone = '') {
+function addPerson($n600, $first, $last, $email, $did, $room, $access) {
     $con = dbConnect();
-    $res = mysqli_query($con, "INSERT INTO people VALUES (NULL, $n600, '$first', '$last', 1, '$email', '$phone', 1, '$room', $did");
-}
-
-function addCoordinator($n600, $first, $last, $email, $did, $room, $da, $coor, $phone = '') {
-    $con = dbConnect();
-    $res = mysqli_query($con, "INSERT INTO people VALUES (NULL, $n600, '$first', '$last', 4, '$email', '$phone', 1, '$room', $did");
-}
-//NOTE: RA, and DA need to behave as an edit student access level RA=3, DA=2.
-function addRA($n600, $first, $last, $email, $did, $room, $da, $coor, $phone = '') {
-    $con = dbConnect();
-    $res = mysqli_query($con, "INSERT INTO people VALUES (NULL, $n600, '$first', '$last', 3, '$email', '$phone', 1, '$room', $did");
-}
-
-function addDA($n600, $first, $last, $email, $did, $room, $da, $coor, $phone = '') {
-    $con = dbConnect();
-    $res = mysqli_query($con, "INSERT INTO people VALUES (NULL, $n600, '$first', '$last', 2, '$email', '$phone', 1, '$room', $did");
+    $res = mysqli_query($con, "INSERT INTO people VALUES (NULL, $n600, '$first', '$last', $access, '$email', '', 1, '$room', $did");
 }
 
 
@@ -63,8 +48,9 @@ function searchPeople($name) {
     return mysqli_fetch_all($res, MYSQLI_ASSOC);
 }
 
-function editPerson(){
-  //NOTE: Needs QUERY This doesnt changes access level to 1
+function editPerson($id, $n600, $first, $last, $email, $did, $room, $access){
+    $con = dbConnect();
+    $res = mysqli_query($con, "UPDATE people SET `600_number` = $n600, `first_name` = '$first', `last_name` = '$last', `access` = $access, `email` = '$email', '', 1, `room_number` = '$room', `dorm` = $did WHERE unique_id = $id");
 }
 
 //NOTE: THIS CLEARS ALL ENTRIES IN THE PEOPLE TABLE AND ADDS A "MASTER ADMIN" USE CAUTION WHEN CALLING
@@ -210,6 +196,11 @@ if (loggedIn()) {
                 case "search": {
                     echo json_encode(searchPeople($_GET['name']));
                     break;
+                }
+                case "chkt": {
+                  checkoutPackages($_GET['oid']);
+                  echo "true";
+                  break;
                 }
             }
         }

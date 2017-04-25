@@ -8,60 +8,52 @@
     <script>
 
 
-        var cardrgx = /(?:%E\?;E\?|\%(\d+)\^(\w+), (\w+) (\w)\s*\?;(\d+)=(\d+)\?)\+E\?/;
-        function readCard(cinfo) {
-            info = cardrgx.exec(cinfo);
-            if (info != null) {
-                if (info[1] != null) {
-                    $("#600_number").val(info[5]);
-                    $("#first_name").val(info[3]);
-                    $("#last_name").val(info[2]);
-                } else {
-                    $("#600_number").val("");
-                    $("#first_name").val("");
-                    $("#last_name").val("");
-                    alert("Error reading card");
-                }
-            }
-        }
-        var dfetch = true;
-        function login(cinfo) {
-            info = cardrgx.exec(cinfo);
-            if (info != null) {
-                if (info[1] != null) {
-                    $.ajax("functions.php?a=login", {
-                        'method': 'POST',
-                        'data': {'first' : info[3], 'last' : info[2], 'n600' : info[5]},
-                        'dataType': "json",
-                        'success' : function(json) {
-                            if (json.result) {
-                                if (dfetch) {
-                                    dfetch = false;
-                                    $.ajax("functions.php?a=getd", {
-                                        'method': 'GET',
-                                        'dataType': "json",
-                                        'success' : function(json) {
-                                            dvm.dorms = json.result;
-                                        }
-                                    });
-                                }
-                                $("#overlay").hide();
+    var dfetch = true;
+    function login(Fname, Lname, Key) {
+                $.ajax("functions.php?a=login", {
+                    'method': 'POST',
+                    'data': {'first' : Fname, 'last' : Lname, 'n600' : Key},
+                    'dataType': "json",
+                    'success' : function(json) {
+                        if (json.result) {
+                            if (dfetch) {
+                                dfetch = false;
+                                $.ajax("functions.php?a=getd", {
+                                    'method': 'GET',
+                                    'dataType': "json",
+                                    'success' : function(json) {
+                                        dvm.dorms = json.result;
+                                    }
+                                });
+                                $.ajax("functions.php?a=gettv", {
+                                    'method': 'GET',
+                                    'dataType': "json",
+                                    'success' : function(json) {
+                                        pvm.Students = json.result;
+                                    }
+                                });
                             }
+                            $("#overlay").hide();
                         }
-                    });
-                } else {
-                    alert("Error reading card");
-                }
-            }
+                    }
+                });
         }
-
-        var curcard = "";
-        function silentLogin(event) {
-            curcard += String.fromCharCode(event.charCode);
-            if (event.keyCode == 13) {
-                login(curcard);
-                curcard = "";
-            }
+        function doSearch(name) {
+            $.get(
+                "functions.php",
+                {"a": "search", "name": name},
+                function (response) {
+                    svm.results = response;
+                },
+                "json"
+            );
+        }
+        function getStudent(idx) {
+            $("#id").val(svm.results[idx].Unique_ID);
+            $("#600_number").val(svm.results[idx]["600_number"]);
+            $("#first_name").val(svm.results[idx].First_Name);
+            $("#last_name").val(svm.results[idx].Last_Name);
+            $("#email").val(svm.results[idx].Email);
         }
     </script>
 </head>
@@ -82,7 +74,8 @@
 <nav>
           <ul>
               <li> <a name="nav" href="javascript:void" onclick = "$('a[name=nav]').removeClass('NavHighlight');$(this).addClass('NavHighlight');$('span').hide();$('#Roster').show()">Roster</a></li>
-              <li> <a name="nav" href="javascript:void" onclick = "$('a[name=nav]').removeClass('NavHighlight');$(this).addClass('NavHighlight');$('span').hide();$('#EditStudent').show()" >Edit Student</a></li>
+              <li> <a name="nav" href="javascript:void" onclick = "$('a[name=nav]').removeClass('NavHighlight');$(this).addClass('NavHighlight');$('span').hide();$('#AddStudent').show()" >Add Student</a></li>
+              <li> <a name="nav" href="javascript:void" onclick = "$('a[name=nav]').removeClass('NavHighlight');$(this).addClass('NavHighlight');$('span').hide();$('#EditStudent').show()" >Edit/Remove Student</a></li>
               <li> <a name="nav" href="javascript:void" onclick = "$('a[name=nav]').removeClass('NavHighlight');$(this).addClass('NavHighlight');$('span').hide();$('#PackageList').show()" >Package List</a></li>
           </ul>
 </nav>
@@ -96,8 +89,8 @@
         <input type="button" value="Show Students in Residence Hall" onclick="getPersonresHall;"/>
     </select></p>
   </span>
-  <span id = "EditStudent">
-      Welcome to the Edit Student. Pleas Fill in all info EVEN IF FIELD HASN'T CHANGED<br>
+  <span id = "AddStudent">
+      Welcome to the Add Student. Pleas Fill in all info.<br>
       <em><small>Note: all changes will be added to database.</small> </em>
       <div class = "FormAdd">
           <br>
@@ -132,12 +125,59 @@
                     <td><input type="button" value="Add Student" onclick="addPerson(), clearFields();"/></td>
                     <td><input type="button" value="Add RA" onclick="addRA(), clearFields();"/></td>
                     <td><input type="button" value="Add DA" onclick="addDA(), clearFields();"/></td>
-                    <td><input type="button" value="Edit" onclick="editPerson(), clearFields();"/></td>
-                    <td><input type="button" value="Remove" onclick="removePerson(), clearFields();"/></td>
                     <td><input type="button" value="Clear" onclick="clearFields();"/></td>
                   </tr>
               </table>
           </form>
+      </div>
+  </span>
+  <span id = "EditStudent">
+      Welcome to the Add Student. Pleas Fill in all info.<br>
+      <em><small>Note: all changes will be added to database.</small> </em>
+      <div class = "FormAdd">
+          <br>
+            <table>
+                <tr>
+                    <th>Name:</th>
+                    <td> <input type="text" name="name" onkeypress="doSearch(this.value);"/></td>
+                    <td>
+                        <select id="results" name="results" onchange="useStudent(this.value);">
+                            <option v-for="result in results" :value="$index">{{result.First_Name}} {{result.Last_Name}}</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>600 #:</td>
+                    <td><input type="text" id="600_number" name="600_number"/></td>
+                </tr>
+                <tr>
+                    <td>First Name:</td>
+                    <td><input type="text" name ="fname" required /></td>
+                </tr>
+                <tr>
+                    <td>Last Name:</td>
+                    <td><input type="text" name ="lname" required /></td>
+                </tr>
+                <tr>
+                    <td>Email:</td>
+                    <td><input type="text" id="email" name="email" /></td>
+                </tr>
+                <tr>
+                    <td>Residence Hall:</td>
+                    <td>
+                        <select id="dorms" name="dorms">
+                            <option v-for="dorm in dorms" :value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <input type="hidden" id="id" name="id"/>
+                    <td><input type="button" value="Add Student" onclick="addPerson(), clearFields();"/></td>
+                    <td><input type="button" value="Add RA" onclick="addRA(), clearFields();"/></td>
+                    <td><input type="button" value="Add DA" onclick="addDA(), clearFields();"/></td>
+                    <td><input type="button" value="Clear" onclick="clearFields();"/></td>
+                </tr>
+            </table>
       </div>
   </span>
   <span id = "PackageList">
@@ -157,5 +197,19 @@
     <footer>
 			&copy Colorado Mesa University
 		</footer>
+    <script>
+        var svm = new Vue({
+            el: '#results',
+            data: {
+                results: []
+            }
+        });
+        function clearFields() {
+            $("#600_number").val("");
+            $("#first_name").val("");
+            $("#last_name").val("");
+            $("#email").val("");
+        }
+    </script>
     </body>
 </html>

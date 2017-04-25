@@ -63,6 +63,31 @@
                     curcard = "";
                 }
             }
+
+            var lastid;
+            function getStudentPackages() {
+                $.ajax("functions.php?a=getsp", {
+                    'method': 'POST',
+                    'data': {'first' : $("#first"), 'last' : $("#last"), 'n600' : $("#n600")},
+                    'dataType': "json",
+                    'success' : function(json) {
+                        if (json.result) {
+                            pvm.packages = json.result;
+                            lastid = pvm.packages[0].owner;
+                        }
+                    }
+                });
+
+            }
+
+            function getCheckoutPackages() {
+                $.ajax("functions.php?a=chkt", {
+                    'method': 'POST',
+                    'data': {'oid' : lastid},
+                    'dataType': "json"
+                });
+
+            }
         </script>
     </head>
     <body class = "indexBody">
@@ -110,30 +135,42 @@
       </select></p>
     </span>
     <span id = "CheckoutPkg">
-<center>
-      <table>
-          <tr>
-              <th>Swipe Mavcard:</th>
-              <td><input type="password" onkeypress="if (event.keyCode == 13) {readCard(this.value); this.value='';}"/></td>
-          </tr>
-      </table>
-      <form>
+    <center>
           <table>
               <tr>
-                  <td><input type="text" id="600_number" name="600_number" disabled hidden/></td>
-                  <td><input type="text" id="first_name" name="first_name" disabled hidden/></td>
-                  <td><input type="text" id="last_name" name="last_name" disabled hidden/></td>
-                  <td><input type="button" value="Check for Packages" onclick="getStudentPackages;"/>
+                  <th>Swipe Mavcard:</th>
+                  <td><input type="password" onkeypress="if (event.keyCode == 13) {readCard(this.value); this.value='';}"/></td>
+              </tr>
+              <tr>
+                  <td><input type="text" id="first" disabled/></td>
+                  <td><input type="text" id="last" disabled/></td>
+                  <td><input type="text" id="n600" disabled/></td>
+                  <td><input type="button" value="Check for Packages" onclick="getStudentPackages();"/>
               </tr>
           </table>
-</center>
-      <div v-for="package in packages" style="border: 1px solid black; margin: 1px;">
-          {{package.First_Name}} {{package.Last_Name}} - {{package.Description}}
-      </div>
+    </center>
+    <div v-for="package in packages" id="packages" style="border: 1px solid black; margin: 1px;">
+        {{package.First_Name}} {{package.Last_Name}} - {{package.Description}}
+    </div>
     <input type="button" value="Checkout" onclick="checkoutPackages();"/>
     </span>
         <footer>
 			&copy Colorado Mesa University
 		</footer>
+    <script type="text/javascript">
+        var pvm = new Vue({
+            el: '#packages',
+            data: {
+                packages: []
+            }
+        });
+
+        function clearFields() {
+            $("#n600").val("");
+            $("#first").val("");
+            $("#last").val("");
+        }
+        clearFields();
+    </script>
     </body>
 </html>
