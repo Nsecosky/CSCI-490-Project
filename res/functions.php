@@ -11,7 +11,7 @@ function dbConnect() {
 
 function login($first, $last, $n600) {
     $con = dbConnect();
-    $res = mysqli_query($con, "SELECT * FROM people WHERE first_name = '$first' AND last_name = '$last' AND 600_number = $n600");
+    $res = mysqli_query($con, "SELECT * FROM people WHERE first_name = '$first' AND last_name = '$last' AND 600_number = '$n600'");
     if ($row = mysqli_fetch_assoc($res)) {
         $_SESSION['id'] = $row["unique_id"];
         $_SESSION['logged'] = true;
