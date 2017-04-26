@@ -37,6 +37,7 @@
                     }
                 });
             }
+            
             function doSearch(name) {
                 $.get(
                         "functions.php",
@@ -47,6 +48,7 @@
                         "json"
                         );
             }
+            
             function getStudent(idx) {
                 $("#id").val(svm.results[idx].Unique_ID);
                 $("#600_number").val(svm.results[idx]["600_number"]);
@@ -72,10 +74,10 @@
         </header>
         <nav>
             <ul>
-                <li> <a name="nav" href="javascript:void" onclick = "switchToTab(this, '#Roster');">Roster</a></li>
-                <li> <a name="nav" href="javascript:void" onclick = "switchToTab(this, '#AddStudent');" >Add Student</a></li>
-                <li> <a name="nav" href="javascript:void" onclick = "switchToTab(this, '#EditStudent');" >Edit/Remove Student</a></li>
-                <li> <a name="nav" href="javascript:void" onclick = "switchToTab(this, '#PackageList');" >Package List</a></li>
+                <li> <a name="nav" href="javascript:void" onclick="switchToTab(this, '#Roster');">Roster</a></li>
+                <li> <a name="nav" href="javascript:void" onclick="switchToTab(this, '#AddStudent');" >Add Student</a></li>
+                <li> <a name="nav" href="javascript:void" onclick="switchToTab(this, '#EditStudent');" >Edit/Remove Student</a></li>
+                <li> <a name="nav" href="javascript:void" onclick="switchToTab(this, '#PackageList');" >Package List</a></li>
             </ul>
         </nav>
 

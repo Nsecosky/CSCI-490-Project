@@ -103,14 +103,14 @@
         <nav>
             <ul>
                 <li> <a name="nav" href="javascript:void" onclick="switchToTab(this, '#CheckoutPkg');">Checkout Package</a></li>
-                <li> <a name="nav" href="javascript:void" onclick = "switchToTab(this, '#AddPkg');" >Add Package</a></li>
-                <li> <a name="nav" href="javascript:void" onclick = "switchToTab(this, '#StuRoster');" >Student Roster</a></li>
+                <li> <a name="nav" href="javascript:void" onclick="switchToTab(this, '#AddPkg');" >Add Package</a></li>
+                <li> <a name="nav" href="javascript:void" onclick="switchToTab(this, '#StuRoster');" >Student Roster</a></li>
             </ul>
         </nav>
 
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
         
-        <span id = "AddPkg">
+        <span id="AddPkg">
             Welcome to the Package Portal.
             Please insert the students first name, last name and package description below.
 
@@ -118,11 +118,18 @@
                 <br>
                 <em><small>Note: This form will input the First and Last name into the package Database.</small> </em>
                 <table>
-                    <tr><th>First Name:</th><td> <input type="text" name="fname" required /></td></tr>
-                    <tr><th>Last Name:</th><td> <input type="text" name="lname" required /></td></tr>
-                    <tr><th>Room Number:</th><td> <input type="text" name="roomnum" required /></td></tr>
-                    <tr><th>Package Description: </th><td> <textarea name="package" rows ="3" cols ="50" required></textarea></td></tr>
-                    <tr><th><input type= "submit" value = "Submit" /> <input type = "reset" value = "Reset" /></th></tr>
+                    <tr>
+                        <th>Name: </th>
+                        <td> <input type="text" name="name" onkeypress="doSearch(this.value);"/></td>
+                        <td>
+                            <select id="results" name="results" onchange="useStudent(this.value);">
+                                <option v-for="result in results" v-bind:value="$index">{{result.First_Name}} {{result.Last_Name}}</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr><th>Room Number: </th><td> <input type="text" id="roomnum" required /></td></tr>
+                    <tr><th>Package Description: </th><td> <textarea name="package" rows="3" cols="50" required></textarea></td></tr>
+                    <tr><th><input type="button" value = "Submit" /> <input type="button" value="Reset" /></th></tr>
                 </table>
             </div>
         </span>
@@ -130,14 +137,14 @@
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
         
         <span id="StuRoster">
-            <input type="button" value="Sort by Hall" onclick="getPersonhall();"/>
-            <input type="button" value="Sort by last name" onclick="getPersonLname();"/>
+            <input type="button" value="Sort by Hall" onclick="sortBy = 'Dorm'"/>
+            <input type="button" value="Sort by last name" onclick="sortBy = 'Last_Name'"/>
             </br>
-            <p>Display Single Residence Hall Students:
+            <p>Display Residence Hall Students:
                 <select id="dorms" name="dorms">
                     <option v-for="dorm in dorms" v-bind:value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
                 </select>
-                <input type="button" value="Show Students in Residence Hall" onclick="getPersonResHall();" />
+                <input type="button" value="Show" onclick="getPersonResHall();" />
             </p>
         </span>
         
@@ -177,13 +184,32 @@
                     packages: []
                 }
             });
+            
+            var svm = new Vue({
+                el: '#results',
+                data: {
+                    results: []
+                }
+            });
+            
+            var dvm = new Vue({
+                el: '#dorms',
+                data: {
+                    dorms: []
+                }
+            });
 
-            function clearFields() {
-                $("#n600").val("");
-                $("#first").val("");
-                $("#last").val("");
-            }
+            
             clearFields();
+            switchToTab($("a")[0], '#CheckoutPkg');
+            
+            
+            var sortby = "First_Name";
+            function sorted(arr) {
+                Array.sort(arr, function(a, b){
+                    return b[sortby] - a[sortby];
+                });
+            }
         </script>
     </body>
 </html>

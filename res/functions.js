@@ -34,7 +34,7 @@ function login(fname, lname, n600) {
         'dataType': "json",
         'success': function (json) {
             if (json.result) {
-                if (dfetch) {
+                if (dfetch && typeof dvm !== 'undefined') {
                     dfetch = false;
                     $.ajax("res/functions.php?a=getd", {
                         'method': 'GET',
@@ -81,17 +81,3 @@ function doSearch(name) {
         "json"
     );
 }
-
-var dvm = new Vue({
-    el: '#dorms',
-    data: {
-        dorms: []
-    }
-});
-
-var svm = new Vue({
-    el: '#results',
-    data: {
-        results: []
-    }
-});

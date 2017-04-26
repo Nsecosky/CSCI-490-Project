@@ -36,7 +36,6 @@ function addPerson($n600, $first, $last, $email, $did, $room, $access) {
     $res = mysqli_query($con, "INSERT INTO people VALUES (NULL, $n600, '$first', '$last', $access, '$email', '', 1, '$room', $did");
 }
 
-
 function removePerson($sid) {
     $con = dbConnect();
     $res = mysqli_query($con, "UPDATE people SET active = 0 WHERE unique_id = $sid;");
@@ -71,17 +70,18 @@ function getPerson($id) {
     return mysqli_fetch_row($res);
 }
 
-function getPersonhall(){
-  //NOTE: This returns the people table sorted by ResHall NOTE used in student roster pages
+function getPeople(){
+    $con = dbConnect();
+    $res = mysqli_query($con, "SELECT * from people");
+    return mysqli_fetch_row($res);
 }
 
-function getPersonLname(){
-  //NOTE: This returns the people table sorted by last name NOTE used in student roster pages
+function getDormPeople($did){
+    $con = dbConnect();
+    $res = mysqli_query($con, "SELECT * from people WHERE dorm = $did");
+    return mysqli_fetch_row($res);
 }
 
-function getPersonresHall(){
-  //NOTE: this returns only people from the people table of a selected resHall NOTE used in student roster pages
-}
 //NOTE: All Packages Table Functions ********************************************************************************************************
 function addPackage($own, $description, $sidin) {
     $con = dbConnect();
@@ -147,7 +147,7 @@ function removeDorm($name, $address) {
 }
 
 function editDorm(){
-  //NOTE: Needs QUERY
+    //NOTE: Needs QUERY
 }
 
 function getDorms() {
