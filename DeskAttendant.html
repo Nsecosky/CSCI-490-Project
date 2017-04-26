@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
     <head>
-        <title class = "headtitle">Desk Attendant Portal</title>
+        <title>Desk Attendant Portal</title>
         <link rel="stylesheet" href="res/PackageSysStyle.css">
         <script src="res/jquery-3.2.1-min.js"></script>
         <script src="https://unpkg.com/vue/dist/vue.js"></script>
@@ -89,16 +89,20 @@
                 });
 
             }
+            
+            var dormsEl = "#dorms";
+            var packagesEl = "#packages";
+            var searchEl = "#results";
         </script>
     </head>
     <body>
         <div id="overlay" onkeypress="silentLogin(event)" tabindex="1" style="background: rgba(0, 0, 0, 0.67); position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;">
-            <div style="background: #FFFFFF; opacity: 1.00; position: absolute; top: 0%; left: 0%; width: 100%; height: 100%">
+            <div style="background: #FFFFFF; opacity: 1.00; position: absolute; top: 25%; left: 25%; width: 50%; height: 50%">
                 Swipe Mavcard to log back in to system
             </div>
         </div>
         <header>
-            <img class = "CMULogo" alt="Colorado Mesa Unversity" src="res/cmu_white.png" />
+            <img class="CMULogo" alt="Colorado Mesa Unversity" src="res/cmu_white.png" />
         </header>
         <nav>
             <ul>
@@ -110,28 +114,55 @@
 
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
         
+        <span id="CheckoutPkg">
+            <center>
+                <table>
+                    <tr>
+                        <th>Swipe Mavcard:</th>
+                        <td><input type="password" onkeypress="if (event.keyCode == 13) {readCard(this.value);this.value = '';}"/></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" id="first_name" disabled/></td>
+                        <td><input type="text" id="last_name" disabled/></td>
+                        <td><input type="text" id="600_number" disabled/></td>
+                        <td><input type="button" value="Check for Packages" onclick="getStudentPackages();"/>
+                    </tr>
+                </table>
+            </center>
+            <div id="packages" style="border: 1px solid black; margin: 1px;">
+                <div v-for="package in packages" style="border: 1px solid black; margin: 1px;">
+                    {{package.First_Name}} {{package.Last_Name}} - {{package.Description}}
+                </div>
+            </div>
+            <input type="button" value="Checkout" onclick="checkoutPackages();"/>
+        </span>
+        
+        <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+        
         <span id="AddPkg">
             Welcome to the Package Portal.
             Please insert the students first name, last name and package description below.
 
-            <div>
-                <br>
-                <em><small>Note: This form will input the First and Last name into the package Database.</small> </em>
-                <table>
-                    <tr>
-                        <th>Name: </th>
-                        <td> <input type="text" name="name" onkeypress="doSearch(this.value);"/></td>
-                        <td>
-                            <select id="results" name="results" onchange="useStudent(this.value);">
-                                <option v-for="result in results" v-bind:value="$index">{{result.First_Name}} {{result.Last_Name}}</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr><th>Room Number: </th><td> <input type="text" id="roomnum" required /></td></tr>
-                    <tr><th>Package Description: </th><td> <textarea name="package" rows="3" cols="50" required></textarea></td></tr>
-                    <tr><th><input type="button" value = "Submit" /> <input type="button" value="Reset" /></th></tr>
-                </table>
-            </div>
+            <center>
+                <div>
+                    <br>
+                    <em><small>Note: This form will input the First and Last name into the package Database.</small> </em>
+                    <table>
+                        <tr>
+                            <th>Name: </th>
+                            <td> <input type="text" name="name" oninput="doSearch(this.value);"/></td>
+                            <td>
+                                <select id="results" onchange="useStudent(this.value);">
+                                    <option v-for="(result, index) in results" v-bind:value="index">{{result.First_Name}} {{result.Last_Name}}</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr><th>Room Number: </th><td> <input type="text" id="roomnum" required /></td></tr>
+                        <tr><th>Package Description: </th><td> <textarea name="package" rows="3" cols="50" required></textarea></td></tr>
+                        <tr><th><input type="button" value = "Submit" /> <input type="button" value="Reset" /></th></tr>
+                    </table>
+                </div>
+            </center>
         </span>
         
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
@@ -150,55 +181,11 @@
         
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
         
-        <span id="CheckoutPkg">
-            <center>
-                <table>
-                    <tr>
-                        <th>Swipe Mavcard:</th>
-                        <td><input type="password" onkeypress="if (event.keyCode == 13) {readCard(this.value);this.value = '';}"/></td>
-                    </tr>
-                    <tr>
-                        <td><input type="text" id="first_name" disabled/></td>
-                        <td><input type="text" id="last_name" disabled/></td>
-                        <td><input type="text" id="600_number" disabled/></td>
-                        <td><input type="button" value="Check for Packages" onclick="getStudentPackages();"/>
-                    </tr>
-                </table>
-            </center>
-            <div v-for="package in packages" id="packages" style="border: 1px solid black; margin: 1px;">
-                {{package.First_Name}} {{package.Last_Name}} - {{package.Description}}
-            </div>
-            <input type="button" value="Checkout" onclick="checkoutPackages();"/>
-        </span>
-        
-        <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-        
         <footer>
             &copy; Colorado Mesa University
         </footer>
         
         <script type="text/javascript">
-            var pvm = new Vue({
-                el: '#packages',
-                data: {
-                    packages: []
-                }
-            });
-            
-            var svm = new Vue({
-                el: '#results',
-                data: {
-                    results: []
-                }
-            });
-            
-            var dvm = new Vue({
-                el: '#dorms',
-                data: {
-                    dorms: []
-                }
-            });
-
             
             clearFields();
             switchToTab($("a")[0], '#CheckoutPkg');

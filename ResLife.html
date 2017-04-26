@@ -1,155 +1,131 @@
 <!DOCTYPE HTML>
 <html>
     <head>
-        <title class = "headtitle">Res-Life</title>
+        <title>Res-Life</title>
         <link rel="stylesheet" href="PackageSysStyle.css">
-        <script src="https://unpkg.com/vue/dist/vue.js"></script>
         <script src="res/jquery-3.2.1-min.js"></script>
-        <script>
-
-
-        var dfetch = true;
-        function login(Fname, Lname, Key) {
-                    $.ajax("functions.php?a=login", {
-                        'method': 'POST',
-                        'data': {'first' : Fname, 'last' : Lname, 'n600' : Key},
-                        'dataType': "json",
-                        'success' : function(json) {
-                            if (json.result) {
-                                if (dfetch) {
-                                    dfetch = false;
-                                    $.ajax("functions.php?a=getd", {
-                                        'method': 'GET',
-                                        'dataType': "json",
-                                        'success' : function(json) {
-                                            dvm.dorms = json.result;
-                                        }
-                                    });
-                                    $.ajax("functions.php?a=gettv", {
-                                        'method': 'GET',
-                                        'dataType': "json",
-                                        'success' : function(json) {
-                                            pvm.Students = json.result;
-                                        }
-                                    });
-                                }
-                                $("#overlay").hide();
-                            }
-                        }
-                    });
-            }
-        </script>
+        <script src="https://unpkg.com/vue/dist/vue.js"></script>
+        <script src="res/functions.js"></script>
     </head>
-  <body>
-    <div id="overlay" onkeypress="silentLogin(event)" tabindex="1" style="background: rgba(0, 0, 0, 0.67); position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;">
-      <div style="background: #FFFFFF; opacity: 1.00; position: absolute; top: 0%; left: 0%; width:100%; height: 100%">
-          First Name: <input type="text" id="Fname"/>
-        </br>
-          Last Name: <input type="text" id="Lname"/>
-        </br>
-          Enter Key: <input type="text" id="Key"/>
-        </br>
-          <input type="button" value="Login" onclick="login($('#Fname').value, $('#Lname').value, $('#Key').value)"/>
-      </div>
+    <body>
+        <div id="overlay" onkeypress="silentLogin(event)" tabindex="1" style="background: rgba(0, 0, 0, 0.67); position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;">
+            <div style="background: #FFFFFF; opacity: 1.00; position: absolute; top: 0%; left: 0%; width:100%; height: 100%">
+                First Name: <input type="text" id="Fname"/>
+                <br>
+                Last Name: <input type="text" id="Lname"/>
+                <br>
+                Enter Key: <input type="text" id="Key"/>
+                <br>
+                <input type="button" value="Login" onclick="login($('#Fname').value, $('#Lname').value, $('#Key').value)"/>
+            </div>
+        </div>
 
-		<header>
-			<img class = "CMULogo" alt="Colorado Mesa Unversity" src="cmu_white.png">
-	  </header>
-    <nav>
-              <ul>
-                  <li> <a name="nav" href="javascript:void" onclick = "$('a[name=nav]').removeClass('NavHighlight');$(this).addClass('NavHighlight');$('span').hide();$('#HallEdit').show()">Edit Residence Halls</a></li>
-                  <li> <a name="nav" href="javascript:void" onclick = "$('a[name=nav]').removeClass('NavHighlight');$(this).addClass('NavHighlight');$('span').hide();$('#PersonEdit').show()">Edit Person</a></li>
-                  <li> <a name="nav" href="javascript:void" onclick = "$('a[name=nav]').removeClass('NavHighlight');$(this).addClass('NavHighlight');$('span').hide();$('#MasterClear').show()">Master Clear</a></li>
-              </ul>
-    </nav>
-  <span id = "HallEdit">
-    Welcome to the Residence Hall Edit/Add/Delete form.<br>
-    <em><small>Note: Please Fill in all information.</small></em>
-    <em><small>Once a submission is made it is added to database.</small></em>
-    <div class="FormAdd">
-        <br>
-        <table>
-            <tr>
-                    <th>Hall Name:</th>
-                    <td><input type="text" id="first_name" name="first_name"/></td>
-              </tr>
-                <tr>
-                    <th></th>
-                </tr>
-                <tr>
-                    <th>Address:</th>
-                    <td><input type="text" id="email" name="email" /></td>
-                </tr>
-                <tr>
-                    <td><input type="button" value="Add" onclick="addDorm();"/></td>
-                    <td><input type="button" value="Edit" onclick="editDorm();"/></td>
-                    <td><input type="button" value="Remove" onclick="removeDorm();"/></td>
-                    <td><input type="button" value="Clear" onclick="clearFields();"/></td>
-                </tr>
-            </table>
-        </form>
-    </div>
-  </span>
-    <span id = "PersonEdit">
-      Welcome to the Edit/Add/Remove Person Form.<br>
-      <em><small>Note: Please fill in all information.</small></em>
-      <em><small>Once a submission is made it added to database.</small></em>
+        <header>
+            <img class = "CMULogo" alt="Colorado Mesa Unversity" src="cmu_white.png">
+        </header>
+        <nav>
+            <ul>
+                <li> <a name="nav" href="javascript:void" onclick = "switchToTab(this, '#HallEdit');">Edit Residence Halls</a></li>
+                <li> <a name="nav" href="javascript:void" onclick = "switchToTab(this, '#PersonEdit');">Edit Person</a></li>
+                <li> <a name="nav" href="javascript:void" onclick = "switchToTab(this, '#MasterClear');">Master Clear</a></li>
+            </ul>
+        </nav>
 
-      <div class="FormAdd">
-          <br>
-          <form>
-              <table>
-                  <tr>
-                      <th>600 #:</th>
-                      <td><input type="text" id="600_number" name="600_number" </td>
-                  </tr>
-                  <tr>
-                      <th>Name:</th>
-                      <td><input type="text" id="first_name" name="first_name" </td>
-                      <td><input type="text" id="last_name" name="last_name" </td>
-                  </tr>
-                  <tr>
-                      <th></th>
-                  </tr>
-                  <tr>
-                      <th>Email:</th>
-                      <td><input type="text" id="email" name="email" /></td>
-                  </tr>
-                  <tr>
-    <th>Residence Hall:</th>
-                      <td>
-                          <select id="dorms" name="dorms">
-                              <option v-for="dorm in dorms" v-bind:value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
-                          </select>
-                      </td>
-                  </tr>
-                  <tr>
-                    <td><input type="button" value="Add Coordinator" onclick="addPerson(4); clearFields();"/></td>
-                    <td><input type="button" value="Add RA" onclick="addPerson(3); clearFields();"/></td>
-                    <td><input type="button" value="Add DA" onclick="addPerson(2); clearFields();"/></td>
-                    <td><input type="button" value="Add Student" onclick="addPerson(1); clearFields();"/></td>
-                    <td><input type="button" value="Edit" onclick="editPerson(); clearFields();"/></td>
-                    <td><input type="button" value="Remove" onclick="removePerson(); clearFields();"/></td>
-                    <td><input type="button" value="Clear" onclick="clearFields();"/></td>
-                  </tr>
-              </table>
-          </form>
-      </div>
-  </span>
-    <span id = "MasterClear">
-<em><large><font size="9">WARNING! </font></large></em>
-</br>
-<em><large><font size="9">ONCE A BUTTON IS CLICKED RESPECTIVE DATABASE IS CLEARED!</font></large></em>
-</br>
-<em><large><font size="9">THIS CANNOT BE UNDONE! </font></large></em>
-</br>
-  <input type="button" value="Clear packages" onclick="clearPackages();"/>
-  <input type="button" value="Clear All People" onclick="clearPeople();"/>
+        <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+        
+        <span id = "HallEdit">
+            Welcome to the Residence Hall Edit/Add/Delete form.<br>
+            <em><small>Note: Please Fill in all information.</small></em>
+            <em><small>Once a submission is made it is added to database.</small></em>
+            <br>
+            <div class="FormAdd">
+                <table>
+                    <tr>
+                        <th>Hall Name:</th>
+                        <td><input type="text" id="first_name" name="first_name"/></td>
+                    </tr>
+                    <tr>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <th>Address:</th>
+                        <td><input type="text" id="email" name="email" /></td>
+                    </tr>
+                    <tr>
+                        <td><input type="button" value="Add" onclick="addDorm();"/></td>
+                        <td><input type="button" value="Edit" onclick="editDorm();"/></td>
+                        <td><input type="button" value="Remove" onclick="removeDorm();"/></td>
+                        <td><input type="button" value="Clear" onclick="clearFields();"/></td>
+                    </tr>
+                </table>
+            </div>
+        </span>
 
-    </span>
+        <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+        
+        <span id = "PersonEdit">
+            Welcome to the Edit/Add/Remove Person Form.<br>
+            <em><small>Note: Please fill in all information.</small></em>
+            <em><small>Once a submission is made it added to database.</small></em>
+
+            <div class="FormAdd">
+                <br>
+                <form>
+                    <table>
+                        <tr>
+                            <th>600 #:</th>
+                            <td><input type="text" id="600_number" name="600_number" /></td>
+                        </tr>
+                        <tr>
+                            <th>Name:</th>
+                            <td><input type="text" id="first_name" name="first_name" /></td>
+                            <td><input type="text" id="last_name" name="last_name" /></td>
+                        </tr>
+                        <tr>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <th>Email:</th>
+                            <td><input type="text" id="email" name="email" /></td>
+                        </tr>
+                        <tr>
+                            <th>Residence Hall:</th>
+                            <td>
+                                <select id="dorms" name="dorms">
+                                    <option v-for="dorm in dorms" v-bind:value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="button" value="Add Coordinator" onclick="addPerson(4); clearFields();"/></td>
+                            <td><input type="button" value="Add RA" onclick="addPerson(3); clearFields();"/></td>
+                            <td><input type="button" value="Add DA" onclick="addPerson(2); clearFields();"/></td>
+                            <td><input type="button" value="Add Student" onclick="addPerson(1); clearFields();"/></td>
+                            <td><input type="button" value="Edit" onclick="editPerson(); clearFields();"/></td>
+                            <td><input type="button" value="Remove" onclick="removePerson(); clearFields();"/></td>
+                            <td><input type="button" value="Clear" onclick="clearFields();"/></td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        </span>
+
+        <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+        
+        <span>
+            <em><large><font size="9">WARNING! </font></large></em>
+            </br>
+            <em><large><font size="9">ONCE A BUTTON IS CLICKED RESPECTIVE DATABASE IS CLEARED!</font></large></em>
+            </br>
+            <em><large><font size="9">THIS CANNOT BE UNDONE! </font></large></em>
+            </br>
+            <input type="button" value="Clear packages" onclick="clearPackages();"/>
+            <input type="button" value="Clear All People" onclick="clearPeople();"/>
+
+        </span>
 
         <footer>
-			&copy Colorado Mesa University
-		</footer>
+            &copy Colorado Mesa University
+        </footer>
     </body>
 </html>

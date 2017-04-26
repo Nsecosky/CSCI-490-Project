@@ -1,3 +1,44 @@
+var dormsEl = "";
+var packagesEl = "";
+var searchEl = "";
+var studentsEl = "";
+var dvm = null;
+var pvm = null;
+var svm = null;
+var stvm = null;
+
+function createVMs() {
+    dvm = new Vue({
+        el: dormsEl,
+        data: {
+            dorms: []
+        }
+    });
+    pvm = new Vue({
+        el: packagesEl,
+        data: {
+            packages: []
+        }
+    });
+    svm = new Vue({
+        el: searchEl,
+        data: {
+            results: []
+        }
+    });
+    stvm = new Vue({
+        el: studentsEl,
+        data: {
+            students: []
+        }
+    });
+}
+
+
+$(document).ready(createVMs);
+
+//////////////////////////////
+
 var cardrgx = /(?:%E\?;E\?|\%(\d+)\^(\w+), (\w+) (\w)\s*\?;(\d+)=(\d+)\?)\+E\?/;
 function readCard(cinfo) {
     info = cardrgx.exec(cinfo);
@@ -15,7 +56,7 @@ function readCard(cinfo) {
     }
 }
 
-function login(cinfo) {
+function cLogin(cinfo) {
     info = cardrgx.exec(cinfo);
     if (info != null) {
         if (info[1] != null) {
@@ -34,6 +75,7 @@ function login(fname, lname, n600) {
         'dataType': "json",
         'success': function (json) {
             if (json.result) {
+                showLogin = false;
                 if (dfetch && typeof dvm !== 'undefined') {
                     dfetch = false;
                     $.ajax("res/functions.php?a=getd", {
@@ -50,11 +92,35 @@ function login(fname, lname, n600) {
     });
 }
 
+function checkLogin() {
+    $.get(
+        "res/functions.php",
+        {"a": "login"},
+        function (response, status, jqxhr) {
+            if (!response.logged) {
+                reLogin();
+            }
+        },
+        "json"
+    );
+}
+
+setInterval(checkLogin, 5000);
+
+var showLogin = true;
+function reLogin() {
+    if (!showLogin) {
+        showLogin = true;
+        $("#overlay").show();
+        $("#overlay").focus();
+    }
+}
+
 var curcard = "";
 function silentLogin(event) {
     curcard += String.fromCharCode(event.charCode);
     if (event.keyCode == 13) {
-        login(curcard);
+        cLogin(curcard);
         curcard = "";
     }
 }
@@ -73,10 +139,15 @@ function switchToTab(tabnav, tabcont) {
 
 function doSearch(name) {
     $.get(
-        "functions.php",
+        "res/functions.php",
         {"a": "search", "name": name},
-        function (response) {
-            svm.results = response;
+        function (response, status, jqxhr) {
+            if (response.logged && response.result) {
+                svm.results = response.result;
+            } else {
+                svm.results = [];
+                reLogin();
+            }
         },
         "json"
     );

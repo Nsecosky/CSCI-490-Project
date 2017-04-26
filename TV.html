@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
     <head>
-        <title class = "headtitle">TV Display</title>
+        <title>TV Display</title>
         <link rel="stylesheet" href="PackageSysStyle.css">
         <script src="https://unpkg.com/vue/dist/vue.js"></script>
         <script src="res/jquery-3.2.1-min.js"></script>
@@ -12,10 +12,12 @@
                     'method': 'GET',
                     'dataType': "json",
                     'success': function (json) {
-                        pvm.students = json.result;
+                        stvm.students = json.result;
                     }
                 });
             }
+            var studentsEl = "#display";
+            var dormsEl = "#dorms";
         </script>
     </head>
 
@@ -23,11 +25,11 @@
         <div id="overlay" style="background: rgba(0, 0, 0, 0.67); position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;">
             <div style="background: #FFFFFF; opacity: 1.00; position: absolute; top: 0%; left: 0%; width:100%; height: 100%">
                 First Name: <input type="text" id="Fname"/>
-                </br>
+                <br>
                 Last Name: <input type="text" id="Lname"/>
-                </br>
+                <br>
                 Enter Key: <input type="text" id="Key"/>
-                </br>
+                <br>
                 <input type="button" value="Login" onclick="login($('#Fname')[0].value, $('#Lname')[0].value, $('#Key')[0].value)"/>
             </div>
 
@@ -66,22 +68,5 @@
         <footer>
             &copy; Colorado Mesa University
         </footer>
-
-        <script type="text/javascript">
-            var pvm = new Vue({
-                el: '#display',
-                data: {
-                    students: []
-                }
-            });
-            
-            var dvm = new Vue({
-                el: '#dorms',
-                data: {
-                    dorms: []
-                }
-            });
-
-        </script>
     </body>
 </html>

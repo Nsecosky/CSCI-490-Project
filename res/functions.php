@@ -11,9 +11,9 @@ function dbConnect() {
 
 function login($first, $last, $n600) {
     $con = dbConnect();
-    $res = mysqli_query($con, "SELECT * FROM people WHERE first_name = '$first' AND last_name = '$last' AND 600_number = '$n600'");
-    if ($res) {
-        $_SESSION['id'] = mysqli_fetch_assoc($res)["unique_id"];
+    $res = mysqli_query($con, "SELECT * FROM people WHERE first_name = '$first' AND last_name = '$last' AND 600_number = $n600");
+    if ($row = mysqli_fetch_assoc($res)) {
+        $_SESSION['id'] = $row["unique_id"];
         $_SESSION['logged'] = true;
         $_SESSION['time'] = time();
         return true;
@@ -43,7 +43,7 @@ function removePerson($sid) {
 
 function searchPeople($name) {
     $con = dbConnect();
-    $res = mysqli_query($con, "SELECT * FROM people WHERE first_name LIKE '$name%' OR last_name LIKE '$name%'");
+    $res = mysqli_query($con, "SELECT * FROM people WHERE first_name LIKE '%$name%' OR last_name LIKE '%$name%'");
     return mysqli_fetch_all($res, MYSQLI_ASSOC);
 }
 
@@ -67,7 +67,7 @@ function clearPeople(){
 function getPerson($id) {
     $con = dbConnect();
     $res = mysqli_query($con, "SELECT * from people WHERE unique_id = $id");
-    return mysqli_fetch_row($res);
+    return mysqli_fetch_assoc($res);
 }
 
 function getPeople(){
@@ -157,10 +157,15 @@ function getDorms() {
 }
 
 //NOTE: QUERY Picker**************************************************************************************
-echo "{\"result\": ";
+$result = "false";
 if (loggedIn()) {
     $da = $_SESSION['id'];
-    switch (getPerson($da)['access']) {
+    switch (getPerson($da)['Access']) {
+        case 4: {
+            switch ($_GET['a']) {
+
+            }
+        }
         case 3: {
             switch ($_GET['a']) {
 
@@ -169,7 +174,7 @@ if (loggedIn()) {
         case 2: {
             switch ($_GET['a']) {
                 case "getp": {
-                    echo json_encode(getPackages());
+                    $result = json_encode(getPackages());
                     break;
                 }
             }
@@ -178,39 +183,40 @@ if (loggedIn()) {
             switch ($_GET['a']) {
                 case "addp": {
                     addPackage($_GET['first'], $_GET['last'], $_GET['oid'], $_GET['desc'], $_GET['room'], $_GET['did'], $da);
+                    $result = "true";
                     break;
                 }
                 case "getsp": {
-                    echo json_encode(getStudentPackages($_GET['oid']));
+                    $result = json_encode(getStudentPackages($_GET['oid']));
                     break;
                 }
                 case "getdp": {
-                    echo json_encode(getDormPackages($_GET['did']));
+                    $result = json_encode(getDormPackages($_GET['did']));
                     break;
                 }
                 case "search": {
-                    echo json_encode(searchPeople($_GET['name']));
+                    $result = json_encode(searchPeople($_GET['name']));
                     break;
                 }
                 case "chkt": {
-                  checkoutPackages($_GET['oid']);
-                  echo "true";
-                  break;
+                    checkoutPackages($_GET['oid']);
+                    $result = "true";
+                    break;
                 }
             }
         }
         case 0: {
             switch ($_GET['a']) {
                 case "login": {
-                        echo "true";
+                    $result = "true";
                     break;
                 }
                 case "getd": {
-                    echo json_encode(getDorms());
+                    $result = json_encode(getDorms());
                     break;
                 }
                 case "gettv": {
-                    echo json_encode(getDormTVPackages($_GET['did']));
+                    $result = json_encode(getDormTVPackages($_GET['did']));
                     break;
                 }
             }
@@ -219,11 +225,11 @@ if (loggedIn()) {
 } else {
     switch ($_GET['a']) {
         case "login": {
-            echo login($_POST['first'], $_POST['last'], $_POST['n600']) ? "true" : "false";
+            $result = login($_POST['first'], $_POST['last'], $_POST['n600']) ? "true" : "false";
             break;
         }
     }
 }
-echo "}";
+echo "{\"logged\": " . (loggedIn() ? "true" : "false") . ", \"result\": $result}";
 
 ?>

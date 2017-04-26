@@ -1,53 +1,12 @@
 <!DOCTYPE HTML>
 <html>
     <head>
-        <title class = "headtitle">Desk Attendant Portal</title>
+        <title>Desk Attendant Portal</title>
         <link rel="stylesheet" href="res/PackageSysStyle.css">
         <script src="res/jquery-3.2.1-min.js"></script>
         <script src="https://unpkg.com/vue/dist/vue.js"></script>
         <script src="res/functions.js"></script>
         <script>
-            var dfetch = true;
-            function login(Fname, Lname, Key) {
-                $.ajax("functions.php?a=login", {
-                    'method': 'POST',
-                    'data': {'first': Fname, 'last': Lname, 'n600': Key},
-                    'dataType': "json",
-                    'success': function (json) {
-                        if (json.result) {
-                            if (dfetch) {
-                                dfetch = false;
-                                $.ajax("functions.php?a=getd", {
-                                    'method': 'GET',
-                                    'dataType': "json",
-                                    'success': function (json) {
-                                        dvm.dorms = json.result;
-                                    }
-                                });
-                                $.ajax("functions.php?a=gettv", {
-                                    'method': 'GET',
-                                    'dataType': "json",
-                                    'success': function (json) {
-                                        pvm.Students = json.result;
-                                    }
-                                });
-                            }
-                            $("#overlay").hide();
-                        }
-                    }
-                });
-            }
-            
-            function doSearch(name) {
-                $.get(
-                        "functions.php",
-                        {"a": "search", "name": name},
-                        function (response) {
-                            svm.results = response;
-                        },
-                        "json"
-                        );
-            }
             
             function getStudent(idx) {
                 $("#id").val(svm.results[idx].Unique_ID);
@@ -99,45 +58,43 @@
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
         
         <span id = "AddStudent">
-            Welcome to the Add Student. Pleas Fill in all info.<br>
+            Welcome to the Add Student. Please Fill in all info.<br>
             <em><small>Note: all changes will be added to database.</small> </em>
-            <div>
-                <br>
-                <form>
-                    <table>
-                        <tr>
-                            <th>600 #:</th>
-                            <td><input type="text" id="600_number" name="600_number"/></td>
-                        </tr>
-                        <tr>
-                            <th>First Name:</th>
-                            <td><input type="text" name ="fname" required /></td>
-                        </tr>
-                        <tr>
-                            <th>Last Name:</th>
-                            <td><input type="text" name ="lname" required /></td>
-                        </tr>
-                        <tr>
-                            <th>Email:</th>
-                            <td><input type="text" id="email" name="email" /></td>
-                        </tr>
-                        <tr>
-                            <th>Residence Hall:</th>
-                            <td>
-                                <select id="dorms" name="dorms">
-                                    <option v-for="dorm in dorms" v-bind:value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
-                                </select>
-                            </td>
-                        </tr>
-                        </tr>
-                        <tr>
-                            <td><input type="button" value="Add Student" onclick="addPerson(), clearFields();"/></td>
-                            <td><input type="button" value="Add RA" onclick="addRA(), clearFields();"/></td>
-                            <td><input type="button" value="Add DA" onclick="addDA(), clearFields();"/></td>
-                            <td><input type="button" value="Clear" onclick="clearFields();"/></td>
-                        </tr>
-                    </table>
-                </form>
+            <br>
+            <div class="FormAdd">
+                <table>
+                    <tr>
+                        <th>600 #:</th>
+                        <td><input type="text" id="600_number" name="600_number"/></td>
+                    </tr>
+                    <tr>
+                        <th>First Name:</th>
+                        <td><input type="text" name ="fname" required /></td>
+                    </tr>
+                    <tr>
+                        <th>Last Name:</th>
+                        <td><input type="text" name ="lname" required /></td>
+                    </tr>
+                    <tr>
+                        <th>Email:</th>
+                        <td><input type="text" id="email" name="email" /></td>
+                    </tr>
+                    <tr>
+                        <th>Residence Hall:</th>
+                        <td>
+                            <select id="dorms" name="dorms">
+                                <option v-for="dorm in dorms" v-bind:value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
+                            </select>
+                        </td>
+                    </tr>
+                    </tr>
+                    <tr>
+                        <td><input type="button" value="Add Student" onclick="addPerson(), clearFields();"/></td>
+                        <td><input type="button" value="Add RA" onclick="addRA(), clearFields();"/></td>
+                        <td><input type="button" value="Add DA" onclick="addDA(), clearFields();"/></td>
+                        <td><input type="button" value="Clear" onclick="clearFields();"/></td>
+                    </tr>
+                </table>
             </div>
         </span>
 

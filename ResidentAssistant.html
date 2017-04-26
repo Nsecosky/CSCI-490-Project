@@ -1,100 +1,67 @@
 <!DOCTYPE HTML>
 <html>
-<head>
-    <title class = "headtitle">Desk Attendant Portal</title>
-    <link rel="stylesheet" href="PackageSysStyle.css">
-    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <head>
+        <title>Desk Attendant Portal</title>
+        <link rel="stylesheet" href="PackageSysStyle.css">
+        <script src="https://unpkg.com/vue/dist/vue.js"></script>
         <script src="res/jquery-3.2.1-min.js"></script>
-    <script>
+        <script src="res/functions.js"></script>
+    </head>
+    <body>
+        <div id="overlay" onkeypress="silentLogin(event)" tabindex="1" style="background: rgba(0, 0, 0, 0.67); position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;">
+            <div style="background: #FFFFFF; opacity: 1.00; position: absolute; top: 0%; left: 0%; width:100%; height: 100%">
+                First Name: <input type="text" id="Fname"/>
+                </br>
+                Last Name: <input type="text" id="Lname"/>
+                </br>
+                Enter Key: <input type="text" id="Key"/>
+                </br>
+                <input type="button" value="Login" onclick="login($('#Fname').value, $('#Lname').value, $('#Key').value)"/>
+            </div>
+            <header>
+                <img class = "CMULogo" alt="Colorado Mesa Unversity" src="cmu_white.png">
+            </header>
 
+            Welcome to the Hall Coordinator Form. Please type a students first and last name to add them to the residence hall roster.<br>
+            <em><small>Note: This will add a student to the residence hall database.</small></em>
 
-    var dfetch = true;
-    function login(Fname, Lname, Key) {
-                $.ajax("functions.php?a=login", {
-                    'method': 'POST',
-                    'data': {'first' : Fname, 'last' : Lname, 'n600' : Key},
-                    'dataType': "json",
-                    'success' : function(json) {
-                        if (json.result) {
-                            if (dfetch) {
-                                dfetch = false;
-                                $.ajax("functions.php?a=getd", {
-                                    'method': 'GET',
-                                    'dataType': "json",
-                                    'success' : function(json) {
-                                        dvm.dorms = json.result;
-                                    }
-                                });
-                                $.ajax("functions.php?a=gettv", {
-                                    'method': 'GET',
-                                    'dataType': "json",
-                                    'success' : function(json) {
-                                        pvm.Students = json.result;
-                                    }
-                                });
-                            }
-                            $("#overlay").hide();
-                        }
-                    }
-                });
-        }
-    </script>
-</head>
-<body>
-  <div id="overlay" onkeypress="silentLogin(event)" tabindex="1" style="background: rgba(0, 0, 0, 0.67); position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;">
-    <div style="background: #FFFFFF; opacity: 1.00; position: absolute; top: 0%; left: 0%; width:100%; height: 100%">
-        First Name: <input type="text" id="Fname"/>
-      </br>
-        Last Name: <input type="text" id="Lname"/>
-      </br>
-        Enter Key: <input type="text" id="Key"/>
-      </br>
-        <input type="button" value="Login" onclick="login($('#Fname').value, $('#Lname').value, $('#Key').value)"/>
-    </div>
-<header>
-  <img class = "CMULogo" alt="Colorado Mesa Unversity" src="cmu_white.png":></img>
-</header>
-
-Welcome to the Hall Coordinator Form. Please type a students first and last name to add them to the residence hall roster.<br>
-<em><small>Note: This will add a student to the residence hall database.</small></em>
-
-<div class="FormAdd">
-<br>
-<form>
-   <table>
-       <tr>
-           <th>600 #:</th>
-           <td><input type="text" id="600_number" name="600_number"/></td>
-       </tr>
-       <tr>
-           <th>Name:</th>
-           <td><input type="text" id="first_name" name="first_name"/></td>
-           <td><input type="text" id="last_name" name="last_name"/></td>
-       </tr>
-       <tr>
-           <th></th>
-       </tr>
-       <tr>
-           <th>Email:</th>
-           <td><input type="text" id="email" name="email" /></td>
-       </tr>
-       <tr>
-<th>Residence Hall:</th>
-           <td>
-               <select id="dorms" name="dorms">
-                   <option v-for="dorm in dorms" :value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
-               </select>
-           </td>
-       </tr>
-       <tr>
-           <td><input type="button" value="Add Student" onclick="addPerson (), clearFields();"/></td>
-           <td><input type="button" value="Clear" onclick="clearFields();"/></td>
-       </tr>
-   </table>
-</form>
-</div>
-<footer>
-&copy Colorado Mesa University
-</footer>
-</body>
+            <div class="FormAdd">
+                <br>
+                <form>
+                    <table>
+                        <tr>
+                            <th>600 #:</th>
+                            <td><input type="text" id="600_number" name="600_number"/></td>
+                        </tr>
+                        <tr>
+                            <th>Name:</th>
+                            <td><input type="text" id="first_name" name="first_name"/></td>
+                            <td><input type="text" id="last_name" name="last_name"/></td>
+                        </tr>
+                        <tr>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <th>Email:</th>
+                            <td><input type="text" id="email" name="email" /></td>
+                        </tr>
+                        <tr>
+                            <th>Residence Hall:</th>
+                            <td>
+                                <select id="dorms" name="dorms">
+                                    <option v-for="dorm in dorms" v-bind:value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type="button" value="Add Student" onclick="addPerson(), clearFields();"/></td>
+                            <td><input type="button" value="Clear" onclick="clearFields();"/></td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+            <footer>
+                &copy Colorado Mesa University
+            </footer>
+    </body>
 </html>
