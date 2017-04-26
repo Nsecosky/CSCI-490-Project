@@ -7,7 +7,7 @@
         <script src="https://unpkg.com/vue/dist/vue.js"></script>
         <script src="res/functions.js"></script>
         <script>
-            
+
             function getStudent(idx) {
                 $("#id").val(svm.results[idx].Unique_ID);
                 $("#600_number").val(svm.results[idx]["600_number"]);
@@ -41,7 +41,7 @@
         </nav>
 
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-        
+
         <span id = "Roster">
             <input type="button" value="Sort by Hall" onclick="getPersonhall();"/>
             <input type="button" value="Sort by last name" onclick="getPersonLname();"/>
@@ -56,7 +56,7 @@
         </span>
 
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-        
+
         <span id = "AddStudent">
             Welcome to the Add Student. Please Fill in all info.<br>
             <em><small>Note: all changes will be added to database.</small> </em>
@@ -89,9 +89,9 @@
                     </tr>
                     </tr>
                     <tr>
-                        <td><input type="button" value="Add Student" onclick="addPerson(), clearFields();"/></td>
-                        <td><input type="button" value="Add RA" onclick="addRA(), clearFields();"/></td>
-                        <td><input type="button" value="Add DA" onclick="addDA(), clearFields();"/></td>
+                        <td><input type="button" value="Add Student" onclick="addPerson(1), clearFields();"/></td>
+                        <td><input type="button" value="Add RA" onclick="addPerson(3), clearFields();"/></td>
+                        <td><input type="button" value="Add DA" onclick="addPerson(2), clearFields();"/></td>
                         <td><input type="button" value="Clear" onclick="clearFields();"/></td>
                     </tr>
                 </table>
@@ -99,19 +99,19 @@
         </span>
 
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-        
+
         <span id="EditStudent">
-            Welcome to the Add Student. Pleas Fill in all info.<br>
+            Welcome to the Edit Student. Pleas Fill in all info.<br>
             <em><small>Note: all changes will be added to database.</small> </em>
             <div>
                 <br>
                 <table>
                     <tr>
                         <th>Name:</th>
-                        <td> <input type="text" name="name" onkeypress="doSearch(this.value);"/></td>
+                        <td> <input type="text" name="name" oninput="doSearch(this.value);"/></td>
                         <td>
                             <select id="results" name="results" onchange="useStudent(this.value);">
-                                <option v-for="result in results" v-bind:value="$index">{{result.First_Name}} {{result.Last_Name}}</option>
+                                <option v-for="(result, index) in results" v-bind:value="index">{{result.First_Name}} {{result.Last_Name}}</option>
                             </select>
                         </td>
                     </tr>
@@ -141,9 +141,10 @@
                     </tr>
                     <tr>
                     <input type="hidden" id="id" name="id"/>
-                    <td><input type="button" value="Add Student" onclick="addPerson(); clearFields();"/></td>
-                    <td><input type="button" value="Add RA" onclick="addRA(); clearFields();"/></td>
-                    <td><input type="button" value="Add DA" onclick="addDA(); clearFields();"/></td>
+                    <td><input type="button" value="Add Student" onclick="editPerson(1); clearFields();"/></td>
+                    <td><input type="button" value="Add RA" onclick="editPerson(3); clearFields();"/></td>
+                    <td><input type="button" value="Add DA" onclick="editPerson(2); clearFields();"/></td>
+                    <td><input type="button" value="Remove Person" onclick="removePerson(); clearFields();"/></td>
                     <td><input type="button" value="Clear" onclick="clearFields();"/></td>
                     </tr>
                 </table>
@@ -151,8 +152,8 @@
         </span>
 
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-        
-        <span id = "PackageList">
+
+        <span id= "PackageList">
             Welcome to the Package Portal
             <center>
                 <div id="packages" style="border: 2px solid black; width: 800px;">
@@ -168,16 +169,19 @@
         </span>
 
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-        
+
         <footer>
             &copy Colorado Mesa University
         </footer>
-        
-        <script>
+
+        <script type="text/javascript">
+
+            clearFields():
+            switchToTab($("a")[0], '#PackageList');
             function clearFields() {
                 $("#600_number").val("");
-                $("#first_name").val("");
-                $("#last_name").val("");
+                $("#fname").val("");
+                $("#lname").val("");
                 $("#email").val("");
             }
         </script>

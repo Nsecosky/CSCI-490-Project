@@ -26,13 +26,14 @@
         <nav>
             <ul>
                 <li> <a name="nav" href="javascript:void" onclick = "switchToTab(this, '#HallEdit');">Edit Residence Halls</a></li>
-                <li> <a name="nav" href="javascript:void" onclick = "switchToTab(this, '#PersonEdit');">Edit Person</a></li>
+                <li> <a name="nav" href="javascript:void" onclick = "switchToTab(this, '#AddPaerson');">Add Person</a></li>
+                <li> <a name="nav" href="javascript:void" onclick = "switchToTab(this, '#EditPaerson');">Edit Person</a></li>
                 <li> <a name="nav" href="javascript:void" onclick = "switchToTab(this, '#MasterClear');">Master Clear</a></li>
             </ul>
         </nav>
 
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-        
+
         <span id = "HallEdit">
             Welcome to the Residence Hall Edit/Add/Delete form.<br>
             <em><small>Note: Please Fill in all information.</small></em>
@@ -62,9 +63,9 @@
         </span>
 
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-        
+
         <span id = "PersonEdit">
-            Welcome to the Edit/Add/Remove Person Form.<br>
+            Welcome to the Add Person Form.<br>
             <em><small>Note: Please fill in all information.</small></em>
             <em><small>Once a submission is made it added to database.</small></em>
 
@@ -101,8 +102,7 @@
                             <td><input type="button" value="Add RA" onclick="addPerson(3); clearFields();"/></td>
                             <td><input type="button" value="Add DA" onclick="addPerson(2); clearFields();"/></td>
                             <td><input type="button" value="Add Student" onclick="addPerson(1); clearFields();"/></td>
-                            <td><input type="button" value="Edit" onclick="editPerson(); clearFields();"/></td>
-                            <td><input type="button" value="Remove" onclick="removePerson(); clearFields();"/></td>
+
                             <td><input type="button" value="Clear" onclick="clearFields();"/></td>
                         </tr>
                     </table>
@@ -111,7 +111,61 @@
         </span>
 
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-        
+
+        <span id="EditStudent">
+            Welcome to the Edit Person Page. Please Fill in all info.<br>
+            <em><small>Note: all changes will be added to database.</small> </em>
+            <div>
+                <br>
+                <table>
+                    <tr>
+                        <th>Name:</th>
+                        <td> <input type="text" name="name" oninput="doSearch(this.value);"/></td>
+                        <td>
+                            <select id="results" name="results" onchange="useStudent(this.value);">
+                                <option v-for="(result, index) in results" v-bind:value="index">{{result.First_Name}} {{result.Last_Name}}</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>600 #:</td>
+                        <td><input type="text" id="600_number" name="600_number"/></td>
+                    </tr>
+                    <tr>
+                        <td>First Name:</td>
+                        <td><input type="text" name ="fname" required /></td>
+                    </tr>
+                    <tr>
+                        <td>Last Name:</td>
+                        <td><input type="text" name ="lname" required /></td>
+                    </tr>
+                    <tr>
+                        <td>Email:</td>
+                        <td><input type="text" id="email" name="email" /></td>
+                    </tr>
+                    <tr>
+                        <td>Residence Hall:</td>
+                        <td>
+                            <select id="dorms" name="dorms">
+                                <option v-for="dorm in dorms" v-bind:value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                    <input type="hidden" id="id" name="id"/>
+                    <td><input type="button" value="Add Student" onclick="addPerson(1); clearFields();"/></td>
+                    <td><input type="button" value="Add RA" onclick="addPerson(3); clearFields();"/></td>
+                    <td><input type="button" value="Add DA" onclick="addPerson(2); clearFields();"/></td>
+                    <td><input type="button" value="Remove Person" onclick="removePerson(); clearFields();"/></td>
+                    <td><input type="button" value="Clear" onclick="clearFields();"/></td>
+                    </tr>
+                </table>
+            </div>
+        </span>
+
+
+        <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
         <span>
             <em><large><font size="9">WARNING! </font></large></em>
             </br>
