@@ -188,7 +188,7 @@ if (loggedIn()) {
                     $result = json_encode(getPackages());
                     break;
                 }
-
+              }
 
         }
         case 1: {
