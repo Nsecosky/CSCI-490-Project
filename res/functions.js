@@ -1,19 +1,27 @@
-var dormsEl = "";
+var dormsEl = [];
 var packagesEl = "";
 var searchEl = "";
 var studentsEl = "";
-var dvm = null;
+var dvm = [];
 var pvm = null;
 var svm = null;
 var stvm = null;
 
+function setDormsData(data) {
+    for (var i = 0; i < dvm.length; i++) {
+        dvm[i].dorms = data;
+    }
+}
+
 function createVMs() {
-    dvm = new Vue({
-        el: dormsEl,
-        data: {
-            dorms: []
-        }
-    });
+    for (var i = 0; i < dormsEl.length; i++) {
+        dvm[i] = new Vue({
+            el: dormsEl[i],
+            data: {
+                dorms: []
+            }
+        });
+    }
     pvm = new Vue({
         el: packagesEl,
         data: {
@@ -76,13 +84,13 @@ function login(fname, lname, n600) {
         'success': function (json) {
             if (json.result) {
                 showLogin = false;
-                if (dfetch && typeof dvm !== 'undefined') {
+                if (dfetch && dvm.length > 0) {
                     dfetch = false;
                     $.ajax("res/functions.php?a=getd", {
                         'method': 'GET',
                         'dataType': "json",
                         'success': function (json) {
-                            dvm.dorms = json.result;
+                            setDormData(json.result);
                         }
                     });
                 }
@@ -142,13 +150,10 @@ function editDorm(){
 function addStudent(access){
   $.ajax("res/function.php?a=addp", {
     'method' : 'POST',
-    'data' : { 'n600' : $("#600_number").val(), 'first' : $("#fname").val(), 'last' : $("#lname").val(), 'email' : $("#email").val(), 'did' : $("#dorms").val(), 'room' : $("#dorms").val(), 'access' : access },
-
+    'data' : { 'n600' : $("#600_number").val(), 'first' : $("#fname").val(), 'last' : $("#lname").val(), 'email' : $("#email").val(), 'did' : $("#dorms").val(), 'room' : $("#dorms").val(), 'access' : access},
     'dataType': "json"
   });
 }
-
-
 
 function switchToTab(tabnav, tabcont) {
     $('a[name=nav]').removeClass('NavHighlight');
