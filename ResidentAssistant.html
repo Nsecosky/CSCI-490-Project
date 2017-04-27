@@ -6,6 +6,9 @@
         <script src="https://unpkg.com/vue/dist/vue.js"></script>
         <script src="res/jquery-3.2.1-min.js"></script>
         <script src="res/functions.js"></script>
+        <script>
+            dormsEl = ["dorms"];
+        </script>
     </head>
     <body>
       <div id="overlay" class = "OverlayStyle" style="background: rgba(109, 94, 81, 0.5); position: fixed; top: 0%; left: 0%; width: 100%; height: 100%;">
@@ -70,7 +73,7 @@
             </footer>
             <script type="text/javascript">
 
-                clearFields():
+                clearFields();
                 function clearFields() {
                     $("#600_number").val("");
                     $("#first_name").val("");
