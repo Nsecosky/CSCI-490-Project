@@ -2,7 +2,7 @@
 <html>
     <head>
         <title>TV Display</title>
-        <link rel="stylesheet" href="PackageSysStyle.css">
+        <link rel="stylesheet" href="res/PackageSysStyle.css">
         <script src="https://unpkg.com/vue/dist/vue.js"></script>
         <script src="res/jquery-3.2.1-min.js"></script>
         <script src="res/functions.js"></script>
@@ -23,21 +23,21 @@
 
     <body>
       <!-- This div -->
-        <div id="overlay" style="background: rgba(0, 0, 0, 0.67); position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;">
-            <div style="background: #FFFFFF; opacity: 1.00; position: absolute; top: 0%; left: 0%; width:100%; height: 100%">
-                First Name: <input type="text" id="Fname"/>
+        <div id="overlay" class = "OverlayStyle" style="background: rgba(109, 94, 81, 0.5); position: fixed; top: 0%; left: 0%; width: 100%; height: 100%;">
+            <div class = "OverlayText" style="opacity: 1.0; position: fixed; top: 30%; left: 30%; width:40%; height: 30%">
+                <font color = 'white'> <p><b>ALERT: Login information is case sensitive!</b></p></font>
+                <font color = 'white'> First Name: </font> <input type="text" id="Fname"/>
                 <br>
-                Last Name: <input type="text" id="Lname"/>
+                <font color = 'white'> Last Name: </font> <input type="text" id="Lname"/>
                 <br>
-                Enter Key: <input type="text" id="Key"/>
+                <font color = 'white'> Enter Key: </font> <input type="text" id="Key"/>
                 <br>
                 <input type="button" value="Login" onclick="login($('#Fname')[0].value, $('#Lname')[0].value, $('#Key')[0].value)"/>
             </div>
-
         </div>
 
         <header>
-            <img class="CMULogo" alt="Colorado Mesa Unversity" src="cmu_white.png">
+            <img class="CMULogo" alt="Colorado Mesa Unversity" src="res/cmu_white.png">
         </header>
 
         <em>

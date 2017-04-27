@@ -165,7 +165,6 @@ function doSearch(name) {
                 svm.results = response.result;
             } else {
                 svm.results = [];
-                reLogin();
             }
         },
         "json"
