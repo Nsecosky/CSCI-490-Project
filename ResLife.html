@@ -8,7 +8,7 @@
         <script src="res/functions.js"></script>
         <script>
           var studentsEl = "#display";
-          var dormsEl = "#dorms";
+          var dormsEl = ["#dorms", "#dorms2", "#dorms3"];
         </script>
     </head>
     <body>
@@ -47,7 +47,7 @@
             <br>
             <div class="FormAdd">
                 <table>
-
+                    <tr>
                         <th>Hall Name:</th>
                         <td><input type="text" id="name" name="first_name"/></td>
                     </tr>
@@ -59,8 +59,8 @@
                         <td><input type="text" id="address" name="address" /></td>
                     </tr>
                     <tr>
-                        <td><input type="button" value="Edit" onclick="editDorm()clearFields();"/></td>
-                        <td><input type="button" value="Remove" onclick="removeDorm()clearFields();"/></td>
+                        <td><input type="button" value="Edit" onclick="editDorm(); clearFields();"/></td>
+                        <td><input type="button" value="Remove" onclick="removeDorm(); clearFields();"/></td>
                         <td><input type="button" value="Clear" onclick="clearFields();"/></td>
                     </tr>
                 </table>
@@ -76,11 +76,13 @@
             <br>
             <div class="FormAdd">
                 <table>
-                    <th>Please select hall</th>
                     <tr>
-                      <select id="dorms" name="dorms" onchange="getPackages(this.value)">
-                          <option v-for="dorm in dorms" v-bind:value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
-                      </select>
+                        <th>Please select hall</th>
+                        <td>
+                            <select id="dorms" name="dorms" onchange="getPackages(this.value)">
+                                    <option v-for="dorm in dorms" v-bind:value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
+                            </select>
+                        </td>
                     </tr>
                     <tr>
                         <th>Hall Name:</th>
@@ -133,7 +135,7 @@
                         <tr>
                             <th>Residence Hall:</th>
                             <td>
-                                <select id="dorms" name="dorms">
+                                <select id="dorms2" name="dorms">
                                     <option v-for="dorm in dorms" v-bind:value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
                                 </select>
                             </td>
@@ -188,7 +190,7 @@
                     <tr>
                         <td>Residence Hall:</td>
                         <td>
-                            <select id="dorms" name="dorms">
+                            <select id="dorms3" name="dorms">
                                 <option v-for="dorm in dorms" v-bind:value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
                             </select>
                         </td>

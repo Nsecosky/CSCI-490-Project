@@ -27,7 +27,7 @@
                 <img class = "CMULogo" alt="Colorado Mesa Unversity" src="res/cmu_white.png">
             </header>
 
-          Please provide ALL Student Info to add them to residence hall roster.<br>
+            Please provide ALL Student Info to add them to residence hall roster.<br>
             <em><small>Note: This will add a student to the residence hall database.</small></em>
             <b><p>ALERT: STUDENT INFORMATION MUST BE ALL CAPS! LIKE THIS ALERT!</p></b>
             <div class="FormAdd">
@@ -56,7 +56,7 @@
                         <tr>
                             <th>Residence Hall:</th>
                             <td>
-                                <select id="dorms" name="dorms">
+                                <select id="dorms">
                                     <option v-for="dorm in dorms" v-bind:value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
                                 </select>
                             </td>
