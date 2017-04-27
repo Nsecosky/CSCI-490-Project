@@ -12,7 +12,7 @@
             function getStudentPackages() {
                 $.ajax("res/functions.php?a=getsp", {
                     'method': 'POST',
-                    'data': {'first': $("#first"), 'last': $("#last"), 'n600': $("#n600")},
+                    'data': {'first': $("#first").val(), 'last': $("#last").val(), 'n600': $("#n600").val()},
                     'dataType': "json",
                     'success': function (json) {
                         if (json.result) {
@@ -71,10 +71,7 @@
                 <table>
                     <tr>
                         <th>Swipe Mavcard:</th>
-                        <td><input type="password" onkeypress="if (event.keyCode == 13) {
-                                    readCard(this.value);
-                                    this.value = '';
-                                }"/></td>
+                        <td><input type="password" onkeypress="if (event.keyCode == 13) {readCard(this.value);this.value = '';}"/></td>
                     </tr>
                     <tr>
                         <td><input type="text" id="first_name" disabled/></td>
