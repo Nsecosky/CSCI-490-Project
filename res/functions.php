@@ -108,7 +108,7 @@ function getPackages() {
 
 function getDormTVPackages($did) {
     $con = dbConnect();
-    $res = mysqli_query($con, "SELECT first_name, last_name, (SELECT COUNT(unique_id) FROM packages WHERE people.unique_id = packages.owner AND time_out IS NULL) AS pcount FROM people WHERE dorm = $did HAVING pcount > 1");
+    $res = mysqli_query($con, "SELECT first_name, last_name, (SELECT COUNT(unique_id) FROM packages WHERE people.unique_id = packages.owner AND time_out IS NULL) AS pcount FROM people WHERE dorm = $did HAVING pcount > 0");
     return mysqli_fetch_all($res, MYSQLI_ASSOC);
 }
 
