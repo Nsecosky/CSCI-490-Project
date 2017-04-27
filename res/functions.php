@@ -4,7 +4,7 @@ error_reporting(E_ERROR);
 session_start();
 //NOTE: Set Up Functions ******************************************************************************************************************
 function dbConnect() {
-    $con = mysqli_connect("localhost", "root", "CSCI490", "PackageSystem");
+    $con = mysqli_connect("localhost", "root", "CSCI490", "packagesystem");
     mysqli_set_charset($con, "utf8");
     return $con;
 }
@@ -26,7 +26,7 @@ function loggedIn() {
 }
 
 function hasTimedOut() {
-    return time() - $_SESSION['time'] > 30;
+    return time() - $_SESSION['time'] > 60;
 }
 
  //NOTE: All People Table Functions *******************************************************************************************************
@@ -114,7 +114,7 @@ function getDormTVPackages($did) {
 
 function getDormPackages($did) {
     $con = dbConnect();
-    $res = mysqli_query($con, "SELECT * FROM packages INNER JOIN people ON people.unique_id = packages.owner WHERE dorm = $did AND time_out IS NULL");
+    $res = mysqli_query($con, "SELECT * FROM packages INNER JOIN people ON people.unique_id = packages.owner WHERE dorm = $did");
     return mysqli_fetch_all($res, MYSQLI_ASSOC);
 }
 
@@ -147,8 +147,8 @@ function removeDorm($name, $address) {
 }
 
 function editDorm($name, $address ,$dorm_id){
-  on = dbConnect();
-  $res = mysqli_query($con, "UPDATE dorms SET Dorm_Name = '$name', address = '$address' WHERE unique_id = $dorm_id");
+    $con = dbConnect();
+    $res = mysqli_query($con, "UPDATE dorms SET Dorm_Name = '$name', address = '$address' WHERE unique_id = $dorm_id");
 }
 
 function getDorms() {
