@@ -199,10 +199,12 @@ if (loggedIn()) {
                     break;
                 }
                 case "getsp": {
+                    echo "getsp";
                     $result = json_encode(getStudentPackages($_POST['first'], $_POST['last'], $_POST['n600']));
                     break;
                 }
                 case "search": {
+                    echo "search";
                     $result = json_encode(searchPeople($_GET['name']));
                     break;
                 }
