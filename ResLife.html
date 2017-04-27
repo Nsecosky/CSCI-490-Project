@@ -30,9 +30,10 @@
         </header>
         <nav>
             <ul>
+                <li> <a name="nav" href="javascript:void" onclick = "switchToTab(this, '#HallAdd');">Add Residence Halls</a></li>
                 <li> <a name="nav" href="javascript:void" onclick = "switchToTab(this, '#HallEdit');">Edit Residence Halls</a></li>
                 <li> <a name="nav" href="javascript:void" onclick = "switchToTab(this, '#AddPerson');">Add Person</a></li>
-                <li> <a name="nav" href="javascript:void" onclick = "switchToTab(this, '#EditPaerson');">Edit Person</a></li>
+                <li> <a name="nav" href="javascript:void" onclick = "switchToTab(this, '#EditPerson');">Edit/Remove Person</a></li>
                 <li> <a name="nav" href="javascript:void" onclick = "switchToTab(this, '#MasterClear');">Master Clear</a></li>
             </ul>
         </nav>
@@ -226,7 +227,7 @@
         <script type="text/javascript">
 
             clearFields():
-            switchToTab($("a")[0], '#AddPerson');
+            switchToTab($("a")[0], '#HallAdd');
             function clearFields() {
                 $("#600_number").val("");
                 $("#fname").val("");
