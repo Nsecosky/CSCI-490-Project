@@ -153,7 +153,7 @@
                             <td> <input type="text" name="name" oninput="doSearch(this.value);"/></td>
                             <td>
                                 <select id="results" onchange="useStudent(this.value);">
-                                    <option v-for="(result, index) in results" v-bind:value="index">{{result.First_Name}} {{result.Last_Name}}</option>
+                                    <option v-for="(result, index) in results" v-bind:value="index">{{result.First_Name}} {{result.Last_Name}} - Room {{result.Room_Number}}</option>
                                 </select>
                             </td>
                         </tr>
