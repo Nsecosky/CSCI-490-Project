@@ -16,7 +16,7 @@
                 $("#email").val(svm.results[idx].Email);
             }
 
-            var dormsEl = "#dorms";
+            var dormsEl = ["#dorms", "#dorms2", "#dorms3"];
             var packagesEl = "#packages";
             var searchEl = "#results";
         </script>
@@ -48,7 +48,7 @@
 
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-        <span id = "Roster">
+        <span id="Roster">
             <input type="button" value="Sort by Hall" onclick="getPersonhall();"/>
             <input type="button" value="Sort by last name" onclick="getPersonLname();"/>
             <br>
@@ -63,7 +63,7 @@
 
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-        <span id = "AddStudent">
+        <span id="AddStudent">
             Welcome to the Add Student. Please Fill in all info.<br>
             <b><p>ALERT: STUDENT INFORMATION MUST BE ALL CAPS! LIKE THIS ALERT!</p></b>
             <em><small>Note: all changes will be added to database.</small> </em>
@@ -89,7 +89,7 @@
                     <tr>
                         <th>Residence Hall:</th>
                         <td>
-                            <select id="dorms" name="dorms">
+                            <select id="dorms2" name="dorms">
                                 <option v-for="dorm in dorms" v-bind:value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
                             </select>
                         </td>
@@ -112,7 +112,7 @@
 
         <span id="EditStudent">
             Welcome to the Edit Student. Please Fill in all info.<br>
-            <em><small>Note: all changes will be added to database.</small> </em>
+            <em><small>Note: all changes will be added to database.</small></em>
             <div>
                 <br>
                 <table>
@@ -144,7 +144,7 @@
                     <tr>
                         <td>Residence Hall:</td>
                         <td>
-                            <select id="dorms" name="dorms">
+                            <select id="dorms3" name="dorms">
                                 <option v-for="dorm in dorms" v-bind:value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
                             </select>
                         </td>
@@ -186,7 +186,6 @@
         </footer>
 
         <script type="text/javascript">
-
             clearFields();
             switchToTab($("a")[0], '#addStudent');
             function clearFields() {
