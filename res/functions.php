@@ -108,7 +108,7 @@ function getPackages() {
 
 function getDormTVPackages($did) {
     $con = dbConnect();
-    $res = mysqli_query($con, "SELECT first_name, last_name, (SELECT COUNT(unique_id) FROM packages WHERE people.unique_id = packages.owner AND time_out IS NULL) AS pcount FROM people WHERE dorm = $did HAVING pcount > 1");
+    $res = mysqli_query($con, "SELECT first_name, last_name, (SELECT COUNT(unique_id) FROM packages WHERE people.unique_id = packages.owner AND time_out IS NULL) AS pcount FROM people WHERE dorm = $did HAVING pcount > 0");
     return mysqli_fetch_all($res, MYSQLI_ASSOC);
 }
 
@@ -118,9 +118,9 @@ function getDormPackages($did) {
     return mysqli_fetch_all($res, MYSQLI_ASSOC);
 }
 
-function getStudentPackages($oid) {
+function getStudentPackages($first, $last, $n600) {
     $con = dbConnect();
-    $res = mysqli_query($con, "SELECT * FROM packages WHERE owner = $oid AND time_out IS NULL");
+    $res = mysqli_query($con, "SELECT * FROM people WHERE first_name = '$first' AND last_name = '$last' AND 600_number = '$n600' AND time_out IS NULL");
     return mysqli_fetch_all($res, MYSQLI_ASSOC);
 }
 
@@ -162,7 +162,7 @@ $result = "false";
 if (loggedIn()) {
     $da = $_SESSION['id'];
     switch (getPerson($da)['Access']) {
-        case 4: {
+        case 3: {
             switch ($_GET['a']) {
               case "editd": {
                 editDorm($_POST['name'], $_POST['address'] ,$_POST['dorm_id']);
@@ -170,11 +170,16 @@ if (loggedIn()) {
                 break;
               }
 
-            }
-        }
-        case 3: {
-            switch ($_GET['a']) {
+              case "getdp": {
+                  $result = json_encode(getDormPackages($_GET['did']));
+                  break;
+              }
 
+              case "adds":{
+                  addPerson($_POST['n600'], $_POST['first'], $_POST['last'], $_POST['email'], $_POST['did'], $_POST['room'], $_POST['access']);
+                  $result = true;
+                  break;
+              }
             }
         }
         case 2: {
@@ -188,16 +193,12 @@ if (loggedIn()) {
         case 1: {
             switch ($_GET['a']) {
                 case "addp": {
-                    addPackage($_GET['first'], $_GET['last'], $_GET['oid'], $_GET['desc'], $_GET['room'], $_GET['did'], $da);
+                    addPackage($_POST['oid'], $_POST['desc'], $da);
                     $result = "true";
                     break;
                 }
                 case "getsp": {
-                    $result = json_encode(getStudentPackages($_GET['oid']));
-                    break;
-                }
-                case "getdp": {
-                    $result = json_encode(getDormPackages($_GET['did']));
+                    $result = json_encode(getStudentPackages($_POST['first'], $_POST['last'], $_POST['n600']));
                     break;
                 }
                 case "search": {
@@ -205,7 +206,7 @@ if (loggedIn()) {
                     break;
                 }
                 case "chkt": {
-                    checkoutPackages($_GET['oid']);
+                    checkoutPackages($_POST['oid']);
                     $result = "true";
                     break;
                 }

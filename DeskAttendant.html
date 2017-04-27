@@ -8,68 +8,11 @@
         <script src="res/functions.js"></script>
         <script>
 
-
-//            var cardrgx = /(?:%E\?;E\?|\%(\d+)\^(\w+), (\w+) (\w)\s*\?;(\d+)=(\d+)\?)\+E\?/;
-//            function readCard(cinfo) {
-//                info = cardrgx.exec(cinfo);
-//                if (info != null) {
-//                    if (info[1] != null) {
-//                        $("#600_number").val(info[5]);
-//                        $("#first_name").val(info[3]);
-//                        $("#last_name").val(info[2]);
-//                    } else {
-//                        $("#600_number").val("");
-//                        $("#first_name").val("");
-//                        $("#last_name").val("");
-//                        alert("Error reading card");
-//                    }
-//                }
-//            }
-//            var dfetch = true;
-//            function login(cinfo) {
-//                info = cardrgx.exec(cinfo);
-//                if (info != null) {
-//                    if (info[1] != null) {
-//                        $.ajax("res/functions.php?a=login", {
-//                            'method': 'POST',
-//                            'data': {'first': info[3], 'last': info[2], 'n600': info[5]},
-//                            'dataType': "json",
-//                            'success': function (json) {
-//                                if (json.result) {
-//                                    if (dfetch) {
-//                                        dfetch = false;
-//                                        $.ajax("res/functions.php?a=getd", {
-//                                            'method': 'GET',
-//                                            'dataType': "json",
-//                                            'success': function (json) {
-//                                                dvm.dorms = json.result;
-//                                            }
-//                                        });
-//                                    }
-//                                    $("#overlay").hide();
-//                                }
-//                            }
-//                        });
-//                    } else {
-//                        alert("Error reading card");
-//                    }
-//                }
-//            }
-//
-//            var curcard = "";
-//            function silentLogin(event) {
-//                curcard += String.fromCharCode(event.charCode);
-//                if (event.keyCode == 13) {
-//                    login(curcard);
-//                    curcard = "";
-//                }
-//            }
-
             var lastid;
             function getStudentPackages() {
                 $.ajax("res/functions.php?a=getsp", {
                     'method': 'POST',
-                    'data': {'first': $("#first"), 'last': $("#last"), 'n600': $("#n600")},
+                    'data': {'first': $("#first_name").val(), 'last': $("#last_name").val(), 'n600': $("#600_number").val()},
                     'dataType': "json",
                     'success': function (json) {
                         if (json.result) {
@@ -81,25 +24,34 @@
 
             }
 
-            function getCheckoutPackages() {
-                $.ajax("res/functions.php?a=chkt", {
+            function checkoutPackages() {
+                $.ajax("res/functions.php?a=getsp", {
                     'method': 'POST',
                     'data': {'oid': lastid},
                     'dataType': "json"
                 });
-
             }
+
+            function addPackage(){
+                $.ajax("res/function.php?a=addp", {
+                    'method' : 'POST',
+                    'data' : {'oid' : $("#result").val(), 'desc' : $("#pacdesc").val()},
+                    'dataType': "json"
+                });
+            }
+
 
             var dormsEl = "#dorms";
             var packagesEl = "#packages";
             var searchEl = "#results";
+            $("#overlay").focus();
         </script>
     </head>
     <body>
-      <div id="overlay" class = "OverlayStyle" style="background: rgba(109, 94, 81, 0.5); position: fixed; top: 0%; left: 0%; width: 100%; height: 100%;">
-          <div class = "OverlayText" style="opacity: 1.0; position: fixed; top: 30%; left: 30%; width:40%; height: 15%">
-            <b><font color = 'white'>Swipe Mavcard to log back in to system</font></b>
-          </div>
+        <div id="overlay" onkeypress="silentLogin(event)" tabindex="1" style="background: rgba(109, 94, 81, 0.5); position: fixed; top: 0%; left: 0%; width: 100%; height: 100%;">
+            <div class="OverlayText" onkeypress="silentLogin(event)" tabindex="2"  style="opacity: 1.0; position: fixed; top: 30%; left: 30%; width:40%; height: 15%">
+                <b><font color = 'white'>Swipe Mavcard to log back in to system</font></b>
+            </div>
         </div>
         <header>
             <img class="CMULogo" alt="Colorado Mesa Unversity" src="res/cmu_white.png" />
@@ -158,7 +110,7 @@
                             </td>
                         </tr>
                         <tr><th>Room Number: </th><td> <input type="text" id="roomnum" required /></td></tr>
-                        <tr><th>Package Description: </th><td> <textarea name="package" rows="3" cols="50" required></textarea></td></tr>
+                        <tr><th>Package Description: </th><td> <textarea id="pacdesc" rows="3" cols="50" required></textarea></td></tr>
                         <tr><th><input type="button" value = "Submit" /> <input type="button" value="Reset" /></th></tr>
                     </table>
                 </div>
@@ -193,7 +145,7 @@
 
             var sortby = "First_Name";
             function sorted(arr) {
-                Array.sort(arr, function(a, b){
+                Array.sort(arr, function (a, b) {
                     return b[sortby] - a[sortby];
                 });
             }

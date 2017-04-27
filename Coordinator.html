@@ -15,6 +15,10 @@
                 $("#last_name").val(svm.results[idx].Last_Name);
                 $("#email").val(svm.results[idx].Email);
             }
+
+            var dormsEl = "#dorms";
+            var packagesEl = "#packages";
+            var searchEl = "#results";
         </script>
     </head>
     <body>
@@ -90,11 +94,14 @@
                             </select>
                         </td>
                     </tr>
+                    <tr>
+                        <th>Room:</th>
+                        <td><input type="text" id="room" name="room" /></td>
                     </tr>
                     <tr>
-                        <td><input type="button" value="Add Student" onclick="addPerson(1), clearFields();"/></td>
-                        <td><input type="button" value="Add RA" onclick="addPerson(3), clearFields();"/></td>
-                        <td><input type="button" value="Add DA" onclick="addPerson(2), clearFields();"/></td>
+                        <td><input type="button" value="Add Student" onclick="addPerson(1); clearFields();"/></td>
+                        <td><input type="button" value="Add RA" onclick="addPerson(3); clearFields();"/></td>
+                        <td><input type="button" value="Add DA" onclick="addPerson(2); clearFields();"/></td>
                         <td><input type="button" value="Clear" onclick="clearFields();"/></td>
                     </tr>
                 </table>
@@ -159,11 +166,12 @@
         <span id= "PackageList">
             Welcome to the Package Portal
             <center>
+              <em><small> Please Select Residence Hall </small> </em>
+              <p><select id="dorms" name="dorms">
+                      <option v-for="dorm in dorms" v-bind:value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
+              </select></p>
                 <div id="packages" style="border: 2px solid black; width: 800px;">
-                    <em><small> Please Select Residence Hall </small> </em>
-                    <p><select id="dorms" name="dorms">
-                            <option v-for="dorm in dorms" v-bind:value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
-                        </select></p>
+
                     <div v-for="package in packages" style="border: 1px solid black; margin: 1px;">
                         {{package.First_Name}} {{package.Last_Name}} - {{package.Date_Recieved}}-{{package.Description}}-{{package.Date_Checkout}}
                     </div>
@@ -174,13 +182,13 @@
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
         <footer>
-            &copy Colorado Mesa University
+            &copy; Colorado Mesa University
         </footer>
 
         <script type="text/javascript">
 
-            clearFields():
-            switchToTab($("a")[0], '#PackageList');
+            clearFields();
+            switchToTab($("a")[0], '#addStudent');
             function clearFields() {
                 $("#600_number").val("");
                 $("#fname").val("");
