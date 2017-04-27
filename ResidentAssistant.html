@@ -22,7 +22,7 @@
                 <img class = "CMULogo" alt="Colorado Mesa Unversity" src="cmu_white.png">
             </header>
 
-            Welcome to the Hall Coordinator Form. Please type a students first and last name to add them to the residence hall roster.<br>
+          Please provide ALL Student Info to add them to residence hall roster.<br>
             <em><small>Note: This will add a student to the residence hall database.</small></em>
 
             <div class="FormAdd">
@@ -54,7 +54,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td><input type="button" value="Add Student" onclick="addPerson(), clearFields();"/></td>
+                            <td><input type="button" value="Add Student" onclick="addPerson(1), clearFields();"/></td>
                             <td><input type="button" value="Clear" onclick="clearFields();"/></td>
                         </tr>
                     </table>
@@ -66,7 +66,6 @@
             <script type="text/javascript">
 
                 clearFields():
-                switchToTab($("a")[0], '#PackageList');
                 function clearFields() {
                     $("#600_number").val("");
                     $("#first_name").val("");
