@@ -139,6 +139,17 @@ function editDorm(){
 
 }
 
+function addStudent(access){
+  $.ajax("res/function.php?a=addp", {
+    'method' : 'POST',
+    'data' : { 'n600' : $("#600_number").val(), 'first' : $("#fname").val(), 'last' : $("#lname").val(), 'email' : $("#email").val(), 'did' : $("#dorms").val(), 'room' : $("#dorms").val(), 'access' : access },
+
+    'dataType': "json"
+  });
+}
+
+
+
 function switchToTab(tabnav, tabcont) {
     $('a[name=nav]').removeClass('NavHighlight');
     $(tabnav).addClass('NavHighlight');$('span').hide();
