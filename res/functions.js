@@ -129,6 +129,14 @@ function clearFields() {
     $("#n600").val("");
     $("#first").val("");
     $("#last").val("");
+    $("#600_number").val("");
+    $("#fname").val("");
+    $("#lname").val("");
+    $("#email").val("");
+}
+
+function editDorm(){
+
 }
 
 function switchToTab(tabnav, tabcont) {

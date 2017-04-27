@@ -6,6 +6,10 @@
         <script src="res/jquery-3.2.1-min.js"></script>
         <script src="https://unpkg.com/vue/dist/vue.js"></script>
         <script src="res/functions.js"></script>
+        <script>
+          var studentsEl = "#display";
+          var dormsEl = "#dorms";
+        </script>
     </head>
     <body>
         <div id="overlay" onkeypress="silentLogin(event)" tabindex="1" style="background: rgba(0, 0, 0, 0.67); position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;">
@@ -34,6 +38,35 @@
 
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
+        <span id = "HallAdd">
+            Welcome to the Residence Hall Add form.<br>
+            <em><small>Note: Please Fill in all information.</small></em>
+            <em><small>Once a submission is made it is added to database.</small></em>
+            <br>
+            <div class="FormAdd">
+                <table>
+
+                        <th>Hall Name:</th>
+                        <td><input type="text" id="name" name="first_name"/></td>
+                    </tr>
+                    <tr>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <th>Address:</th>
+                        <td><input type="text" id="address" name="address" /></td>
+                    </tr>
+                    <tr>
+                        <td><input type="button" value="Edit" onclick="editDorm()clearFields();"/></td>
+                        <td><input type="button" value="Remove" onclick="removeDorm()clearFields();"/></td>
+                        <td><input type="button" value="Clear" onclick="clearFields();"/></td>
+                    </tr>
+                </table>
+            </div>
+        </span>
+
+        <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
         <span id = "HallEdit">
             Welcome to the Residence Hall Edit/Add/Delete form.<br>
             <em><small>Note: Please Fill in all information.</small></em>
@@ -41,21 +74,27 @@
             <br>
             <div class="FormAdd">
                 <table>
+                    <th>Please select hall</th>
+                    <tr>
+                      <select id="dorms" name="dorms" onchange="getPackages(this.value)">
+                          <option v-for="dorm in dorms" v-bind:value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
+                      </select>
+                    </tr>
                     <tr>
                         <th>Hall Name:</th>
-                        <td><input type="text" id="first_name" name="first_name"/></td>
+                        <td><input type="text" id="name" name="first_name"/></td>
                     </tr>
                     <tr>
                         <th></th>
                     </tr>
                     <tr>
                         <th>Address:</th>
-                        <td><input type="text" id="email" name="email" /></td>
+                        <td><input type="text" id="address" name="address" /></td>
                     </tr>
                     <tr>
-                        <td><input type="button" value="Add" onclick="addDorm();"/></td>
-                        <td><input type="button" value="Edit" onclick="editDorm();"/></td>
-                        <td><input type="button" value="Remove" onclick="removeDorm();"/></td>
+                        <td><input type="button" value="Add" onclick="addDorm()clearFields();"/></td>
+                        <td><input type="button" value="Edit" onclick="editDorm()clearFields();"/></td>
+                        <td><input type="button" value="Remove" onclick="removeDorm()clearFields();"/></td>
                         <td><input type="button" value="Clear" onclick="clearFields();"/></td>
                     </tr>
                 </table>
@@ -153,9 +192,10 @@
                     </tr>
                     <tr>
                     <input type="hidden" id="id" name="id"/>
-                    <td><input type="button" value="Add Student" onclick="addPerson(1); clearFields();"/></td>
-                    <td><input type="button" value="Add RA" onclick="addPerson(3); clearFields();"/></td>
-                    <td><input type="button" value="Add DA" onclick="addPerson(2); clearFields();"/></td>
+                    <td><input type="button" value="Add Student" onclick="editPerson(1); clearFields();"/></td>
+                    <td><input type="button" value="Add DA" onclick="editPerson(2); clearFields();"/></td>
+                    <td><input type="button" value="Add RA" onclick="editPerson(3); clearFields();"/></td>
+                    <td><input type="button" value="Add Coordinator" onclick="editPerson(4); clearFields();"/></td>
                     <td><input type="button" value="Remove Person" onclick="removePerson(); clearFields();"/></td>
                     <td><input type="button" value="Clear" onclick="clearFields();"/></td>
                     </tr>
@@ -181,5 +221,16 @@
         <footer>
             &copy Colorado Mesa University
         </footer>
+        <script type="text/javascript">
+
+            clearFields():
+            switchToTab($("a")[0], '#AddParson');
+            function clearFields() {
+                $("#600_number").val("");
+                $("#fname").val("");
+                $("#lname").val("");
+                $("#email").val("");
+            }
+        </script>
     </body>
 </html>

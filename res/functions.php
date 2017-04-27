@@ -146,8 +146,9 @@ function removeDorm($name, $address) {
    $res = mysqli_query($con, "DELETE FROM `dorms` VALUES(NULL,'$name', '$address' )");
 }
 
-function editDorm(){
-    //NOTE: Needs QUERY
+function editDorm($name, $address ,$dorm_id){
+  on = dbConnect();
+  $res = mysqli_query($con, "UPDATE dorms SET Dorm_Name = '$name', address = '$address' WHERE unique_id = $dorm_id");
 }
 
 function getDorms() {
@@ -163,6 +164,11 @@ if (loggedIn()) {
     switch (getPerson($da)['Access']) {
         case 4: {
             switch ($_GET['a']) {
+              case "editd": {
+                editDorm($_POST['name'], $_POST['address'] ,$_POST['dorm_id']);
+                $result = "true";
+                break;
+              }
 
             }
         }
