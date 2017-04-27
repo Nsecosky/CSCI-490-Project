@@ -90,7 +90,7 @@ function login(fname, lname, n600) {
                         'method': 'GET',
                         'dataType': "json",
                         'success': function (json) {
-                            setDormData(json.result);
+                            setDormsData(json.result);
                         }
                     });
                 }
