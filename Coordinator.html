@@ -16,13 +16,13 @@
                 $("#email").val(svm.results[idx].Email);
             }
 
-            var dormsEl = ["#dorms", "#dorms2", "#dorms3"];
+            var dormsEl = ["#dorms", "#dorms2", "#dorms3", "#dorms4"];
             var packagesEl = "#packages";
             var searchEl = "#results";
         </script>
     </head>
     <body>
-      <div id="overlay" class = "OverlayStyle" style="background: rgba(109, 94, 81, 0.5); position: fixed; top: 0%; left: 0%; width: 100%; height: 100%;">
+      <div id="overlay" style="background: rgba(109, 94, 81, 0.5); position: fixed; top: 0%; left: 0%; width: 100%; height: 100%;">
           <div class = "OverlayText" style="opacity: 1.0; position: fixed; top: 30%; left: 30%; width:40%; height: 30%">
               <font color = 'white'> First Name: </font> <input type="text" id="Fname"/>
               <br>
@@ -166,12 +166,13 @@
         <span id= "PackageList">
             Welcome to the Package Portal
             <center>
-              <em><small> Please Select Residence Hall </small> </em>
-              <p><select id="dorms" name="dorms">
-                      <option v-for="dorm in dorms" v-bind:value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
-              </select></p>
+                <em><small> Please Select Residence Hall </small> </em>
+                <p>
+                    <select id="dorms4">
+                        <option v-for="dorm in dorms" v-bind:value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
+                    </select>
+                </p>
                 <div id="packages" style="border: 2px solid black; width: 800px;">
-
                     <div v-for="package in packages" style="border: 1px solid black; margin: 1px;">
                         {{package.First_Name}} {{package.Last_Name}} - {{package.Date_Recieved}}-{{package.Description}}-{{package.Date_Checkout}}
                     </div>
