@@ -108,7 +108,7 @@ function getPackages() {
 
 function getDormTVPackages($did) {
     $con = dbConnect();
-    $res = mysqli_query($con, "SELECT first_name, last_name, (SELECT COUNT(unique_id) FROM packages WHERE people.unique_id = packages.owner AND time_out IS NULL) AS pcount FROM people WHERE dorm = $did HAVING pcount > 1");
+    $res = mysqli_query($con, "SELECT first_name, last_name, (SELECT COUNT(unique_id) FROM packages WHERE people.unique_id = packages.owner AND time_out IS NULL) AS pcount FROM people WHERE dorm = $did HAVING pcount > 0");
     return mysqli_fetch_all($res, MYSQLI_ASSOC);
 }
 
@@ -118,9 +118,9 @@ function getDormPackages($did) {
     return mysqli_fetch_all($res, MYSQLI_ASSOC);
 }
 
-function getStudentPackages($oid) {
+function getStudentPackages($first, $last, $n600) {
     $con = dbConnect();
-    $res = mysqli_query($con, "SELECT * FROM packages WHERE owner = $oid AND time_out IS NULL");
+    $res = mysqli_query($con, "SELECT * FROM people WHERE first_name = '$first' AND last_name = '$last' AND 600_number = '$n600' AND time_out IS NULL");
     return mysqli_fetch_all($res, MYSQLI_ASSOC);
 }
 
@@ -188,8 +188,7 @@ if (loggedIn()) {
                     $result = json_encode(getPackages());
                     break;
                 }
-              }
-
+            }
         }
         case 1: {
             switch ($_GET['a']) {
@@ -199,10 +198,9 @@ if (loggedIn()) {
                     break;
                 }
                 case "getsp": {
-                    $result = json_encode(getStudentPackages($_GET['oid']));
+                    $result = json_encode(getStudentPackages($_POST['first'], $_POST['last'], $_POST['n600']));
                     break;
                 }
-
                 case "search": {
                     $result = json_encode(searchPeople($_GET['name']));
                     break;

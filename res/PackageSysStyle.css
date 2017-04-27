@@ -121,3 +121,9 @@ nav ul li a:active
 {
   background-color: #5D0022;
 }
+
+.display
+{
+  text-align:center;
+  font-weight:bold;
+}

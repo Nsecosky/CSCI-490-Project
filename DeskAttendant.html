@@ -12,7 +12,7 @@
             function getStudentPackages() {
                 $.ajax("res/functions.php?a=getsp", {
                     'method': 'POST',
-                    'data': {'first': $("#first"), 'last': $("#last"), 'n600': $("#n600")},
+                    'data': {'first': $("#first_name").val(), 'last': $("#last_name").val(), 'n600': $("#600_number").val()},
                     'dataType': "json",
                     'success': function (json) {
                         if (json.result) {
@@ -30,16 +30,14 @@
                     'data': {'oid': lastid},
                     'dataType': "json"
                 });
-
             }
 
             function addPackage(){
-              $.ajax("res/function.php?a=addp", {
-                'method' : 'POST',
-                'data' : {'oid' : $("#result").val(), 'desc' : $("#pacdesc").val()}
-                'dataType': "json"
-            });
-
+                $.ajax("res/function.php?a=addp", {
+                    'method' : 'POST',
+                    'data' : {'oid' : $("#result").val(), 'desc' : $("#pacdesc").val()},
+                    'dataType': "json"
+                });
             }
 
 
@@ -50,10 +48,10 @@
         </script>
     </head>
     <body>
-      <div id="overlay" onkeypress="silentLogin(event)" tabindex="1" style="background: rgba(109, 94, 81, 0.5); position: fixed; top: 0%; left: 0%; width: 100%; height: 100%;">
-          <div class="OverlayText" onkeypress="silentLogin(event)" tabindex="2"  style="opacity: 1.0; position: fixed; top: 30%; left: 30%; width:40%; height: 15%">
-            <b><font color = 'white'>Swipe Mavcard to log back in to system</font></b>
-          </div>
+        <div id="overlay" onkeypress="silentLogin(event)" tabindex="1" style="background: rgba(109, 94, 81, 0.5); position: fixed; top: 0%; left: 0%; width: 100%; height: 100%;">
+            <div class="OverlayText" onkeypress="silentLogin(event)" tabindex="2"  style="opacity: 1.0; position: fixed; top: 30%; left: 30%; width:40%; height: 15%">
+                <b><font color = 'white'>Swipe Mavcard to log back in to system</font></b>
+            </div>
         </div>
         <header>
             <img class="CMULogo" alt="Colorado Mesa Unversity" src="res/cmu_white.png" />
@@ -147,7 +145,7 @@
 
             var sortby = "First_Name";
             function sorted(arr) {
-                Array.sort(arr, function(a, b){
+                Array.sort(arr, function (a, b) {
                     return b[sortby] - a[sortby];
                 });
             }
