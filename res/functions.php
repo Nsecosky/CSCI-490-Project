@@ -26,7 +26,7 @@ function loggedIn() {
 }
 
 function hasTimedOut() {
-    return time() - $_SESSION['time'] > 30;
+    return time() - $_SESSION['time'] > 60;
 }
 
  //NOTE: All People Table Functions *******************************************************************************************************
