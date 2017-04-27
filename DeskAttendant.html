@@ -30,16 +30,14 @@
                     'data': {'oid': lastid},
                     'dataType': "json"
                 });
-
             }
 
             function addPackage(){
-              $.ajax("res/function.php?a=addp", {
-                'method' : 'POST',
-                'data' : {'oid' : $("#result").val(), 'desc' : $("#pacdesc").val()}
-                'dataType': "json"
-            });
-
+                $.ajax("res/function.php?a=addp", {
+                    'method' : 'POST',
+                    'data' : {'oid' : $("#result").val(), 'desc' : $("#pacdesc").val()},
+                    'dataType': "json"
+                });
             }
 
 
