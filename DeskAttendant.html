@@ -89,17 +89,17 @@
                 });
 
             }
-            
+
             var dormsEl = "#dorms";
             var packagesEl = "#packages";
             var searchEl = "#results";
         </script>
     </head>
     <body>
-        <div id="overlay" onkeypress="silentLogin(event)" tabindex="1" style="background: rgba(0, 0, 0, 0.67); position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;">
-            <div style="background: #FFFFFF; opacity: 1.00; position: absolute; top: 25%; left: 25%; width: 50%; height: 50%">
-                Swipe Mavcard to log back in to system
-            </div>
+      <div id="overlay" class = "OverlayStyle" style="background: rgba(109, 94, 81, 0.5); position: fixed; top: 0%; left: 0%; width: 100%; height: 100%;">
+          <div class = "OverlayText" style="opacity: 1.0; position: fixed; top: 30%; left: 30%; width:40%; height: 15%">
+            <b><font color = 'white'>Swipe Mavcard to log back in to system</font></b>
+          </div>
         </div>
         <header>
             <img class="CMULogo" alt="Colorado Mesa Unversity" src="res/cmu_white.png" />
@@ -113,7 +113,7 @@
         </nav>
 
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-        
+
         <span id="CheckoutPkg">
             <center>
                 <table>
@@ -136,9 +136,9 @@
             </div>
             <input type="button" value="Checkout" onclick="checkoutPackages();"/>
         </span>
-        
+
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-        
+
         <span id="AddPkg">
             Welcome to the Package Portal.
             Please insert the students first name, last name and package description below.
@@ -164,9 +164,9 @@
                 </div>
             </center>
         </span>
-        
+
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-        
+
         <span id="StuRoster">
             <input type="button" value="Sort by Hall" onclick="sortBy = 'Dorm'"/>
             <input type="button" value="Sort by last name" onclick="sortBy = 'Last_Name'"/>
@@ -178,19 +178,19 @@
                 <input type="button" value="Show" onclick="getPersonResHall();" />
             </p>
         </span>
-        
+
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-        
+
         <footer>
             &copy; Colorado Mesa University
         </footer>
-        
+
         <script type="text/javascript">
-            
+
             clearFields();
             switchToTab($("a")[0], '#CheckoutPkg');
-            
-            
+
+
             var sortby = "First_Name";
             function sorted(arr) {
                 Array.sort(arr, function(a, b){
