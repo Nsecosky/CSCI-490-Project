@@ -8,63 +8,6 @@
         <script src="res/functions.js"></script>
         <script>
 
-
-//            var cardrgx = /(?:%E\?;E\?|\%(\d+)\^(\w+), (\w+) (\w)\s*\?;(\d+)=(\d+)\?)\+E\?/;
-//            function readCard(cinfo) {
-//                info = cardrgx.exec(cinfo);
-//                if (info != null) {
-//                    if (info[1] != null) {
-//                        $("#600_number").val(info[5]);
-//                        $("#first_name").val(info[3]);
-//                        $("#last_name").val(info[2]);
-//                    } else {
-//                        $("#600_number").val("");
-//                        $("#first_name").val("");
-//                        $("#last_name").val("");
-//                        alert("Error reading card");
-//                    }
-//                }
-//            }
-//            var dfetch = true;
-//            function login(cinfo) {
-//                info = cardrgx.exec(cinfo);
-//                if (info != null) {
-//                    if (info[1] != null) {
-//                        $.ajax("res/functions.php?a=login", {
-//                            'method': 'POST',
-//                            'data': {'first': info[3], 'last': info[2], 'n600': info[5]},
-//                            'dataType': "json",
-//                            'success': function (json) {
-//                                if (json.result) {
-//                                    if (dfetch) {
-//                                        dfetch = false;
-//                                        $.ajax("res/functions.php?a=getd", {
-//                                            'method': 'GET',
-//                                            'dataType': "json",
-//                                            'success': function (json) {
-//                                                dvm.dorms = json.result;
-//                                            }
-//                                        });
-//                                    }
-//                                    $("#overlay").hide();
-//                                }
-//                            }
-//                        });
-//                    } else {
-//                        alert("Error reading card");
-//                    }
-//                }
-//            }
-//
-//            var curcard = "";
-//            function silentLogin(event) {
-//                curcard += String.fromCharCode(event.charCode);
-//                if (event.keyCode == 13) {
-//                    login(curcard);
-//                    curcard = "";
-//                }
-//            }
-
             var lastid;
             function getStudentPackages() {
                 $.ajax("res/functions.php?a=getsp", {
@@ -81,15 +24,24 @@
 
             }
 
-            function getCheckoutPackages() {
-                $.ajax("res/functions.php?a=chkt", {
+            function checkoutPackages() {
+                $.ajax("res/functions.php?a=getsp", {
                     'method': 'POST',
                     'data': {'oid': lastid},
                     'dataType': "json"
                 });
 
             }
-            
+
+            function addPackage(){
+              $.ajax("res/function.php?a=addp", {
+                'method' : 'POST',
+                'data' : {'oid' : $("#result").val(), 'desc' : $("#pacdesc").val()}
+                'dataType': "json"
+            });
+
+            }
+
             var dormsEl = "#dorms";
             var packagesEl = "#packages";
             var searchEl = "#results";
@@ -113,7 +65,7 @@
         </nav>
 
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-        
+
         <span id="CheckoutPkg">
             <center>
                 <table>
@@ -136,9 +88,9 @@
             </div>
             <input type="button" value="Checkout" onclick="checkoutPackages();"/>
         </span>
-        
+
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-        
+
         <span id="AddPkg">
             Welcome to the Package Portal.
             Please insert the students first name, last name and package description below.
@@ -158,15 +110,15 @@
                             </td>
                         </tr>
                         <tr><th>Room Number: </th><td> <input type="text" id="roomnum" required /></td></tr>
-                        <tr><th>Package Description: </th><td> <textarea name="package" rows="3" cols="50" required></textarea></td></tr>
+                        <tr><th>Package Description: </th><td> <textarea id="pacdesc" rows="3" cols="50" required></textarea></td></tr>
                         <tr><th><input type="button" value = "Submit" /> <input type="button" value="Reset" /></th></tr>
                     </table>
                 </div>
             </center>
         </span>
-        
+
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-        
+
         <span id="StuRoster">
             <input type="button" value="Sort by Hall" onclick="sortBy = 'Dorm'"/>
             <input type="button" value="Sort by last name" onclick="sortBy = 'Last_Name'"/>
@@ -178,19 +130,19 @@
                 <input type="button" value="Show" onclick="getPersonResHall();" />
             </p>
         </span>
-        
+
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-        
+
         <footer>
             &copy; Colorado Mesa University
         </footer>
-        
+
         <script type="text/javascript">
-            
+
             clearFields();
             switchToTab($("a")[0], '#CheckoutPkg');
-            
-            
+
+
             var sortby = "First_Name";
             function sorted(arr) {
                 Array.sort(arr, function(a, b){

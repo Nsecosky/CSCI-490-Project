@@ -162,7 +162,7 @@ $result = "false";
 if (loggedIn()) {
     $da = $_SESSION['id'];
     switch (getPerson($da)['Access']) {
-        case 4: {
+        case 3: {
             switch ($_GET['a']) {
               case "editd": {
                 editDorm($_POST['name'], $_POST['address'] ,$_POST['dorm_id']);
@@ -170,11 +170,16 @@ if (loggedIn()) {
                 break;
               }
 
-            }
-        }
-        case 3: {
-            switch ($_GET['a']) {
+              case "getdp": {
+                  $result = json_encode(getDormPackages($_GET['did']));
+                  break;
+              }
 
+              case "adds":{
+                  addPerson($_POST['n600'], $_POST['first'], $_POST['last'], $_POST['email'], $_POST['did'], $_POST['room'], $_POST['access']);
+                  $result = true;
+                  break;
+              }
             }
         }
         case 2: {
@@ -183,12 +188,13 @@ if (loggedIn()) {
                     $result = json_encode(getPackages());
                     break;
                 }
-            }
+
+
         }
         case 1: {
             switch ($_GET['a']) {
                 case "addp": {
-                    addPackage($_GET['first'], $_GET['last'], $_GET['oid'], $_GET['desc'], $_GET['room'], $_GET['did'], $da);
+                    addPackage($_POST['oid'], $_POST['desc'], $da);
                     $result = "true";
                     break;
                 }
@@ -196,16 +202,13 @@ if (loggedIn()) {
                     $result = json_encode(getStudentPackages($_GET['oid']));
                     break;
                 }
-                case "getdp": {
-                    $result = json_encode(getDormPackages($_GET['did']));
-                    break;
-                }
+
                 case "search": {
                     $result = json_encode(searchPeople($_GET['name']));
                     break;
                 }
                 case "chkt": {
-                    checkoutPackages($_GET['oid']);
+                    checkoutPackages($_POST['oid']);
                     $result = "true";
                     break;
                 }
