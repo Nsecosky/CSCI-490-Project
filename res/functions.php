@@ -26,7 +26,7 @@ function loggedIn() {
 }
 
 function hasTimedOut() {
-    if (getPerson($_SESSION['id'])['First_Name']='Package') return time() - $_SESSION['time'] > 86400;
+    if (getPerson($_SESSION['id'])['First_Name'] == 'Package') return time() - $_SESSION['time'] > 86400;
     return time() - $_SESSION['time'] > 60;
 }
 
