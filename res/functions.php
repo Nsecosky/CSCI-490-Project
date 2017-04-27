@@ -26,6 +26,7 @@ function loggedIn() {
 }
 
 function hasTimedOut() {
+    if (getPerson($_SESSION['id'])['First_Name']='Package') return time() - $_SESSION['time'] > 86400;
     return time() - $_SESSION['time'] > 60;
 }
 
@@ -56,7 +57,7 @@ function editPerson($id, $n600, $first, $last, $email, $did, $room, $access){
 function clearPeople(){
     $con = dbConnect();
     $res = mysqli_query($con, 'TRUNCATE TABLE people');
-    $res = mysqli_query($con, "INSERT INTO people VALUES (NULL, 6004083854, 'Master', 'Admin', '4', 'IT@mavs.coloradomesa.edu', 1, '1', '14')");
+    $res = mysqli_query($con, "INSERT INTO people VALUES (NULL, 6004083854, 'Master', 'Admin', '3', 'IT@mavs.coloradomesa.edu', 1, '1', '14')");
 }
 //NOTE: This is not necessary reslife wants to just clear people database and start fresh, I know its cringy but its what the client wants.
 //function removePeople() {
