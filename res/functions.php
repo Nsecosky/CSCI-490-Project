@@ -165,22 +165,22 @@ if (loggedIn()) {
     switch (getPerson($da)['Access']) {
         case 3: {
             switch ($_GET['a']) {
-              case "editd": {
-                editDorm($_POST['name'], $_POST['address'] ,$_POST['dorm_id']);
-                $result = "true";
-                break;
-              }
+                case "editd": {
+                    editDorm($_POST['name'], $_POST['address'] ,$_POST['dorm_id']);
+                    $result = "true";
+                    break;
+                }
 
-              case "getdp": {
-                  $result = json_encode(getDormPackages($_GET['did']));
-                  break;
-              }
+                case "getdp": {
+                    $result = json_encode(getDormPackages($_GET['did']));
+                    break;
+                }
 
-              case "adds":{
-                  addPerson($_POST['n600'], $_POST['first'], $_POST['last'], $_POST['email'], $_POST['did'], $_POST['room'], $_POST['access']);
-                  $result = true;
-                  break;
-              }
+                case "adds":{
+                    addPerson($_POST['n600'], $_POST['first'], $_POST['last'], $_POST['email'], $_POST['did'], $_POST['room'], $_POST['access']);
+                    $result = true;
+                    break;
+                }
             }
         }
         case 2: {
