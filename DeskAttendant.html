@@ -93,11 +93,12 @@
             var dormsEl = "#dorms";
             var packagesEl = "#packages";
             var searchEl = "#results";
+            $("#overlay").focus();
         </script>
     </head>
     <body>
-      <div id="overlay" onkeypress="silentLogin(event)" tabindex="1" class = "OverlayStyle" style="background: rgba(109, 94, 81, 0.5); position: fixed; top: 0%; left: 0%; width: 100%; height: 100%;">
-          <div class = "OverlayText" style="opacity: 1.0; position: fixed; top: 30%; left: 30%; width:40%; height: 15%">
+      <div id="overlay" onkeypress="silentLogin(event)" tabindex="1" style="background: rgba(109, 94, 81, 0.5); position: fixed; top: 0%; left: 0%; width: 100%; height: 100%;">
+          <div class="OverlayText" onkeypress="silentLogin(event)" tabindex="2"  style="opacity: 1.0; position: fixed; top: 30%; left: 30%; width:40%; height: 15%">
             <b><font color = 'white'>Swipe Mavcard to log back in to system</font></b>
           </div>
         </div>
