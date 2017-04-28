@@ -13,6 +13,7 @@ function login($first, $last, $n600) {
     $con = dbConnect();
     $res = mysqli_query($con, "SELECT * FROM people WHERE first_name = '$first' AND last_name = '$last' AND 600_number = '$n600'");
     if (($row = mysqli_fetch_assoc($res)) != NULL) {
+        print_r($row);
         $_SESSION['id'] = $row["Unique_ID"];
         $_SESSION['logged'] = true;
         resetLogin();
