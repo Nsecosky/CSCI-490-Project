@@ -107,7 +107,7 @@
                         <tr>
                             <th>Name: </th>
                             <td>
-                                <input type="text" name="name" oninput="doSearch(this.value);"/>
+                                <input type="text" name="name" oninput="doDASearch(this.value);"/>
                                 <select id="results">
                                     <option v-for="result in results" v-bind:value="result.Unique_ID">{{result.First_Name}} {{result.Last_Name}} - Room {{result.Room_Number}}</option>
                                 </select>

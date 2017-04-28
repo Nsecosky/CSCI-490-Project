@@ -4,7 +4,7 @@ error_reporting(E_ERROR);
 session_start();
 //NOTE: Set Up Functions ******************************************************************************************************************
 function dbConnect() {
-    $con = mysqli_connect("localhost", "root", "CSCI490", "packagesystem");
+    $con = mysqli_connect("localhost", "root", "", "packagesystem");
     mysqli_set_charset($con, "utf8");
     return $con;
 }
@@ -15,7 +15,7 @@ function login($first, $last, $n600) {
     if ($row = mysqli_fetch_assoc($res)) {
         $_SESSION['id'] = $row["Unique_ID"];
         $_SESSION['logged'] = true;
-        $_SESSION['time'] = time();
+        resetLogin();
         return true;
     }
     return false;
@@ -25,9 +25,13 @@ function loggedIn() {
     return $_SESSION['logged'] && !hasTimedOut();
 }
 
+function resetLogin() {
+    $_SESSION['time'] = time();
+}
+
 function hasTimedOut() {
     if (getPerson($_SESSION['id'])['First_Name'] == 'Package') return time() - $_SESSION['time'] > 86400;
-    return time() - $_SESSION['time'] > 60;
+    return time() - $_SESSION['time'] > 30;
 }
 
  //NOTE: All People Table Functions *******************************************************************************************************
@@ -40,6 +44,12 @@ function addPerson($n600, $first, $last, $email, $did, $room, $access) {
 function removePerson($sid) {
     $con = dbConnect();
     $res = mysqli_query($con, "UPDATE people SET active = 0 WHERE unique_id = $sid;");
+}
+
+function searchPeopleDA($name) {
+    $con = dbConnect();
+    $res = mysqli_query($con, "SELECT * FROM people WHERE (first_name LIKE '%$name%' OR last_name LIKE '%$name%') AND dorm = " . getPerson($_SESSION['id'])['Dorm']);
+    return mysqli_fetch_all($res, MYSQLI_ASSOC);
 }
 
 function searchPeople($name) {
@@ -59,11 +69,6 @@ function clearPeople(){
     $res = mysqli_query($con, 'TRUNCATE TABLE people');
     $res = mysqli_query($con, "INSERT INTO people VALUES (NULL, 6004083854, 'Master', 'Admin', '3', 'IT@mavs.coloradomesa.edu', 1, '1', '14')");
 }
-//NOTE: This is not necessary reslife wants to just clear people database and start fresh, I know its cringy but its what the client wants.
-//function removePeople() {
-//    $con = dbConnect();
-//    $res = mysqli_query($con, "UPDATE people SET active = 0");
-//}
 
 function getPerson($id) {
     $con = dbConnect();
@@ -166,17 +171,20 @@ if (loggedIn()) {
         case 3: {
             switch ($_GET['a']) {
                 case "editd": {
+                    resetLogin();
                     editDorm($_POST['name'], $_POST['address'] ,$_POST['dorm_id']);
                     $result = "true";
                     break;
                 }
 
                 case "getdp": {
+                    resetLogin();
                     $result = json_encode(getDormPackages($_GET['did']));
                     break;
                 }
 
-                case "adds":{
+                case "adds": {
+                    resetLogin();
                     addPerson($_POST['n600'], $_POST['first'], $_POST['last'], $_POST['email'], $_POST['did'], $_POST['room'], $_POST['access']);
                     $result = true;
                     break;
@@ -186,7 +194,13 @@ if (loggedIn()) {
         case 2: {
             switch ($_GET['a']) {
                 case "getp": {
+                    resetLogin();
                     $result = json_encode(getPackages());
+                    break;
+                }
+                case "search": {
+                    resetLogin();
+                    $result = json_encode(searchPeople($_GET['name']));
                     break;
                 }
             }
@@ -194,19 +208,23 @@ if (loggedIn()) {
         case 1: {
             switch ($_GET['a']) {
                 case "addp": {
+                    resetLogin();
                     addPackage($_POST['oid'], $_POST['desc'], $da);
                     $result = "true";
                     break;
                 }
                 case "getsp": {
+                    resetLogin();
                     $result = json_encode(getStudentPackages($_POST['first'], $_POST['last'], $_POST['n600']));
                     break;
                 }
-                case "search": {
-                    $result = json_encode(searchPeople($_GET['name']));
+                case "dasearch": {
+                    resetLogin();
+                    $result = json_encode(searchPeopleDA($_GET['name']));
                     break;
                 }
                 case "chkt": {
+                    resetLogin();
                     checkoutPackages($_POST['oid']);
                     $result = "true";
                     break;
@@ -220,10 +238,12 @@ if (loggedIn()) {
                     break;
                 }
                 case "getd": {
+                    resetLogin();
                     $result = json_encode(getDorms());
                     break;
                 }
                 case "gettv": {
+                    resetLogin();
                     $result = json_encode(getDormTVPackages($_GET['did']));
                     break;
                 }

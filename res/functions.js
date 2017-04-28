@@ -149,16 +149,16 @@ function clearFields() {
     $("#pacdesc").val("");
 }
 
-function editDorm(){
+function editDorm() {
 
 }
 
 function addStudent(access){
-  $.ajax("res/function.php?a=addp", {
-    'method' : 'POST',
-    'data' : { 'n600' : $("#600_number").val(), 'first' : $("#fname").val(), 'last' : $("#lname").val(), 'email' : $("#email").val(), 'did' : $("#dorms").val(), 'room' : $("#dorms").val(), 'access' : access},
-    'dataType': "json"
-  });
+    $.ajax("res/function.php?a=addp", {
+        'method' : 'POST',
+        'data' : {'n600' : $("#600_number").val(), 'first' : $("#fname").val(), 'last' : $("#lname").val(), 'email' : $("#email").val(), 'did' : $("#dorms").val(), 'room' : $("#dorms").val(), 'access' : access},
+        'dataType': "json"
+    });
 }
 
 function switchToTab(tabnav, tabcont) {
@@ -171,6 +171,21 @@ function doSearch(name) {
     $.get(
         "res/functions.php",
         {"a": "search", "name": name},
+        function (response, status, jqxhr) {
+            if (response.logged && response.result) {
+                svm.results = response.result;
+            } else {
+                svm.results = [];
+            }
+        },
+        "json"
+    );
+}
+
+function doDASearch(name) {
+    $.get(
+        "res/functions.php",
+        {"a": "dasearch", "name": name},
         function (response, status, jqxhr) {
             if (response.logged && response.result) {
                 svm.results = response.result;
