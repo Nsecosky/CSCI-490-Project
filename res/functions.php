@@ -244,7 +244,7 @@ if (loggedIn()) {
                         $result = loggedIn();
                         break;
                     }
-                    $result = (login($_POST['first'], $_POST['last'], $_POST['n600']) ? "true" : "false") . ", 'id': " . $_SESSION['id'];
+                    $result = (login($_POST['first'], $_POST['last'], $_POST['n600']) ? "true" : "false") . ", \"id\": " . $_SESSION['id'];
                     break;
                 }
                 case "getd": {
@@ -267,7 +267,7 @@ if (loggedIn()) {
                 $result = "false";
                 break;
             }
-            $result = (login($_POST['first'], $_POST['last'], $_POST['n600']) ? "true" : "false") . ", 'id': " . $_SESSION['id'];
+            $result = (login($_POST['first'], $_POST['last'], $_POST['n600']) ? "true" : "false") . ", \"id\": " . $_SESSION['id'];
 //            $result = login($_POST['first'], $_POST['last'], $_POST['n600']) ? "true" : "false";
             break;
         }
