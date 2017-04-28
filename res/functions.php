@@ -240,7 +240,11 @@ if (loggedIn()) {
         case 0: {
             switch ($_GET['a']) {
                 case "login": {
-                    $result = "true";
+                    if (!isset($_POST['first']) || !isset($_POST['last']) || !isset($_POST['n600'])) {
+                        $result = loggedIn();
+                        break;
+                    }
+                    $result = (login($_POST['first'], $_POST['last'], $_POST['n600']) ? "true" : "false") . ", 'id': " . $_SESSION['id'];
                     break;
                 }
                 case "getd": {
@@ -263,7 +267,8 @@ if (loggedIn()) {
                 $result = "false";
                 break;
             }
-            $result = login($_POST['first'], $_POST['last'], $_POST['n600']) ? "true" : "false";
+            $result = (login($_POST['first'], $_POST['last'], $_POST['n600']) ? "true" : "false") . ", 'id': " . $_SESSION['id'];
+//            $result = login($_POST['first'], $_POST['last'], $_POST['n600']) ? "true" : "false";
             break;
         }
     }
