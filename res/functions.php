@@ -1,6 +1,6 @@
 <?php
 
-error_reporting(E_ERROR);
+error_reporting(E_ALL);
 session_start();
 //NOTE: Set Up Functions ******************************************************************************************************************
 function dbConnect() {
@@ -181,11 +181,6 @@ if (loggedIn()) {
                     $result = json_encode(getDormPackages($_POST['did']));
                     break;
                 }
-                case "getds": {
-                    resetLogin();
-                    $result = json_encode(getDormPackages($_POST['did']));
-                    break;
-                }
                 case "adds": {
                     resetLogin();
                     addPerson($_POST['n600'], $_POST['first'], $_POST['last'], $_POST['email'], $_POST['did'], $_POST['room'], $_POST['access']);
@@ -219,6 +214,11 @@ if (loggedIn()) {
                 case "getsp": {
                     resetLogin();
                     $result = json_encode(getStudentPackages($_POST['first'], $_POST['last'], $_POST['n600']));
+                    break;
+                }
+                case "getds": {
+                    resetLogin();
+                    $result = json_encode(getDormPeople($_POST['did']));
                     break;
                 }
                 case "dasearch": {
@@ -256,6 +256,10 @@ if (loggedIn()) {
 } else {
     switch ($_GET['a']) {
         case "login": {
+            if (!isset($_POST['first']) || !isset($_POST['last']) || !isset($_POST['n600'])) {
+                $result = "false";
+                break;
+            }
             $result = login($_POST['first'], $_POST['last'], $_POST['n600']) ? "true" : "false";
             break;
         }

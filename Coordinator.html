@@ -28,23 +28,10 @@
                     }
                 });
             }
-            
-            function getPersonResHall() {
-                $.ajax("res/functions.php?a=getdp", {
-                    'method': 'POST',
-                    'data': {'did': $("#dorms4").val()},
-                    'dataType': "json",
-                    'success': function (json) {
-                        if (json.result) {
-                            pvm.packages = json.result;
-                        }
-                    }
-                });
-            }
 
-            var dormsEl = ["#dorms", "#dorms2", "#dorms3", "#dorms4"];
-            var packagesEl = "#packages";
-            var searchEl = "#results";
+            dormsEl = ["#dorms", "#dorms2", "#dorms3", "#dorms4"];
+            packagesEl = "#packages";
+            searchEl = "#results";
         </script>
     </head>
     <body>
@@ -189,7 +176,7 @@
 
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-        <span id= "PackageList">
+        <span id="PackageList">
             Welcome to the Package Portal
             <center>
                 <em><small> Please Select Residence Hall </small> </em>

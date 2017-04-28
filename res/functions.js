@@ -197,3 +197,16 @@ function doDASearch(name) {
         "json"
     );
 }
+
+function getPersonResHall() {
+    $.ajax("res/functions.php?a=getds", {
+        'method': 'POST',
+        'data': {'did': $("#dorms4").val()},
+        'dataType': "json",
+        'success': function (json) {
+            if (json.result) {
+                stvm.packages = json.result;
+            }
+        }
+    });
+}
