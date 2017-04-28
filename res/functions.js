@@ -135,12 +135,18 @@ function silentLogin(event) {
 
 function clearFields() {
     $("#n600").val("");
-    $("#first").val("");
-    $("#last").val("");
     $("#600_number").val("");
+    
+    $("#first").val("");
+    $("#first_name").val("");
     $("#fname").val("");
+    
+    $("#last").val("");
+    $("#last_name").val("");
     $("#lname").val("");
+    
     $("#email").val("");
+    $("#pacdesc").val("");
 }
 
 function editDorm(){

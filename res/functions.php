@@ -91,14 +91,14 @@ function addPackage($own, $description, $sidin) {
     mail(getPerson($own)['email'], "You have package(s) waiting.", "You have package(s) waiting at the front desk. Please note: MavCards are required for checkout.");
 }
 
-function checkoutPackage($pid) {
-    $con = dbConnect();
-    $res = mysqli_query($con, "UPDATE packages SET time_out = NOW(), da_out = ${$_SESSION['id']} WHERE unique_id = $pid;");
-}
+//function checkoutPackage($pid) {
+//    $con = dbConnect();
+//    $res = mysqli_query($con, "UPDATE packages SET time_out = NOW(), da_out = ${$_SESSION['id']} WHERE unique_id = $pid;");
+//}
 
 function clearPackages(){
-  $con = dbConnect();
-  $res = mysqli_query($con, 'TRUNCATE TABLE packages');
+    $con = dbConnect();
+    $res = mysqli_query($con, 'TRUNCATE TABLE packages');
 }
 
 function getPackages() {
@@ -127,7 +127,7 @@ function getStudentPackages($first, $last, $n600) {
 
 function checkoutPackages($oid) {
     $con = dbConnect();
-    $res = mysqli_query($con, "UPDATE packages SET time_out = NOW() WHERE own = $oid AND time_out IS NULL");
+    $res = mysqli_query($con, "UPDATE packages SET da_out = {$_SESSION['id']}, time_out = NOW() WHERE owner = $oid AND time_out IS NULL");
 }
 
 function getPackageHistory() {
