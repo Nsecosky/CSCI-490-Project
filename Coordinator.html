@@ -27,7 +27,19 @@
                         }
                     }
                 });
-
+            }
+            
+            function getPersonResHall() {
+                $.ajax("res/functions.php?a=getdp", {
+                    'method': 'POST',
+                    'data': {'did': $("#dorms4").val()},
+                    'dataType': "json",
+                    'success': function (json) {
+                        if (json.result) {
+                            pvm.packages = json.result;
+                        }
+                    }
+                });
             }
 
             var dormsEl = ["#dorms", "#dorms2", "#dorms3", "#dorms4"];
@@ -113,9 +125,9 @@
                         <td><input type="text" id="room" /></td>
                     </tr>
                     <tr>
-                        <td><input type="button" value="Add Student" onclick="addPerson(1); clearFields();"/></td>
-                        <td><input type="button" value="Add RA" onclick="addPerson(3); clearFields();"/></td>
-                        <td><input type="button" value="Add DA" onclick="addPerson(2); clearFields();"/></td>
+                        <td><input type="button" value="Add Student" onclick="addPerson(0); clearFields();"/></td>
+                        <td><input type="button" value="Add RA" onclick="addPerson(2); clearFields();"/></td>
+                        <td><input type="button" value="Add DA" onclick="addPerson(1); clearFields();"/></td>
                         <td><input type="button" value="Clear" onclick="clearFields();"/></td>
                     </tr>
                 </table>

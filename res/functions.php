@@ -12,7 +12,7 @@ function dbConnect() {
 function login($first, $last, $n600) {
     $con = dbConnect();
     $res = mysqli_query($con, "SELECT * FROM people WHERE first_name = '$first' AND last_name = '$last' AND 600_number = '$n600'");
-    if ($row = mysqli_fetch_assoc($res)) {
+    if (($row = mysqli_fetch_assoc($res)) != NULL) {
         $_SESSION['id'] = $row["Unique_ID"];
         $_SESSION['logged'] = true;
         resetLogin();
@@ -38,7 +38,7 @@ function hasTimedOut() {
 
 function addPerson($n600, $first, $last, $email, $did, $room, $access) {
     $con = dbConnect();
-    $res = mysqli_query($con, "INSERT INTO people VALUES (NULL, '$n600', '$first', '$last', $access, '$email', NULL, 1, '$room', $did)");
+    $res = mysqli_query($con, "INSERT INTO people VALUES (NULL, '$n600', '$first', '$last', $access, '$email', 1, '$room', $did)");
 }
 
 function removePerson($sid) {
@@ -177,6 +177,11 @@ if (loggedIn()) {
                     break;
                 }
                 case "getdp": {
+                    resetLogin();
+                    $result = json_encode(getDormPackages($_POST['did']));
+                    break;
+                }
+                case "getds": {
                     resetLogin();
                     $result = json_encode(getDormPackages($_POST['did']));
                     break;
