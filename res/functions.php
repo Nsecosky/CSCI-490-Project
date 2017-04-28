@@ -4,7 +4,7 @@ error_reporting(E_ERROR);
 session_start();
 //NOTE: Set Up Functions ******************************************************************************************************************
 function dbConnect() {
-    $con = mysqli_connect("localhost", "root", "", "packagesystem");
+    $con = mysqli_connect("localhost", "root", "CSCI490", "packagesystem");
     mysqli_set_charset($con, "utf8");
     return $con;
 }
