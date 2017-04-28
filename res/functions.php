@@ -39,6 +39,7 @@ function hasTimedOut() {
 function addPerson($n600, $first, $last, $email, $did, $room, $access) {
     $con = dbConnect();
     $res = mysqli_query($con, "INSERT INTO people VALUES (NULL, '$n600', '$first', '$last', $access, '$email', 1, '$room', $did)");
+    echo mysqli_error($con);
 }
 
 function removePerson($sid) {
@@ -49,12 +50,14 @@ function removePerson($sid) {
 function searchPeopleDA($name) {
     $con = dbConnect();
     $res = mysqli_query($con, "SELECT * FROM people WHERE (first_name LIKE '%$name%' OR last_name LIKE '%$name%') AND dorm = " . getPerson($_SESSION['id'])['Dorm']);
+    echo mysqli_error($con);
     return mysqli_fetch_all($res, MYSQLI_ASSOC);
 }
 
 function searchPeople($name) {
     $con = dbConnect();
     $res = mysqli_query($con, "SELECT * FROM people WHERE first_name LIKE '%$name%' OR last_name LIKE '%$name%'");
+    echo mysqli_error($con);
     return mysqli_fetch_all($res, MYSQLI_ASSOC);
 }
 
