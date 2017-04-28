@@ -33,9 +33,9 @@
             }
 
             function addPackage(){
-                $.ajax("res/function.php?a=addp", {
+                $.ajax("res/functions.php?a=addp", {
                     'method' : 'POST',
-                    'data' : {'oid' : $("#result").val(), 'desc' : $("#pacdesc").val()},
+                    'data' : {'oid' : $("#results").val(), 'desc' : $("#pacdesc").val()},
                     'dataType': "json"
                 });
             }
@@ -80,12 +80,12 @@
                         <td><input type="button" value="Check for Packages" onclick="getStudentPackages();"/>
                     </tr>
                 </table>
-            </center>
-            <div id="packages" style="border: 1px solid black; margin: 1px;">
-                <div v-for="package in packages" style="border: 1px solid black; margin: 1px;">
-                    {{package.First_Name}} {{package.Last_Name}} - {{package.Description}}
+                <div id="packages" style="border: 1px solid black; margin: 1px; display: inline-block">
+                    <div v-for="package in packages" style="border: 1px solid black; margin: 1px; padding: 1px;">
+                        {{package.Description}} - {{package.Time_In}}
+                    </div>
                 </div>
-            </div>
+            </center>
             <input type="button" value="Checkout" onclick="checkoutPackages();"/>
         </span>
 
@@ -93,26 +93,31 @@
 
         <span id="AddPkg">
             Welcome to the Package Portal.
-            Please insert the students first name, last name and package description below.
+            Please search the student by first name or last name and add a package description below.
 
             <center>
                 <div>
                     <br>
-                    <em><small>Note: This form will input the First and Last name into the package Database.</small> </em>
+                    <em><small>Note: This form will input a new package into the package Database.</small></em>
+                    <br>
                     <table>
                         <tr>
                             <th>Name: </th>
-                            <td> <input type="text" name="name" oninput="doSearch(this.value);"/></td>
                             <td>
-                                <select id="results" onchange="useStudent(this.value);">
-                                    <option v-for="(result, index) in results" v-bind:value="index">{{result.First_Name}} {{result.Last_Name}} - Room {{result.Room_Number}}</option>
+                                <input type="text" name="name" oninput="doSearch(this.value);"/>
+                                <select id="results">
+                                    <option v-for="result in results" v-bind:value="result.Unique_ID">{{result.First_Name}} {{result.Last_Name}} - Room {{result.Room_Number}}</option>
                                 </select>
                             </td>
                         </tr>
-                        <tr><th>Room Number: </th><td> <input type="text" id="roomnum" required /></td></tr>
-                        <tr><th>Package Description: </th><td> <textarea id="pacdesc" rows="3" cols="50" required></textarea></td></tr>
-                        <tr><th><input type="button" value = "Submit" /> <input type="button" value="Reset" /></th></tr>
+                        <tr>
+                            <th>Package Description: </th><td> <textarea id="pacdesc" rows="3" cols="50" required></textarea></td>
+                        </tr>
+                        <tr>
+                            <th></th><td><input type="button" value="Submit" onclick="addPackage();"/> <input type="button" value="Reset" /></td>
+                        </tr>
                     </table>
+                    <br>
                 </div>
             </center>
         </span>

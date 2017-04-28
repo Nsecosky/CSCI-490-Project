@@ -13,7 +13,7 @@ function login($first, $last, $n600) {
     $con = dbConnect();
     $res = mysqli_query($con, "SELECT * FROM people WHERE first_name = '$first' AND last_name = '$last' AND 600_number = '$n600'");
     if ($row = mysqli_fetch_assoc($res)) {
-        $_SESSION['id'] = $row["unique_id"];
+        $_SESSION['id'] = $row["Unique_ID"];
         $_SESSION['logged'] = true;
         $_SESSION['time'] = time();
         return true;
@@ -121,7 +121,7 @@ function getDormPackages($did) {
 
 function getStudentPackages($first, $last, $n600) {
     $con = dbConnect();
-    $res = mysqli_query($con, "SELECT * FROM people WHERE first_name = '$first' AND last_name = '$last' AND 600_number = '$n600' AND time_out IS NULL");
+    $res = mysqli_query($con, "SELECT * FROM packages WHERE owner = (SELECT unique_id FROM people WHERE first_name = '$first' AND last_name = '$last' AND 600_number = '$n600') AND time_out IS NULL");
     return mysqli_fetch_all($res, MYSQLI_ASSOC);
 }
 
@@ -199,12 +199,10 @@ if (loggedIn()) {
                     break;
                 }
                 case "getsp": {
-                    echo "getsp";
                     $result = json_encode(getStudentPackages($_POST['first'], $_POST['last'], $_POST['n600']));
                     break;
                 }
                 case "search": {
-                    echo "search";
                     $result = json_encode(searchPeople($_GET['name']));
                     break;
                 }
