@@ -147,14 +147,15 @@ function clearFields() {
     
     $("#email").val("");
     $("#pacdesc").val("");
+    $("#room").val("");
 }
 
 function editDorm() {
 
 }
 
-function addStudent(access){
-    $.ajax("res/function.php?a=addp", {
+function addPerson(access){
+    $.ajax("res/functions.php?a=adds", {
         'method' : 'POST',
         'data' : {'n600' : $("#600_number").val(), 'first' : $("#fname").val(), 'last' : $("#lname").val(), 'email' : $("#email").val(), 'did' : $("#dorms").val(), 'room' : $("#dorms").val(), 'access' : access},
         'dataType': "json"

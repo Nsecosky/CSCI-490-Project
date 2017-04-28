@@ -15,6 +15,20 @@
                 $("#last_name").val(svm.results[idx].Last_Name);
                 $("#email").val(svm.results[idx].Email);
             }
+            
+            function getDormPackages() {
+                $.ajax("res/functions.php?a=getdp", {
+                    'method': 'POST',
+                    'data': {'did': $("#dorms4").val()},
+                    'dataType': "json",
+                    'success': function (json) {
+                        if (json.result) {
+                            pvm.packages = json.result;
+                        }
+                    }
+                });
+
+            }
 
             var dormsEl = ["#dorms", "#dorms2", "#dorms3", "#dorms4"];
             var packagesEl = "#packages";
@@ -76,15 +90,15 @@
                     </tr>
                     <tr>
                         <th>First Name:</th>
-                        <td><input type="text" name ="fname" required /></td>
+                        <td><input type="text" id="fname" /></td>
                     </tr>
                     <tr>
                         <th>Last Name:</th>
-                        <td><input type="text" name ="lname" required /></td>
+                        <td><input type="text" id="lname" /></td>
                     </tr>
                     <tr>
                         <th>Email:</th>
-                        <td><input type="text" id="email" name="email" /></td>
+                        <td><input type="text" id="email" /></td>
                     </tr>
                     <tr>
                         <th>Residence Hall:</th>
@@ -96,7 +110,7 @@
                     </tr>
                     <tr>
                         <th>Room:</th>
-                        <td><input type="text" id="room" name="room" /></td>
+                        <td><input type="text" id="room" /></td>
                     </tr>
                     <tr>
                         <td><input type="button" value="Add Student" onclick="addPerson(1); clearFields();"/></td>
@@ -168,7 +182,7 @@
             <center>
                 <em><small> Please Select Residence Hall </small> </em>
                 <p>
-                    <select id="dorms4">
+                    <select id="dorms4" onchange="getDormPackages();">
                         <option v-for="dorm in dorms" v-bind:value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
                     </select>
                 </p>

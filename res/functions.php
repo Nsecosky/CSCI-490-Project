@@ -38,7 +38,7 @@ function hasTimedOut() {
 
 function addPerson($n600, $first, $last, $email, $did, $room, $access) {
     $con = dbConnect();
-    $res = mysqli_query($con, "INSERT INTO people VALUES (NULL, $n600, '$first', '$last', $access, '$email', '', 1, '$room', $did");
+    $res = mysqli_query($con, "INSERT INTO people VALUES (NULL, '$n600', '$first', '$last', $access, '$email', NULL, 1, '$room', $did)");
 }
 
 function removePerson($sid) {
@@ -120,7 +120,7 @@ function getDormTVPackages($did) {
 
 function getDormPackages($did) {
     $con = dbConnect();
-    $res = mysqli_query($con, "SELECT * FROM packages INNER JOIN people ON people.unique_id = packages.owner WHERE dorm = $did");
+    $res = mysqli_query($con, "SELECT * FROM packages INNER JOIN people ON people.unique_id = packages.owner WHERE people.dorm = $did");
     return mysqli_fetch_all($res, MYSQLI_ASSOC);
 }
 
@@ -176,13 +176,11 @@ if (loggedIn()) {
                     $result = "true";
                     break;
                 }
-
                 case "getdp": {
                     resetLogin();
-                    $result = json_encode(getDormPackages($_GET['did']));
+                    $result = json_encode(getDormPackages($_POST['did']));
                     break;
                 }
-
                 case "adds": {
                     resetLogin();
                     addPerson($_POST['n600'], $_POST['first'], $_POST['last'], $_POST['email'], $_POST['did'], $_POST['room'], $_POST['access']);
