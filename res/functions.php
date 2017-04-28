@@ -185,7 +185,6 @@ if (loggedIn()) {
                     break;
                 }
                 case "adds": {
-                    echo "adds";
                     resetLogin();
                     addPerson($_POST['n600'], $_POST['first'], $_POST['last'], $_POST['email'], $_POST['did'], $_POST['room'], $_POST['access']);
                     $result = true;
@@ -201,7 +200,6 @@ if (loggedIn()) {
                     break;
                 }
                 case "search": {
-                    echo "search";
                     resetLogin();
                     $result = json_encode(searchPeople($_GET['name']));
                     break;
@@ -227,7 +225,6 @@ if (loggedIn()) {
                     break;
                 }
                 case "dasearch": {
-                    echo "dasearch";
                     resetLogin();
                     $result = json_encode(searchPeopleDA($_GET['name']));
                     break;
