@@ -266,6 +266,7 @@ if (loggedIn()) {
                 $result = "false";
                 break;
             }
+            echo $_SESSION['id'] . ";";
             $result = login($_POST['first'], $_POST['last'], $_POST['n600']) ? "true" : "false";
             break;
         }
