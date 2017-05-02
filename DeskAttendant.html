@@ -44,9 +44,10 @@
             }
 
 
-            var dormsEl = ["#dorms"];
-            var packagesEl = "#packages";
-            var searchEl = "#results";
+            dormsEl = ["#dorms"];
+            packagesEl = "#packages";
+            searchEl = "#results";
+            studentsEl = "#students";
             $("#overlay").focus();
         </script>
     </head>
@@ -130,12 +131,16 @@
         <span id="StuRoster">
             <input type="button" value="Sort by Hall" onclick="sortBy = 'Dorm'"/>
             <input type="button" value="Sort by last name" onclick="sortBy = 'Last_Name'"/>
-            </br>
-            <p>Display Residence Hall Students:
-                <select id="dorms" name="dorms">
+            <br>
+            <p>
+                Display Residence Hall Students:
+                <select id="dorms">
                     <option v-for="dorm in dorms" v-bind:value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
                 </select>
                 <input type="button" value="Show" onclick="getPersonResHall();" />
+                <div id="students">
+                    <div v-for="student in students">{{student.First_Name}} {{student.Last_Name}} - Room {{student.Room_Number}}</div>
+                </div>
             </p>
         </span>
 

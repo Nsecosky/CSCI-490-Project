@@ -27,7 +27,6 @@
                         }
                     }
                 });
-
             }
 
             var dormsEl = ["#dorms", "#dorms2", "#dorms3", "#dorms4"];
@@ -72,7 +71,7 @@
                 <select id="dorms" name="dorms">
                     <option v-for="dorm in dorms" v-bind:value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
                 </select>
-                <input type="button" value="Show Students in Residence Hall" onclick="getDormStudents();"/>
+                <input type="button" value="Show Students in Residence Hall" onclick="getDormStudents($('#dorms').val());"/>
                 <div id="students">
                     <div v-for="student in students">
                         {{student.First_Name}} {{student.Last_Name}} - Room {{student.Room_Number}} - {{student.Email}}
@@ -119,9 +118,9 @@
                         <td><input type="text" id="room" /></td>
                     </tr>
                     <tr>
-                        <td><input type="button" value="Add Student" onclick="addPerson(1); clearFields();"/></td>
-                        <td><input type="button" value="Add RA" onclick="addPerson(3); clearFields();"/></td>
-                        <td><input type="button" value="Add DA" onclick="addPerson(2); clearFields();"/></td>
+                        <td><input type="button" value="Add Student" onclick="addPerson(0); clearFields();"/></td>
+                        <td><input type="button" value="Add RA" onclick="addPerson(2); clearFields();"/></td>
+                        <td><input type="button" value="Add DA" onclick="addPerson(1); clearFields();"/></td>
                         <td><input type="button" value="Clear" onclick="clearFields();"/></td>
                     </tr>
                 </table>
@@ -183,7 +182,7 @@
 
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-        <span id= "PackageList">
+        <span id="PackageList">
             Welcome to the Package Portal
             <center>
                 <em><small> Please Select Residence Hall </small> </em>

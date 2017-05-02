@@ -1,10 +1,10 @@
 <?php
 
-error_reporting(E_ERROR);
+error_reporting(E_ALL);
 session_start();
 //NOTE: Set Up Functions ******************************************************************************************************************
 function dbConnect() {
-    $con = mysqli_connect("localhost", "root", "", "packagesystem");
+    $con = mysqli_connect("localhost", "root", "CSCI490", "packagesystem");
     mysqli_set_charset($con, "utf8");
     return $con;
 }
@@ -12,7 +12,7 @@ function dbConnect() {
 function login($first, $last, $n600) {
     $con = dbConnect();
     $res = mysqli_query($con, "SELECT * FROM people WHERE first_name = '$first' AND last_name = '$last' AND 600_number = '$n600'");
-    if ($row = mysqli_fetch_assoc($res)) {
+    if (($row = mysqli_fetch_assoc($res)) != NULL) {
         $_SESSION['id'] = $row["Unique_ID"];
         $_SESSION['logged'] = true;
         resetLogin();
@@ -38,7 +38,8 @@ function hasTimedOut() {
 
 function addPerson($n600, $first, $last, $email, $did, $room, $access) {
     $con = dbConnect();
-    $res = mysqli_query($con, "INSERT INTO people VALUES (NULL, '$n600', '$first', '$last', $access, '$email', NULL, 1, '$room', $did)");
+    $res = mysqli_query($con, "INSERT INTO people VALUES (NULL, '$n600', '$first', '$last', $access, '$email', 1, '$room', $did)");
+    echo mysqli_error($con);
 }
 
 function removePerson($sid) {
@@ -49,12 +50,14 @@ function removePerson($sid) {
 function searchPeopleDA($name) {
     $con = dbConnect();
     $res = mysqli_query($con, "SELECT * FROM people WHERE (first_name LIKE '%$name%' OR last_name LIKE '%$name%') AND dorm = " . getPerson($_SESSION['id'])['Dorm']);
+    echo mysqli_error($con);
     return mysqli_fetch_all($res, MYSQLI_ASSOC);
 }
 
 function searchPeople($name) {
     $con = dbConnect();
     $res = mysqli_query($con, "SELECT * FROM people WHERE first_name LIKE '%$name%' OR last_name LIKE '%$name%'");
+    echo mysqli_error($con);
     return mysqli_fetch_all($res, MYSQLI_ASSOC);
 }
 
@@ -172,7 +175,7 @@ if (loggedIn()) {
             switch ($_GET['a']) {
                 case "editd": {
                     resetLogin();
-                    editDorm($_POST['name'], $_POST['address'] ,$_POST['dorm_id']);
+                    editDorm($_POST['name'], $_POST['address'], $_POST['dorm_id']);
                     $result = "true";
                     break;
                 }
@@ -216,6 +219,11 @@ if (loggedIn()) {
                     $result = json_encode(getStudentPackages($_POST['first'], $_POST['last'], $_POST['n600']));
                     break;
                 }
+                case "getds": {
+                    resetLogin();
+                    $result = json_encode(getDormPeople($_POST['did']));
+                    break;
+                }
                 case "dasearch": {
                     resetLogin();
                     $result = json_encode(searchPeopleDA($_GET['name']));
@@ -232,7 +240,11 @@ if (loggedIn()) {
         case 0: {
             switch ($_GET['a']) {
                 case "login": {
-                    $result = "true";
+                    if (!isset($_POST['first']) || !isset($_POST['last']) || !isset($_POST['n600'])) {
+                        $result = loggedIn();
+                        break;
+                    }
+                    $result = (login($_POST['first'], $_POST['last'], $_POST['n600']) ? "true" : "false") . ", \"id\": " . $_SESSION['id'];
                     break;
                 }
                 case "getd": {
@@ -251,7 +263,12 @@ if (loggedIn()) {
 } else {
     switch ($_GET['a']) {
         case "login": {
-            $result = login($_POST['first'], $_POST['last'], $_POST['n600']) ? "true" : "false";
+            if (!isset($_POST['first']) || !isset($_POST['last']) || !isset($_POST['n600'])) {
+                $result = "false";
+                break;
+            }
+            $result = (login($_POST['first'], $_POST['last'], $_POST['n600']) ? "true" : "false") . ", \"id\": " . $_SESSION['id'];
+//            $result = login($_POST['first'], $_POST['last'], $_POST['n600']) ? "true" : "false";
             break;
         }
     }
