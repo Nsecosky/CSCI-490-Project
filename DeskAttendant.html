@@ -110,11 +110,10 @@
                             <td>
                                 <input type="text" name="name" oninput="doSearch(this.value);"/>
                                 <select id="results">
-                                  
-                                      <option v-for="result in results" v-bind:value="result.Unique_ID">{{result.First_Name}} {{result.Last_Name}} - Room {{result.Room_Number}}</option>
+                                      <option v-for="result in results" v-bind:value="result.Unique_ID">{{result.First_Name}} {{result.Last_Name}} - {{result.Dorm}} {{result.Room_Number}}</option>
 
                                     <!--
-                                    <option v-for="result in results" v-bind:value="result.Unique_ID">{{result.First_Name}} {{result.Last_Name}} - {{result.Dorm}} {{result.Room_Number}}</option>
+                                    <option v-for="result in results" v-bind:value="result.Unique_ID">{{result.First_Name}} {{result.Last_Name}} - Room {{result.Room_Number}}</option>
                                     -->
                                 </select>
                             </td>
