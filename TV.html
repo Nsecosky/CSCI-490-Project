@@ -17,8 +17,20 @@
                     }
                 });
             }
-
-
+            
+            var scroll = 0;
+            $(document).ready(function() {
+                
+                setInterval(function() {
+                    var el = $("#display")[0];
+                    scroll += 3;
+                    if (scroll > el.scrollHeight - el.clientHeight + 25) {
+                        scroll = 0;
+                    }
+                    el.scrollTop = scroll;
+                }, 200);
+                
+            });
 
             var studentsEl = "#display";
             var dormsEl = ["#dorms"];
@@ -58,18 +70,19 @@
         <em>
             <font size="5">MavCards are required for package checkout.</font>
         </em>
+        <br>
+        <br>
+        
         <!-- This is the display-->
-        <table id="display" class = "display">
-            <tr v-for="student in students">
-                <td style="padding: 5px;">
-                    {{student.first_name}} {{student.last_name}}
-                </td>
-                <td style="padding: 5px;">
-                    {{student.pcount}} packages
-                </td>
-            </tr>
-        </table>
+        <div id="display" class="display">
+            <div v-for="student in students">
+                <div style="padding: 5px;">
+                    {{student.First_Name}} {{student.Last_Name}} &nbsp; {{student.pcount}} packages
+                </div>
+            </div>
+        </div>
 
+        <br>
         <footer>
             &copy; Colorado Mesa University
         </footer>

@@ -4,7 +4,7 @@ error_reporting(E_ALL);
 session_start();
 //NOTE: Set Up Functions ******************************************************************************************************************
 function dbConnect() {
-    $con = mysqli_connect("localhost", "root", "CSCI490", "packagesystem");
+    $con = mysqli_connect("localhost", "root", "", "packagesystem");
     mysqli_set_charset($con, "utf8");
     return $con;
 }
@@ -113,7 +113,7 @@ function getPackages() {
 
 function getDormTVPackages($did) {
     $con = dbConnect();
-    $res = mysqli_query($con, "SELECT first_name, last_name, (SELECT COUNT(unique_id) FROM packages WHERE people.unique_id = packages.owner AND time_out IS NULL) AS pcount FROM people WHERE dorm = $did HAVING pcount > 0");
+    $res = mysqli_query($con, "SELECT First_Name, Last_Name, (SELECT COUNT(unique_id) FROM packages WHERE people.unique_id = packages.owner AND time_out IS NULL) AS pcount FROM people WHERE dorm = $did HAVING pcount > 0");
     return mysqli_fetch_all($res, MYSQLI_ASSOC);
 }
 

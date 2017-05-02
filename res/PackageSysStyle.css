@@ -6,39 +6,39 @@ Adam Childs
 
 @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz|Francois+One|Maven+Pro);
 
-header
-{
+header {
     font-family: "Yanone Kaffeesatz", "Francois One";
-    font-size:30px;
-    width:98%;
-    padding:1%;
+    font-size: 30px;
+    width: 100%;
     background-color: #5D0022;
     text-align: center;
 }
-img.CMULogo
-{
-    position: center;
+
+img.CMULogo {
+    text-align: center;
     margin-top:15px;
 }
-footer
-{
+
+footer {
     font-family: "Yanone Kaffeesatz", "Francois One";
     width:100%;
     background-color:#6D5E51;
     color:#FFFFFF;
     font-weight:bold;
     text-align:center;
-    padding:0%;
     line-height:30px;
     margin-left:auto;
     margin-right:auto;
 }
-body
-{
+
+body {
     text-align:center;
+    height: 100vh;
+    /*width: 100vw;*/
+    margin: 0px;
 }
-.Form
-{
+
+.Form {
     width:60%;
     padding: 1%;
     margin-left:25%;
@@ -46,8 +46,8 @@ body
     margin-top:auto;
     margin-bottom:auto;
 }
-.FormCoordPacks
-{
+
+.FormCoordPacks {
     width:60%;
     padding: 1%;
     margin-left:15%;
@@ -55,6 +55,7 @@ body
     margin-top:auto;
     margin-bottom:auto;
 }
+
 .FormAdd
 {
     width:60%;
@@ -65,10 +66,9 @@ body
     margin-bottom:auto;
 }
 
-nav
-{
+nav {
     line-height:20px;
-    align:center;
+    text-align: center;
     width:100%;
     background-color:#6D5E51;
     margin-left:auto;
@@ -77,14 +77,13 @@ nav
     padding:0px;
 }
 
-nav ul{
+nav ul {
     width: 100%;
     margin-left: auto;
     margin-right: auto;
 }
 
-nav ul li
-{
+nav ul li {
     margin:0px;
     width:25px;
     padding:0px;
@@ -92,8 +91,8 @@ nav ul li
     list-style-type:none;
     display:inline;
 }
-nav ul li a:link, nav ul li a:visited
-{
+
+nav ul li a:link, nav ul li a:visited {
     display:inline-block;
     text-decoration:none;
     border:2px;
@@ -104,29 +103,28 @@ nav ul li a:link, nav ul li a:visited
     padding:4px;
 }
 
-nav ul li a:hover
-{
+nav ul li a:hover {
     background-color:#ff9900;
     color:black;
 }
 
-nav ul li a:active
-{
+nav ul li a:active {
     background-color:black;
 }
 
-.NavHighlight
-{
+.NavHighlight {
     background-color: #5D0022;
 }
 
-.OverlayText
-{
-  background-color: #5D0022;
+.OverlayText {
+    background-color: #5D0022;
 }
 
-.display
-{
-  text-align: left 40%;
-  font-weight:bold;
+.display {
+    text-align: center;
+    font-size: large;
+    font-weight: bold;
+    overflow: scroll;
+    max-height: 60%;
+    border: 5px solid gray;
 }
