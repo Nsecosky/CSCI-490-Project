@@ -30,17 +30,17 @@
         </header>
         <nav>
             <ul>
-                <li> <a name="nav" href="javascript:void" onclick = "switchToTab(this, '#HallAdd');">Add Residence Halls</a></li>
-                <li> <a name="nav" href="javascript:void" onclick = "switchToTab(this, '#HallEdit');">Edit Residence Halls</a></li>
-                <li> <a name="nav" href="javascript:void" onclick = "switchToTab(this, '#AddPerson');">Add Person</a></li>
-                <li> <a name="nav" href="javascript:void" onclick = "switchToTab(this, '#EditPerson');">Edit/Remove Person</a></li>
+                <li> <a name="nav" href="javascript:void" onclick = "switchToTab(this, '#addHall');">Add Residence Halls</a></li>
+                <li> <a name="nav" href="javascript:void" onclick = "switchToTab(this, '#editHall');">Edit Residence Halls</a></li>
+                <li> <a name="nav" href="javascript:void" onclick = "switchToTab(this, '#addPerson');">Add Person</a></li>
+                <li> <a name="nav" href="javascript:void" onclick = "switchToTab(this, '#editPerson');">Edit/Remove Person</a></li>
                 <li> <a name="nav" href="javascript:void" onclick = "switchToTab(this, '#MasterClear');">Master Clear</a></li>
             </ul>
         </nav>
 
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-        <span id="HallAdd">
+        <span id="addHall">
             Welcome to the Residence Hall Add form.<br>
             <em><small>Note: Please Fill in all information.</small></em>
             <em><small>Once a submission is made it is added to database.</small></em>
@@ -69,7 +69,7 @@
 
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-        <span id = "HallEdit">
+        <span id = "editHall">
             Welcome to the Residence Hall Edit/Add/Delete form.<br>
             <em><small>Note: Please Fill in all information.</small></em>
             <em><small>Once a submission is made it is added to database.</small></em>
@@ -107,7 +107,7 @@
 
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-        <span id = "AddPerson">
+        <span id = "addPerson">
             Welcome to the Add Person Form.<br>
             <em><small>Note: Please fill in all information.</small></em>
             <em><small>Once a submission is made it added to database.</small></em>
@@ -141,10 +141,10 @@
                             </td>
                         </tr>
                         <tr>
-                            <td><input type="button" value="Add Coordinator" onclick="addPerson(4); clearFields();"/></td>
-                            <td><input type="button" value="Add RA" onclick="addPerson(3); clearFields();"/></td>
-                            <td><input type="button" value="Add DA" onclick="addPerson(2); clearFields();"/></td>
-                            <td><input type="button" value="Add Student" onclick="addPerson(1); clearFields();"/></td>
+                            <td><input type="button" value="Add Coordinator" onclick="addPerson(3); clearFields();"/></td>
+                            <td><input type="button" value="Add RA" onclick="addPerson(2); clearFields();"/></td>
+                            <td><input type="button" value="Add DA" onclick="addPerson(1); clearFields();"/></td>
+                            <td><input type="button" value="Add Student" onclick="addPerson(0); clearFields();"/></td>
 
                             <td><input type="button" value="Clear" onclick="clearFields();"/></td>
                         </tr>
@@ -155,7 +155,7 @@
 
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-        <span id="EditPerson">
+        <span id="editPerson">
             Welcome to the Edit Person Page. Please Fill in all info.<br>
             <b><p>ALERT: STUDENT INFORMATION MUST BE ALL CAPS! LIKE THIS ALERT!</p></b>
             <em><small>Note: all changes will be added to database.</small> </em>
@@ -211,7 +211,7 @@
 
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-        <span>
+        <span id="MasterClear">
             <em><large><font size="9">WARNING! </font></large></em>
             </br>
             <em><large><font size="9">ONCE A BUTTON IS CLICKED RESPECTIVE DATABASE IS CLEARED!</font></large></em>
@@ -228,8 +228,8 @@
         </footer>
         <script type="text/javascript">
 
-            clearFields():
-            switchToTab($("a")[0], '#HallAdd');
+            clearFields();
+            switchToTab($("a")[0], '#addPeron');
             function clearFields() {
                 $("#600_number").val("");
                 $("#fname").val("");

@@ -13,11 +13,11 @@
                     'dataType': "json",
                     'success': function (json) {
                         stvm.students = json.result;
+                        
                     }
                 });
             }
 
-            setInterval(getPackages, 5000);
 
 
             var studentsEl = "#display";

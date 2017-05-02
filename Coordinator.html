@@ -15,7 +15,7 @@
                 $("#last_name").val(svm.results[idx].Last_Name);
                 $("#email").val(svm.results[idx].Email);
             }
-            
+
             function getDormPackages() {
                 $.ajax("res/functions.php?a=getdp", {
                     'method': 'POST',
