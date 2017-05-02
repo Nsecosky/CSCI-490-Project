@@ -56,7 +56,7 @@ function searchPeopleDA($name) {
 
 function searchPeople($name) {
     $con = dbConnect();
-    $res = mysqli_query($con, "SELECT * FROM people JOIN dorms ON people.dorm = dorms.unique_id WHERE fist_name LIKE '%$name%' OR last_name LIKE '%$name%'");
+    $res = mysqli_query($con, "SELECT * FROM people JOIN dorms ON people.dorms = dorms.unique_id WHERE fist_name LIKE '%$name%' OR last_name LIKE '%$name%'");
     echo mysqli_error($con);
     return mysqli_fetch_all($res, MYSQLI_ASSOC);
 }
