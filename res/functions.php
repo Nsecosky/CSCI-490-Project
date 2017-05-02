@@ -56,7 +56,7 @@ function searchPeopleDA($name) {
 
 function searchPeople($name) {
     $con = dbConnect();
-    $res = mysqli_query($con, "SELECT * FROM people JOIN dorms ON people.dorms = dorms.unique_id WHERE fist_name LIKE '%$name%' OR last_name LIKE '%$name%'");
+    $res = mysqli_query($con, "SELECT * FROM people INNER JOIN dorms ON people.dorm = dorms.unique_id WHERE fist_name LIKE '%$name%' OR last_name LIKE '%$name%'");
     echo mysqli_error($con);
     return mysqli_fetch_all($res, MYSQLI_ASSOC);
 }
@@ -98,11 +98,6 @@ function addPackage($own, $description, $sidin) {
     echo mysqli_error($con);
     mail(getPerson($own)['email'], "You have package(s) waiting.", "You have package(s) waiting at the front desk. Please note: MavCards are required for checkout.");
 }
-
-//function checkoutPackage($pid) {
-//    $con = dbConnect();
-//    $res = mysqli_query($con, "UPDATE packages SET time_out = NOW(), da_out = ${$_SESSION['id']} WHERE unique_id = $pid;");
-//}
 
 function clearPackages(){
     $con = dbConnect();
