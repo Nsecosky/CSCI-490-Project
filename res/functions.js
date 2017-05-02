@@ -206,7 +206,7 @@ function getDormStudents(did) {
             if (response.logged && response.result) {
                 stvm.students = response.result;
             } else {
-                stvm.results = [];
+                stvm.students = [];
             }
         },
         "dataType" : "json"

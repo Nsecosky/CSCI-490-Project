@@ -88,7 +88,7 @@ function getPeople(){
 function getDormPeople($did){
     $con = dbConnect();
     $res = mysqli_query($con, "SELECT * from people WHERE dorm = $did");
-    return mysqli_fetch_row($res);
+    return mysqli_fetch_all($res, MYSQLI_ASSOC);
 }
 
 //NOTE: All Packages Table Functions ********************************************************************************************************
