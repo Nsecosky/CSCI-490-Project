@@ -14,7 +14,7 @@
     <body>
       <div id="overlay" class = "OverlayStyle" style="background: rgba(109, 94, 81, 0.5); position: fixed; top: 0%; left: 0%; width: 100%; height: 100%;">
           <div class = "OverlayText" style="opacity: 1.0; position: fixed; top: 30%; left: 30%; width:40%; height: 30%">
-              <font color = 'white'> <p><b>ALERT: Login information is case sensitive!</b></p></font>
+              <p><font color = 'white'><b>ALERT: Login information is case sensitive!</b></font></p>
               <font color = 'white'> First Name: </font> <input type="text" id="Fname"/>
               <br>
               <font color = 'white'> Last Name: </font> <input type="text" id="Lname"/>
@@ -40,7 +40,7 @@
 
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
-        <span id = "HallAdd">
+        <span id="HallAdd">
             Welcome to the Residence Hall Add form.<br>
             <em><small>Note: Please Fill in all information.</small></em>
             <em><small>Once a submission is made it is added to database.</small></em>
@@ -49,14 +49,14 @@
                 <table>
                     <tr>
                         <th>Hall Name:</th>
-                        <td><input type="text" id="name" name="first_name"/></td>
+                        <td><input type="text" id="name"/></td>
                     </tr>
                     <tr>
                         <th></th>
                     </tr>
                     <tr>
                         <th>Address:</th>
-                        <td><input type="text" id="address" name="address" /></td>
+                        <td><input type="text" id="address"/></td>
                     </tr>
                     <tr>
                         <td><input type="button" value="Edit" onclick="editDorm(); clearFields();"/></td>

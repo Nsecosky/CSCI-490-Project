@@ -33,6 +33,7 @@
             var dormsEl = ["#dorms", "#dorms2", "#dorms3", "#dorms4"];
             var packagesEl = "#packages";
             var searchEl = "#results";
+            var studentsEl = "#students";
         </script>
     </head>
     <body>
@@ -71,7 +72,12 @@
                 <select id="dorms" name="dorms">
                     <option v-for="dorm in dorms" v-bind:value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
                 </select>
-                <input type="button" value="Show Students in Residence Hall" onclick="getPersonResHall();"/>
+                <input type="button" value="Show Students in Residence Hall" onclick="getDormStudents();"/>
+                <div id="students">
+                    <div v-for="student in students">
+                        {{student.First_Name}} {{student.Last_Name}} - Room {{student.Room_Number}} - {{student.Email}}
+                    </div>
+                </div>
             </p>
         </span>
 
@@ -86,7 +92,7 @@
                 <table>
                     <tr>
                         <th>600 #:</th>
-                        <td><input type="text" id="600_number" name="600_number"/></td>
+                        <td><input type="text" id="600_number" /></td>
                     </tr>
                     <tr>
                         <th>First Name:</th>
@@ -141,19 +147,19 @@
                     </tr>
                     <tr>
                         <td>600 #:</td>
-                        <td><input type="text" id="600_number" name="600_number"/></td>
+                        <td><input type="text" id="600_number"/></td>
                     </tr>
                     <tr>
                         <td>First Name:</td>
-                        <td><input type="text" name ="fname" required /></td>
+                        <td><input type="text" name="fname" /></td>
                     </tr>
                     <tr>
                         <td>Last Name:</td>
-                        <td><input type="text" name ="lname" required /></td>
+                        <td><input type="text" name="lname" /></td>
                     </tr>
                     <tr>
                         <td>Email:</td>
-                        <td><input type="text" id="email" name="email" /></td>
+                        <td><input type="text" id="email" /></td>
                     </tr>
                     <tr>
                         <td>Residence Hall:</td>

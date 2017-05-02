@@ -197,3 +197,18 @@ function doDASearch(name) {
         "json"
     );
 }
+
+function getDormStudents(did) {
+    $.ajax("res/functions.php?a=getds", {
+        'method' : 'POST',
+        'data' : {"did": did},
+        "success" : function (response) {
+            if (response.logged && response.result) {
+                stvm.students = response.result;
+            } else {
+                stvm.results = [];
+            }
+        },
+        "dataType" : "json"
+    });
+}
