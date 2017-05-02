@@ -1,6 +1,9 @@
-/*CSS Style Design for Package System at CMU
-Designed by Adam Childs
-1.27.17*/
+/*
+CSS Style Design for Package System at CMU
+Last updated 5.2.2017
+Adam Childs
+*/
+
 @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz|Francois+One|Maven+Pro);
 
 header
@@ -19,7 +22,7 @@ img.CMULogo
 }
 footer
 {
-    font-family: "Verdana";
+    font-family: "Yanone Kaffeesatz", "Francois One";
     width:100%;
     background-color:#6D5E51;
     color:#FFFFFF;
