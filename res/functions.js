@@ -8,6 +8,7 @@ var svm = null;
 var stvm = null;
 
 function setDormsData(data) {
+    data.unshift({'Unique_ID': -1, 'Dorm_Name': "Please Select a Dorm"});
     for (var i = 0; i < dvm.length; i++) {
         dvm[i].dorms = data;
     }
@@ -150,16 +151,40 @@ function clearFields() {
     $("#room").val("");
 }
 
-function editDorm() {
+function addDorm() {
 
+    clearFields();
 }
 
-function addPerson(access){
+function editDorm() {
+    clearFields();
+}
+
+function addPerson(n600, first, last, email, did, room, access){
     $.ajax("res/functions.php?a=adds", {
-        'method' : 'POST',
-        'data' : {'n600' : $("#600_number").val(), 'first' : $("#fname").val(), 'last' : $("#lname").val(), 'email' : $("#email").val(), 'did' : $("#dorms").val(), 'room' : $("#dorms").val(), 'access' : access},
+        'method': 'POST',
+        'data': {'n600': $(n600).val(), 'first': $(first).val(), 'last': $(last).val(), 'email': $(email).val(), 'did': $(did).val(), 'room': $(room).val(), 'access': access},
         'dataType': "json"
     });
+    clearFields();
+}
+
+function editPerson(id, n600, first, last, email, did, room){
+    $.ajax("res/functions.php?a=editp", {
+        'method': 'POST',
+        'data': {'id': $(id).val(), 'n600': $(n600).val(), 'first': $(first).val(), 'last': $(last).val(), 'email': $(email).val(), 'did': $(did).val(), 'room': $(room).val()},
+        'dataType': "json"
+    });
+    clearFields();
+}
+
+function removePerson(id){
+    $.ajax("res/functions.php?a=delp", {
+        'method': 'POST',
+        'data': {'id': $(id).val()},
+        'dataType': "json"
+    });
+    clearFields();
 }
 
 function switchToTab(tabnav, tabcont) {

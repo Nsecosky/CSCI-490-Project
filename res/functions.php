@@ -30,8 +30,11 @@ function resetLogin() {
 }
 
 function hasTimedOut() {
-    if (getPerson($_SESSION['id'])['First_Name'] == 'Package') return time() - $_SESSION['time'] > 86400;
-    return time() - $_SESSION['time'] > 30;
+    if (getPerson($_SESSION['id'])['Access'] == 1) {
+        return time() - $_SESSION['time'] > 30;
+    } else {
+        return time() - $_SESSION['time'] > 86400;
+    }
 }
 
  //NOTE: All People Table Functions *******************************************************************************************************
@@ -44,7 +47,8 @@ function addPerson($n600, $first, $last, $email, $did, $room, $access) {
 
 function removePerson($sid) {
     $con = dbConnect();
-    $res = mysqli_query($con, "UPDATE people SET active = 0 WHERE unique_id = $sid;");
+//    $res = mysqli_query($con, "UPDATE people SET active = 0 WHERE unique_id = $sid");
+    $res = mysqli_query($con, "DELETE FROM people WHERE unique_id = $sid");
 }
 
 function searchPeopleDA($name) {
@@ -56,22 +60,21 @@ function searchPeopleDA($name) {
 
 function searchPeople($name) {
     $con = dbConnect();
-    $res = mysqli_query($con, "SELECT * FROM people INNER JOIN dorms ON people.Dorm = dorms.Unique_ID WHERE (first_name LIKE '%$name%' OR last_name LIKE '%$name%')");
-    #$res = mysqli_query($con, "SELECT * FROM people WHERE first_name LIKE '%$name%' OR last_name LIKE '%$name%'");
+    $res = mysqli_query($con, "SELECT *, people.unique_id AS Person_ID FROM people INNER JOIN dorms ON people.Dorm = dorms.Unique_ID WHERE (first_name LIKE '%$name%' OR last_name LIKE '%$name%')");
     echo mysqli_error($con);
     return mysqli_fetch_all($res, MYSQLI_ASSOC);
 }
 
-function editPerson($id, $n600, $first, $last, $email, $did, $room, $access){
+function editPerson($id, $n600, $first, $last, $email, $did, $room){
     $con = dbConnect();
-    $res = mysqli_query($con, "UPDATE people SET `600_number` = $n600, `first_name` = '$first', `last_name` = '$last', `access` = $access, `email` = '$email', '', 1, `room_number` = '$room', `dorm` = $did WHERE unique_id = $id");
+    $res = mysqli_query($con, "UPDATE people SET `600_number` = '$n600', `first_name` = '$first', `last_name` = '$last', `email` = '$email', `room_number` = '$room', `dorm` = $did WHERE unique_id = $id");
 }
 
 //NOTE: THIS CLEARS ALL ENTRIES IN THE PEOPLE TABLE AND ADDS A "MASTER ADMIN" USE CAUTION WHEN CALLING
 function clearPeople(){
     $con = dbConnect();
     $res = mysqli_query($con, 'TRUNCATE TABLE people');
-    $res = mysqli_query($con, "INSERT INTO people VALUES (NULL, 6004083854, 'Master', 'Admin', '3', 'IT@mavs.coloradomesa.edu', 1, '1', '14')");
+    $res = mysqli_query($con, "INSERT INTO people VALUES (NULL, 6004083854256, 'Master', 'Admin', '3', 'IT@mavs.coloradomesa.edu', 1, '1', '14')");
 }
 
 function getPerson($id) {
@@ -113,7 +116,7 @@ function getPackages() {
 
 function getDormTVPackages($did) {
     $con = dbConnect();
-    $res = mysqli_query($con, "SELECT First_Name, Last_Name, (SELECT COUNT(unique_id) FROM packages WHERE people.unique_id = packages.owner AND time_out IS NULL) AS pcount FROM people WHERE dorm = $did HAVING pcount > 0");
+    $res = mysqli_query($con, "SELECT First_Name, Last_Name, (SELECT COUNT(unique_id) FROM packages WHERE people.unique_id = packages.owner AND time_out IS NULL) AS pcount FROM people WHERE dorm = $did AND people.active = 1 HAVING pcount > 0");
     return mysqli_fetch_all($res, MYSQLI_ASSOC);
 }
 
@@ -180,12 +183,6 @@ if (loggedIn()) {
                     $result = json_encode(getDormPackages($_POST['did']));
                     break;
                 }
-                case "adds": {
-                    resetLogin();
-                    addPerson($_POST['n600'], $_POST['first'], $_POST['last'], $_POST['email'], $_POST['did'], $_POST['room'], $_POST['access']);
-                    $result = true;
-                    break;
-                }
             }
         }
         case 2: {
@@ -198,6 +195,36 @@ if (loggedIn()) {
                 case "search": {
                     resetLogin();
                     $result = json_encode(searchPeople($_GET['name']));
+                    break;
+                }
+                case "adds": {
+                    if (getPerson($da)['Access'] < $_POST['access']) {
+                        $result = "false";
+                        break;
+                    }
+                    resetLogin();
+                    addPerson($_POST['n600'], $_POST['first'], $_POST['last'], $_POST['email'], $_POST['did'], $_POST['room'], $_POST['access']);
+                    $result = "true";
+                    break;
+                }
+                case "editp": {
+                    if (getPerson($da)['Access'] < getPerson($_POST['id'])['Access']) {
+                        $result = "false";
+                        break;
+                    }
+                    resetLogin();
+                    editPerson($_POST['id'], $_POST['n600'], $_POST['first'], $_POST['last'], $_POST['email'], $_POST['did'], $_POST['room']);
+                    $result = "true";
+                    break;
+                }
+                case "delp": {
+                    if (getPerson($da)['Access'] < getPerson($_POST['id'])['Access']) {
+                        $result = "false";
+                        break;
+                    }
+                    resetLogin();
+                    removePerson($_POST['id']);
+                    $result = "true";
                     break;
                 }
             }
@@ -264,7 +291,6 @@ if (loggedIn()) {
                 break;
             }
             $result = (login($_POST['first'], $_POST['last'], $_POST['n600']) ? "true" : "false") . ", \"id\": " . $_SESSION['id'];
-//            $result = login($_POST['first'], $_POST['last'], $_POST['n600']) ? "true" : "false";
             break;
         }
     }

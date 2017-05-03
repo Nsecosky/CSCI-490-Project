@@ -53,10 +53,10 @@
         </header>
         <nav>
             <ul>
-                <li> <a name="nav" href="javascript:void" onclick="switchToTab(this, '#Roster');">Roster</a></li>
-                <li> <a name="nav" href="javascript:void" onclick="switchToTab(this, '#AddStudent');" >Add Student</a></li>
-                <li> <a name="nav" href="javascript:void" onclick="switchToTab(this, '#EditStudent');" >Edit/Remove Student</a></li>
-                <li> <a name="nav" href="javascript:void" onclick="switchToTab(this, '#PackageList');" >Package List</a></li>
+                <li> <a name="nav" id="navRoster" href="javascript:void" onclick="switchToTab(this, '#Roster');">Roster</a></li>
+                <li> <a name="nav" id="navAddStudent" href="javascript:void" onclick="switchToTab(this, '#AddStudent');" >Add Student</a></li>
+                <li> <a name="nav" id="navEditStudent" href="javascript:void" onclick="switchToTab(this, '#EditStudent');" >Edit/Remove Student</a></li>
+                <li> <a name="nav" id="navPackageList" href="javascript:void" onclick="switchToTab(this, '#PackageList');" >Package List</a></li>
             </ul>
         </nav>
 
@@ -68,10 +68,9 @@
             <br>
             <p>
                 Display Single Residence Hall Students:
-                <select id="dorms" name="dorms">
+                <select id="dorms" name="dorms" onchange="getDormStudents($('#dorms').val());">
                     <option v-for="dorm in dorms" v-bind:value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
                 </select>
-                <input type="button" value="Show Students in Residence Hall" onclick="getDormStudents($('#dorms').val());"/>
                 <div id="students">
                     <div v-for="student in students">
                         {{student.First_Name}} {{student.Last_Name}} - Room {{student.Room_Number}} - {{student.Email}}
@@ -118,10 +117,10 @@
                         <td><input type="text" id="room" /></td>
                     </tr>
                     <tr>
-                        <td><input type="button" value="Add Student" onclick="addPerson(0); clearFields();"/></td>
-                        <td><input type="button" value="Add RA" onclick="addPerson(2); clearFields();"/></td>
-                        <td><input type="button" value="Add DA" onclick="addPerson(1); clearFields();"/></td>
-                        <td><input type="button" value="Clear" onclick="clearFields();"/></td>
+                        <td><input type="button" value="Add Student" onclick="addPerson('#600_number', '#fname', '#lname', '#email', '#dorms2', '#room', 0);"/></td>
+                        <td><input type="button" value="Add RA" onclick="addPerson('#600_number', '#fname', '#lname', '#email', '#dorms2', '#room', 2);"/></td>
+                        <td><input type="button" value="Add DA" onclick="addPerson('#600_number', '#fname', '#lname', '#email', '#dorms2', '#room', 1);"/></td>
+                        <td><input type="button" value="Clear Fields" onclick="clearFields();"/></td>
                     </tr>
                 </table>
             </div>
@@ -132,33 +131,33 @@
         <span id="EditStudent">
             Welcome to the Edit Student. Please Fill in all info.<br>
             <em><small>Note: all changes will be added to database.</small></em>
-            <div>
+            <div class="FormEdit">
                 <br>
                 <table>
                     <tr>
                         <th>Name:</th>
                         <td> <input type="text" name="name" oninput="doSearch(this.value);"/></td>
                         <td>
-                            <select id="results" name="results" onchange="useStudent(this.value);">
-                                <option v-for="(result, index) in results" v-bind:value="index">{{result.First_Name}} {{result.Last_Name}}</option>
+                            <select id="results" name="results">
+                                <option v-for="result in results" v-bind:value="result.Person_ID">{{result.First_Name}} {{result.Last_Name}}</option>
                             </select>
                         </td>
                     </tr>
                     <tr>
                         <td>600 #:</td>
-                        <td><input type="text" id="600_number"/></td>
+                        <td><input type="text" id="600_number2"/></td>
                     </tr>
                     <tr>
                         <td>First Name:</td>
-                        <td><input type="text" name="fname" /></td>
+                        <td><input type="text" id="fname2" /></td>
                     </tr>
                     <tr>
                         <td>Last Name:</td>
-                        <td><input type="text" name="lname" /></td>
+                        <td><input type="text" id="lname2" /></td>
                     </tr>
                     <tr>
                         <td>Email:</td>
-                        <td><input type="text" id="email" /></td>
+                        <td><input type="text" id="email2" /></td>
                     </tr>
                     <tr>
                         <td>Residence Hall:</td>
@@ -169,12 +168,13 @@
                         </td>
                     </tr>
                     <tr>
-                    <input type="hidden" id="id" name="id"/>
-                    <td><input type="button" value="Add Student" onclick="editPerson(1); clearFields();"/></td>
-                    <td><input type="button" value="Add RA" onclick="editPerson(3); clearFields();"/></td>
-                    <td><input type="button" value="Add DA" onclick="editPerson(2); clearFields();"/></td>
-                    <td><input type="button" value="Remove Person" onclick="removePerson(); clearFields();"/></td>
-                    <td><input type="button" value="Clear" onclick="clearFields();"/></td>
+                        <td>Room:</td>
+                        <td><input type="text" id="room2" /></td>
+                    </tr>
+                    <tr>
+                    <td><input type="button" value="Submit Changes" onclick="editPerson('#results', '#600_number2', '#fname2', '#lname2', '#email2', '#dorms3', '#room2');"/></td>
+                    <td><input type="button" value="Remove Person" onclick="removePerson('#results');"/></td>
+                    <td><input type="button" value="Clear Fields" onclick="clearFields();"/></td>
                     </tr>
                 </table>
             </div>
@@ -207,13 +207,7 @@
 
         <script type="text/javascript">
             clearFields();
-            switchToTab($("a")[0], '#addStudent');
-            function clearFields() {
-                $("#600_number").val("");
-                $("#fname").val("");
-                $("#lname").val("");
-                $("#email").val("");
-            }
+            switchToTab($("a")[0], '#Roster');
         </script>
     </body>
 </html>
