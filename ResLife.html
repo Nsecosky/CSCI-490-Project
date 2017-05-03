@@ -7,15 +7,45 @@
         <script src="https://unpkg.com/vue/dist/vue.js"></script>
         <script src="res/functions.js"></script>
         <script>
-        var dormsEl = ["#dorms", "#dorms2", "#dorms3"];
-        var packagesEl = "#packages";
-        var searchEl = "#results";
-        var studentsEl = "#students";
+            function fillDormInfo(id) {
+                if (id > -1) {
+                    for (var i = 0; i < dvm[0].dorms.length; i++) {
+                        var dorm = dvm[0].dorms[i];
+                        if (dorm.Unique_ID == id) {
+                            $("#name2").val(dorm.Dorm_Name);
+                            $("#address2").val(dorm.Address);
+                            break;
+                        }
+                    }
+                }
+            }
+            
+            function fillPersonInfo(id) {
+                if (id > -1) {
+                    for (var i = 0; i < svm.results.length; i++) {
+                        var result = svm.results[i];
+                        if (result.Person_ID == id) {
+                            $("#600_number2").val(result['600_Number']);
+                            $("#fname2").val(result.First_Name);
+                            $("#lname2").val(result.Last_Name);
+                            $("#email2").val(result.Email);
+                            $("#dorms3").val(result.Dorm);
+                            $("#room2").val(result.Room_Number);
+                            break;
+                        }
+                    }
+                }
+            }
+                    
+            var dormsEl = ["#dorms", "#dorms2", "#dorms3"];
+            var packagesEl = "#packages";
+            var searchEl = "#results";
+            var studentsEl = "#students";
         </script>
     </head>
     <body>
-      <div id="overlay" class = "OverlayStyle" style="background: rgba(109, 94, 81, 0.5); position: fixed; top: 0%; left: 0%; width: 100%; height: 100%;">
-          <div class = "OverlayText" style="opacity: 1.0; position: fixed; top: 30%; left: 30%; width:40%; height: 30%">
+      <div id="overlay" class="TextLoginBG" >
+          <div class="OverlayText TextLoginOverlayText">
               <p><font color = 'white'><b>ALERT: Login information is case sensitive!</b></font></p>
               <font color = 'white'> First Name: </font> <input type="text" id="Fname"/>
               <br>
@@ -61,7 +91,7 @@
                         <td><input type="text" id="address"/></td>
                     </tr>
                     <tr>
-                        <td><input type="button" value="Add Hall" onclick="addDorm(); clearFields();"/></td>
+                        <td><input type="button" value="Add Hall" onclick="addDorm('#name', '#address');"/></td>
                         <td><input type="button" value="Clear Fields" onclick="clearFields();"/></td>
                     </tr>
                 </table>
@@ -71,34 +101,33 @@
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
         <span id="EditHall">
-            Welcome to the Residence Hall Edit/Add/Delete form.<br>
+            Welcome to the Residence Hall Edit/Delete form.<br>
             <em><small>Note: Please Fill in all information.</small></em>
-            <em><small>Once a submission is made it is added to database.</small></em>
             <br>
             <div class="FormAdd">
                 <table>
                     <tr>
                         <th>Please select hall</th>
                         <td>
-                            <select id="dorms" name="dorms" onchange="getPackages(this.value)">
-                                    <option v-for="dorm in dorms" v-bind:value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
+                            <select id="dorms" name="dorms" onchange="fillDormInfo(this.value)">
+                                <option v-for="dorm in dorms" v-bind:value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
                             </select>
                         </td>
                     </tr>
                     <tr>
                         <th>Hall Name:</th>
-                        <td><input type="text" id="name" name="first_name"/></td>
+                        <td><input type="text" id="name2"/></td>
                     </tr>
                     <tr>
                         <th></th>
                     </tr>
                     <tr>
                         <th>Address:</th>
-                        <td><input type="text" id="address" name="address" /></td>
+                        <td><input type="text" id="address2"/></td>
                     </tr>
                     <tr>
-                        <td><input type="button" value="Submit Changes" onclick="editDorm(); clearFields();"/></td>
-                        <td><input type="button" value="Remove Hall" onclick="removeDorm(); clearFields();"/></td>
+                        <td><input type="button" value="Submit Changes" onclick="editDorm('#name2', '#address2', '#dorms');"/></td>
+                        <td><input type="button" value="Remove Hall" onclick="removeDorm('#dorms');"/></td>
                         <td><input type="button" value="Clear Fields" onclick="clearFields();"/></td>
                     </tr>
                 </table>
@@ -162,9 +191,11 @@
                 <table>
                     <tr>
                         <th>Name:</th>
-                        <td> <input type="text" name="name" oninput="doSearch(this.value);"/></td>
                         <td>
-                            <select id="results" name="results">
+                            <input type="text" id="searchText" oninput="doSearch(this.value);"/>
+                        </td>
+                        <td>
+                            <select id="results" name="results" onchange="fillPersonInfo(this.value)">
                                 <option v-for="result in results" v-bind:value="result.Person_ID">{{result.First_Name}} {{result.Last_Name}}</option>
                             </select>
                         </td>

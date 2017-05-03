@@ -30,10 +30,12 @@ function resetLogin() {
 }
 
 function hasTimedOut() {
-    if (getPerson($_SESSION['id'])['Access'] == 1) {
-        return time() - $_SESSION['time'] > 30;
-    } else {
+    if (getPerson($_SESSION['id'])['Access'] == 0) {
         return time() - $_SESSION['time'] > 86400;
+    } else if (getPerson($_SESSION['id'])['Access'] == 1) {
+        return time() - $_SESSION['time'] > 60;
+    } else {
+        return time() - $_SESSION['time'] > 600;
     }
 }
 
@@ -149,12 +151,12 @@ function addDorm($name, $address) {
     $res = mysqli_query($con, "INSERT INTO dorms VALUES (NULL, '$name', '$address');");
 }
 
-function removeDorm($name, $address) {
+function removeDorm($id) {
    $con = dbConnect();
-   $res = mysqli_query($con, "DELETE FROM `dorms` VALUES(NULL,'$name', '$address' )");
+   $res = mysqli_query($con, "DELETE FROM `dorms` WHERE unique_id = $id");
 }
 
-function editDorm($name, $address ,$dorm_id){
+function editDorm($name, $address, $dorm_id){
     $con = dbConnect();
     $res = mysqli_query($con, "UPDATE dorms SET Dorm_Name = '$name', address = '$address' WHERE unique_id = $dorm_id");
 }
@@ -172,9 +174,21 @@ if (loggedIn()) {
     switch (getPerson($da)['Access']) {
         case 3: {
             switch ($_GET['a']) {
+                case "addd": {
+                    resetLogin();
+                    addDorm($_POST['name'], $_POST['address']);
+                    $result = "true";
+                    break;
+                }
                 case "editd": {
                     resetLogin();
-                    editDorm($_POST['name'], $_POST['address'], $_POST['dorm_id']);
+                    editDorm($_POST['name'], $_POST['address'], $_POST['id']);
+                    $result = "true";
+                    break;
+                }
+                case "deld": {
+                    resetLogin();
+                    removeDorm($_POST['id']);
                     $result = "true";
                     break;
                 }
@@ -264,7 +278,7 @@ if (loggedIn()) {
             switch ($_GET['a']) {
                 case "login": {
                     if (!isset($_POST['first']) || !isset($_POST['last']) || !isset($_POST['n600'])) {
-                        $result = loggedIn();
+                        $result = loggedIn() ? "true" : "false";
                         break;
                     }
                     $result = (login($_POST['first'], $_POST['last'], $_POST['n600']) ? "true" : "false") . ", \"id\": " . $_SESSION['id'];

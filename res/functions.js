@@ -76,6 +76,17 @@ function cLogin(cinfo) {
     }
 }
 
+function getDorms() {
+    $.ajax("res/functions.php?a=getd", {
+        'method': 'GET',
+        'dataType': "json",
+        'success': function (json) {
+            setDormsData(json.result);
+        }
+    });
+    
+}
+
 var dfetch = true;
 function login(fname, lname, n600) {
     $.ajax("res/functions.php?a=login", {
@@ -84,17 +95,11 @@ function login(fname, lname, n600) {
         'dataType': "json",
         'success': function (json) {
             if (json.result) {
-                showLogin = false;
                 if (dfetch && dvm.length > 0) {
                     dfetch = false;
-                    $.ajax("res/functions.php?a=getd", {
-                        'method': 'GET',
-                        'dataType': "json",
-                        'success': function (json) {
-                            setDormsData(json.result);
-                        }
-                    });
+                    getDorms();
                 }
+                showLogin = false;
                 $("#overlay").hide();
             }
         }
@@ -137,26 +142,65 @@ function silentLogin(event) {
 function clearFields() {
     $("#n600").val("");
     $("#600_number").val("");
+    $("#600_number2").val("");
     
     $("#first").val("");
     $("#first_name").val("");
     $("#fname").val("");
+    $("#fname2").val("");
     
     $("#last").val("");
     $("#last_name").val("");
     $("#lname").val("");
+    $("#lname2").val("");
     
     $("#email").val("");
-    $("#pacdesc").val("");
+    $("#email2").val("");
+    $("#room2").val("");
     $("#room").val("");
+    
+    $("#dorms").val(-1);
+    $("#dorms2").val(-1);
+    $("#dorms3").val(-1);
+    
+    $("#pacdesc").val("");
+    
+    $("#name").val("");
+    $("#name2").val("");
+    $("#address").val("");
+    $("#address2").val("");
+    
+    $("#searchText").val("");
+    $("#results").val(-1);
 }
 
-function addDorm() {
-
+function addDorm(name, address) {
+    $.ajax("res/functions.php?a=addd", {
+        'method': 'POST',
+        'data': {'name': $(name).val(), 'address': $(address).val()},
+        'dataType': "json"
+    });
+    getDorms();
     clearFields();
 }
 
-function editDorm() {
+function editDorm(name, address, id) {
+    $.ajax("res/functions.php?a=editd", {
+        'method': 'POST',
+        'data': {'name': $(name).val(), 'address': $(address).val(), 'id': $(id).val()},
+        'dataType': "json"
+    });
+    getDorms();
+    clearFields();
+}
+
+function removeDorm(id){
+    $.ajax("res/functions.php?a=deld", {
+        'method': 'POST',
+        'data': {'id': $(id).val()},
+        'dataType': "json"
+    });
+    getDorms();
     clearFields();
 }
 
@@ -199,6 +243,7 @@ function doSearch(name) {
         {"a": "search", "name": name},
         function (response, status, jqxhr) {
             if (response.logged && response.result) {
+                response.result.unshift({'Person_ID': -1, 'First_Name': "Select", 'Last_Name': "Person"});
                 svm.results = response.result;
             } else {
                 svm.results = [];

@@ -28,6 +28,23 @@
                     }
                 });
             }
+            
+            function fillPersonInfo(id) {
+                if (id > -1) {
+                    for (var i = 0; i < svm.results.length; i++) {
+                        var result = svm.results[i];
+                        if (result.Person_ID == id) {
+                            $("#600_number2").val(result['600_Number']);
+                            $("#fname2").val(result.First_Name);
+                            $("#lname2").val(result.Last_Name);
+                            $("#email2").val(result.Email);
+                            $("#dorms3").val(result.Dorm);
+                            $("#room2").val(result.Room_Number);
+                            break;
+                        }
+                    }
+                }
+            }
 
             var dormsEl = ["#dorms", "#dorms2", "#dorms3", "#dorms4"];
             var packagesEl = "#packages";
@@ -36,8 +53,9 @@
         </script>
     </head>
     <body>
-      <div id="overlay" style="background: rgba(109, 94, 81, 0.5); position: fixed; top: 0%; left: 0%; width: 100%; height: 100%;">
-          <div class = "OverlayText" style="opacity: 1.0; position: fixed; top: 30%; left: 30%; width:40%; height: 30%">
+      <div id="overlay" class="TextLoginBG">
+          <div class="OverlayText TextLoginOverlayText" >
+              <p><font color = 'white'><b>ALERT: Login information is case sensitive!</b></font></p>
               <font color = 'white'> First Name: </font> <input type="text" id="Fname"/>
               <br>
               <font color = 'white'> Last Name: </font> <input type="text" id="Lname"/>
@@ -117,10 +135,16 @@
                         <td><input type="text" id="room" /></td>
                     </tr>
                     <tr>
-                        <td><input type="button" value="Add Student" onclick="addPerson('#600_number', '#fname', '#lname', '#email', '#dorms2', '#room', 0);"/></td>
-                        <td><input type="button" value="Add RA" onclick="addPerson('#600_number', '#fname', '#lname', '#email', '#dorms2', '#room', 2);"/></td>
-                        <td><input type="button" value="Add DA" onclick="addPerson('#600_number', '#fname', '#lname', '#email', '#dorms2', '#room', 1);"/></td>
-                        <td><input type="button" value="Clear Fields" onclick="clearFields();"/></td>
+                        <td>
+                            <input type="button" value="Add Student" onclick="addPerson('#600_number', '#fname', '#lname', '#email', '#dorms2', '#room', 0);"/>
+                        </td>
+                        <td>
+                            <input type="button" value="Add RA" onclick="addPerson('#600_number', '#fname', '#lname', '#email', '#dorms2', '#room', 2);"/>
+                            <input type="button" value="Add DA" onclick="addPerson('#600_number', '#fname', '#lname', '#email', '#dorms2', '#room', 1);"/>
+                        </td>
+                        <td>
+                            <input type="button" value="Clear Fields" onclick="clearFields();"/>
+                        </td>
                     </tr>
                 </table>
             </div>
@@ -138,7 +162,7 @@
                         <th>Name:</th>
                         <td> <input type="text" name="name" oninput="doSearch(this.value);"/></td>
                         <td>
-                            <select id="results" name="results">
+                            <select id="results" name="results" onchange="fillPersonInfo(this.value)">
                                 <option v-for="result in results" v-bind:value="result.Person_ID">{{result.First_Name}} {{result.Last_Name}}</option>
                             </select>
                         </td>
@@ -172,9 +196,15 @@
                         <td><input type="text" id="room2" /></td>
                     </tr>
                     <tr>
-                    <td><input type="button" value="Submit Changes" onclick="editPerson('#results', '#600_number2', '#fname2', '#lname2', '#email2', '#dorms3', '#room2');"/></td>
-                    <td><input type="button" value="Remove Person" onclick="removePerson('#results');"/></td>
-                    <td><input type="button" value="Clear Fields" onclick="clearFields();"/></td>
+                        <td>
+                            <input type="button" value="Submit Changes" onclick="editPerson('#results', '#600_number2', '#fname2', '#lname2', '#email2', '#dorms3', '#room2');"/>
+                        </td>
+                        <td>
+                            <input type="button" value="Remove Person" onclick="removePerson('#results');"/>
+                        </td>
+                        <td>
+                            <input type="button" value="Clear Fields" onclick="clearFields();"/>
+                        </td>
                     </tr>
                 </table>
             </div>
@@ -191,9 +221,9 @@
                         <option v-for="dorm in dorms" v-bind:value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
                     </select>
                 </p>
-                <div id="packages" style="border: 2px solid black; width: 800px;">
+                <div id="packages" style="border: 2px solid black; width: 100%;">
                     <div v-for="package in packages" style="border: 1px solid black; margin: 1px;">
-                        {{package.First_Name}} {{package.Last_Name}} - {{package.Date_Recieved}}-{{package.Description}}-{{package.Date_Checkout}}
+                        {{package.First_Name}} {{package.Last_Name}} - {{package.Time_In}} - {{package.Description}} - {{package.Time_Out || "Not Checked Out"}}
                     </div>
                 </div>
             </center>
