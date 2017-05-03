@@ -43,32 +43,6 @@
                 clearFields();
             }
 
-            function getStudent(idx) {
-                $("#id").val(svm.results[idx].Unique_ID);
-                $("#600_number").val(svm.results[idx]["600_number"]);
-                $("#first_name").val(svm.results[idx].First_Name);
-                $("#last_name").val(svm.results[idx].Last_Name);
-                $("#email").val(svm.results[idx].Email);
-            }
-
-            unction fillPersonInfo(id) {
-                if (id > -1) {
-                    for (var i = 0; i < svm.results.length; i++) {
-                        var result = svm.results[i];
-                        if (result.Person_ID == id) {
-                            $("#600_number2").val(result['600_Number']);
-                            $("#fname2").val(result.First_Name);
-                            $("#lname2").val(result.Last_Name);
-                            $("#email2").val(result.Email);
-                            $("#dorms3").val(result.Dorm);
-                            $("#room2").val(result.Room_Number);
-                            break;
-                        }
-                    }
-                }
-            }
-
-
 
             dormsEl = ["#dorms"];
             packagesEl = "#packages";
@@ -169,10 +143,8 @@
         <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 
         <span id="StuRoster">
-            <!--
             <input type="button" value="Sort by Hall" onclick="sortBy = 'Dorm'"/>
             <input type="button" value="Sort by last name" onclick="sortBy = 'Last_Name'"/>
-          -->
             <br>
             <p>
                 Display Residence Hall Students:
