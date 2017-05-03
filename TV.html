@@ -30,6 +30,10 @@
                     el.scrollTop = scroll;
                 }, 200);
                 
+                setInterval(function() {
+                    getPackages($("#dorms").val());
+                }, 5000);
+                
             });
 
             var studentsEl = "#display";

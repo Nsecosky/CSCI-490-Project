@@ -243,7 +243,7 @@ function doSearch(name) {
         {"a": "search", "name": name},
         function (response, status, jqxhr) {
             if (response.logged && response.result) {
-                response.result.unshift({'Person_ID': -1, 'First_Name': "Select", 'Last_Name': "Person"});
+                response.result.unshift({'Person_ID': -1, 'First_Name': "Select", 'Last_Name': "Person", 'Dorm_Name': "Residence", 'Room_Number': "Number"});
                 svm.results = response.result;
             } else {
                 svm.results = [];
@@ -253,20 +253,20 @@ function doSearch(name) {
     );
 }
 
-function doDASearch(name) {
-    $.get(
-        "res/functions.php",
-        {"a": "dasearch", "name": name},
-        function (response, status, jqxhr) {
-            if (response.logged && response.result) {
-                svm.results = response.result;
-            } else {
-                svm.results = [];
-            }
-        },
-        "json"
-    );
-}
+//function doDASearch(name) {
+//    $.get(
+//        "res/functions.php",
+//        {"a": "dasearch", "name": name},
+//        function (response, status, jqxhr) {
+//            if (response.logged && response.result) {
+//                svm.results = response.result;
+//            } else {
+//                svm.results = [];
+//            }
+//        },
+//        "json"
+//    );
+//}
 
 function getDormStudents(did) {
     $.ajax("res/functions.php?a=getds", {
