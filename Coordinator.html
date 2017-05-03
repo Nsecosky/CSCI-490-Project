@@ -92,7 +92,9 @@
                     <option v-for="dorm in dorms" v-bind:value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
                 </select>
                 <div id="students">
+                  <table>
                     <div v-for="student in students">
+
                         {{student.First_Name}} {{student.Last_Name}} - Room {{student.Room_Number}} - {{student.Email}}
                     </div>
                 </div>
@@ -224,9 +226,27 @@
                     </select>
                 </p>
                 <div id="packages" style="border: 2px solid black; width: 100%;">
-                    <div v-for="package in packages" style="border: 1px solid black; margin: 1px;">
-                        {{package.First_Name}} {{package.Last_Name}} - {{package.Time_In}} - {{package.Description}} - {{package.Time_Out || "Not Checked Out"}}
+                  <table>
+                  <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Date Entered</th>
+                    <th>Description</th>
+                    <th>DA IN</th>
+                    <th>Package Description</th>
+                    <th>Date Checked Out</th>
+                    <th>DA OUT</th>
+                  </tr>
+                  <!--  <div v-for="package in packages" style="border: 1px solid black; margin: 1px;"> -->
+                  {% for package in packages}
+                  <tr>
+                      <td>{{package.First_Name}}</td>
+                      <td>{{package.Last_Name}}</td>
+                      <td>{{package.Time_In}}</td>
+                      <td>{{package.Description}}</td>
+                      <td>{{package.Time_Out || "Not Checked Out"}}</td>
                     </div>
+                  </table>
                 </div>
             </center>
         </span>
