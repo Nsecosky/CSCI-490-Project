@@ -92,20 +92,21 @@
                     <option v-for="dorm in dorms" v-bind:value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
                 </select>
                 <div id="students">
-                  <table>
-                    <tr>
-                      <th>First Name</th>
-                      <th>Last Name</th>
-                      <th>Room</th>
-                      <th>Student Email</th>
-                    </tr>
+                  <div v-for="student in students">
+                    <table>
+                      <tr>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Room</th>
+                        <th>Student Email</th>
+                      </tr>
 
-                    <div v-for="student in students">
                       <tr>
                         <td>{{student.First_Name}} </td>
                         <td>{{student.Last_Name}} </td>
                         <td>{{student.Room_Number}} </td>
                         <td>{{student.Email}} </td>
+                      </tr>
                     </div>
                 </div>
             </p>
