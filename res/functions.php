@@ -1,6 +1,6 @@
 <?php
 
-error_reporting(E_ALL);
+//error_reporting(E_ALL);
 session_start();
 //NOTE: Set Up Functions ******************************************************************************************************************
 function dbConnect() {
@@ -11,7 +11,7 @@ function dbConnect() {
 
 function login($first, $last, $n600) {
     $con = dbConnect();
-    $res = mysqli_query($con, "SELECT * FROM people WHERE first_name = '$first' AND last_name = '$last' AND 600_number = '$n600'");
+    $res = mysqli_query($con, "SELECT * FROM people WHERE first_name = '$first' AND last_name = '$last' AND 600_number = SHA2('$n600', 512)");
     if (($row = mysqli_fetch_assoc($res)) != NULL) {
         $_SESSION['id'] = $row["Unique_ID"];
         $_SESSION['logged'] = true;
@@ -43,13 +43,12 @@ function hasTimedOut() {
 
 function addPerson($n600, $first, $last, $email, $did, $room, $access) {
     $con = dbConnect();
-    $res = mysqli_query($con, "INSERT INTO people VALUES (NULL, '$n600', '$first', '$last', $access, '$email', 1, '$room', $did)");
+    $res = mysqli_query($con, "INSERT INTO people VALUES (NULL, SHA2('$n600', 512), '$first', '$last', $access, '$email', 1, '$room', $did)");
     echo mysqli_error($con);
 }
 
 function removePerson($sid) {
     $con = dbConnect();
-//    $res = mysqli_query($con, "UPDATE people SET active = 0 WHERE unique_id = $sid");
     $res = mysqli_query($con, "DELETE FROM people WHERE unique_id = $sid");
 }
 
@@ -69,14 +68,14 @@ function searchPeople($name) {
 
 function editPerson($id, $n600, $first, $last, $email, $did, $room){
     $con = dbConnect();
-    $res = mysqli_query($con, "UPDATE people SET `600_number` = '$n600', `first_name` = '$first', `last_name` = '$last', `email` = '$email', `room_number` = '$room', `dorm` = $did WHERE unique_id = $id");
+    $res = mysqli_query($con, "UPDATE people SET `600_number` = SHA2('$n600', 512), `first_name` = '$first', `last_name` = '$last', `email` = '$email', `room_number` = '$room', `dorm` = $did WHERE unique_id = $id");
 }
 
 //NOTE: THIS CLEARS ALL ENTRIES IN THE PEOPLE TABLE AND ADDS A "MASTER ADMIN" USE CAUTION WHEN CALLING
 function clearPeople(){
     $con = dbConnect();
     $res = mysqli_query($con, 'TRUNCATE TABLE people');
-    $res = mysqli_query($con, "INSERT INTO people VALUES (NULL, 6004083854256, 'Master', 'Admin', '3', 'IT@mavs.coloradomesa.edu', 1, '1', '14')");
+    addPerson("6004083854256", 'Master', 'Admin', 'IT@mavs.coloradomesa.edu', 14, 100, 3);
 }
 
 function getPerson($id) {
