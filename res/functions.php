@@ -1,6 +1,6 @@
 <?php
 
-//error_reporting(E_ALL);
+error_reporting(E_ERROR);
 session_start();
 //NOTE: Set Up Functions ******************************************************************************************************************
 function dbConnect() {
@@ -12,6 +12,8 @@ function dbConnect() {
 function login($first, $last, $n600) {
     $con = dbConnect();
     $res = mysqli_query($con, "SELECT * FROM people WHERE first_name = '$first' AND last_name = '$last' AND 600_number = SHA2('$n600', 512)");
+    $_SESSION['id'] = -1;
+    $_SESSION['logged'] = false;
     if (($row = mysqli_fetch_assoc($res)) != NULL) {
         $_SESSION['id'] = $row["Unique_ID"];
         $_SESSION['logged'] = true;
@@ -129,7 +131,7 @@ function getDormPackages($did) {
 
 function getStudentPackages($first, $last, $n600) {
     $con = dbConnect();
-    $res = mysqli_query($con, "SELECT * FROM packages WHERE owner = (SELECT unique_id FROM people WHERE first_name = '$first' AND last_name = '$last' AND 600_number = '$n600') AND time_out IS NULL");
+    $res = mysqli_query($con, "SELECT * FROM packages WHERE owner = (SELECT unique_id FROM people WHERE first_name = '$first' AND last_name = '$last' AND 600_number = SHA2('$n600', 512)) AND time_out IS NULL");
     return mysqli_fetch_all($res, MYSQLI_ASSOC);
 }
 
