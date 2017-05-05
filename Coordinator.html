@@ -89,13 +89,13 @@
             <p>
                 Display Single Residence Hall Students:
                 <select id="dorms" name="dorms" onchange="getDormStudents($('#dorms').val());">
-                    <option v-for="dorm in dorms" v-bind:value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
-                </select>
-                <div id="students">
-                    <div v-for="student in students">
-                        {{student.First_Name}} {{student.Last_Name}} - Room {{student.Room_Number}} - {{student.Email}}
-                    </div>
-                </div>
+                <option v-for="dorm in dorms" v-bind:value="dorm.Unique_ID">{{dorm.Dorm_Name}}</option>
+            </select>
+            <div id="students">
+              <div v-for="student in students">
+                                    {{student.First_Name}} {{student.Last_Name}} - Room {{student.Room_Number}} - {{student.Email}}
+              </div>
+            </div>
             </p>
         </span>
 
