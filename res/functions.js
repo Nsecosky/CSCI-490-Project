@@ -232,15 +232,14 @@ function removePerson(id){
 }
 
 
-function clearPackages() {
+function clearPackagesAndPeople() {
     $.ajax("res/functions.php?a=clearp", {
-        'dataType': "json"
-    });
-}
-
-function clearPeople() {
-    $.ajax("res/functions.php?a=clears", {
-        'dataType': "json"
+        'dataType': "json",
+        'success' : function (response) {
+            if (response.result) {
+                alert("Database cleared");
+            }
+        }
     });
 }
 
