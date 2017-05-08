@@ -4,7 +4,7 @@ error_reporting(E_ERROR);
 session_start();
 //NOTE: Set Up Functions ******************************************************************************************************************
 function dbConnect() {
-    $con = mysqli_connect("localhost", "root", "CSCI490", "packagesystem");
+    $con = mysqli_connect("localhost", "root", "", "packagesystem");
     mysqli_set_charset($con, "utf8");
     return $con;
 }
@@ -74,10 +74,13 @@ function editPerson($id, $n600, $first, $last, $email, $did, $room){
 }
 
 //NOTE: THIS CLEARS ALL ENTRIES IN THE PEOPLE TABLE AND ADDS A "MASTER ADMIN" USE CAUTION WHEN CALLING
-function clearPeople(){
+function clearPackagesAndPeople(){
     $con = dbConnect();
-    $res = mysqli_query($con, 'TRUNCATE TABLE people');
-    addPerson("6004083854256", 'Master', 'Admin', 'IT@mavs.coloradomesa.edu', 14, 100, 3);
+    mysqli_query($con, 'DELETE FROM packages;');
+    mysqli_query($con, 'ALTER TABLE packages AUTO_INCREMENT = 1;');
+    mysqli_query($con, 'DELETE FROM people;');
+    mysqli_query($con, 'ALTER TABLE people AUTO_INCREMENT = 1;');
+    addPerson("6004083854256", 'Master', 'Admin', 'it@mavs.coloradomesa.edu', 1, 100, 3);
 }
 
 function getPerson($id) {
@@ -106,10 +109,10 @@ function addPackage($own, $description, $sidin) {
     mail(getPerson($own)['email'], "You have package(s) waiting.", "You have package(s) waiting at the front desk. Please note: MavCards are required for checkout.");
 }
 
-function clearPackages(){
-    $con = dbConnect();
-    $res = mysqli_query($con, 'TRUNCATE TABLE packages');
-}
+//function clearPackages(){
+//    $con = dbConnect();
+//    $res = mysqli_query($con, 'TRUNCATE TABLE packages');
+//}
 
 function getPackages() {
     $con = dbConnect();
@@ -168,6 +171,18 @@ function getDorms() {
     return mysqli_fetch_all($res, MYSQLI_ASSOC);
 }
 
+
+function sanatize($input, $type) {
+    switch ($type) {
+        case "string": {
+            mysqli_real_escape_string($input);
+        }
+        case "int": {
+            filter_var($input, FILTER_SANITIZE_NUMBER_INT);
+        }
+    }
+}
+
 //NOTE: QUERY Picker**************************************************************************************
 $result = "false";
 if (loggedIn()) {
@@ -176,26 +191,43 @@ if (loggedIn()) {
         case 3: {
             switch ($_GET['a']) {
                 case "addd": {
+                    sanatize($_POST['name'], "string");
+                    sanatize($_POST['address'], "string");
+                    
                     resetLogin();
                     addDorm($_POST['name'], $_POST['address']);
                     $result = "true";
                     break;
                 }
                 case "editd": {
+                    sanatize($_POST['name'], "string");
+                    sanatize($_POST['address'], "string");
+                    sanatize($_POST['id'], "int");
+                    
                     resetLogin();
                     editDorm($_POST['name'], $_POST['address'], $_POST['id']);
                     $result = "true";
                     break;
                 }
                 case "deld": {
+                    sanatize($_POST['id'], "int");
+                    
                     resetLogin();
                     removeDorm($_POST['id']);
                     $result = "true";
                     break;
                 }
-                case "getdp": {
+                case "getdp": {                    
+                    sanatize($_POST['did'], "int");
+                    
                     resetLogin();
                     $result = json_encode(getDormPackages($_POST['did']));
+                    break;
+                }
+                case "clearp": {
+                    resetLogin();
+                    clearPackagesAndPeople();
+                    $result = "true";
                     break;
                 }
             }
@@ -208,11 +240,21 @@ if (loggedIn()) {
                     break;
                 }
                 case "search": {
+                    sanatize($_POST['name'], "string");
+                    
                     resetLogin();
                     $result = json_encode(searchPeople($_GET['name']));
                     break;
                 }
                 case "adds": {
+                    sanatize($_POST['n600'], "string");
+                    sanatize($_POST['first'], "string");
+                    sanatize($_POST['last'], "string");
+                    sanatize($_POST['email'], "string");
+                    sanatize($_POST['did'], "int");
+                    sanatize($_POST['room'], "string");
+                    sanatize($_POST['access'], "int");
+                    
                     if (getPerson($da)['Access'] < $_POST['access']) {
                         $result = "false";
                         break;
@@ -223,6 +265,14 @@ if (loggedIn()) {
                     break;
                 }
                 case "editp": {
+                    sanatize($_POST['id'], "int");
+                    sanatize($_POST['n600'], "string");
+                    sanatize($_POST['first'], "string");
+                    sanatize($_POST['last'], "string");
+                    sanatize($_POST['email'], "string");
+                    sanatize($_POST['did'], "int");
+                    sanatize($_POST['room'], "string");
+                    
                     if (getPerson($da)['Access'] < getPerson($_POST['id'])['Access']) {
                         $result = "false";
                         break;
@@ -233,6 +283,8 @@ if (loggedIn()) {
                     break;
                 }
                 case "delp": {
+                    sanatize($_POST['id'], "int");
+                    
                     if (getPerson($da)['Access'] < getPerson($_POST['id'])['Access']) {
                         $result = "false";
                         break;
@@ -247,27 +299,40 @@ if (loggedIn()) {
         case 1: {
             switch ($_GET['a']) {
                 case "addp": {
+                    sanatize($_POST['oid'], "int");
+                    sanatize($_POST['desc'], "string");
+                    
                     resetLogin();
                     addPackage($_POST['oid'], $_POST['desc'], $da);
                     $result = "true";
                     break;
                 }
                 case "getsp": {
+                    sanatize($_POST['n600'], "string");
+                    sanatize($_POST['first'], "string");
+                    sanatize($_POST['last'], "string");
+                    
                     resetLogin();
                     $result = json_encode(getStudentPackages($_POST['first'], $_POST['last'], $_POST['n600']));
                     break;
                 }
                 case "getds": {
+                    sanatize($_POST['did'], "int");
+                    
                     resetLogin();
                     $result = json_encode(getDormPeople($_POST['did']));
                     break;
                 }
                 case "dasearch": {
+                    sanatize($_GET['name'], "string");
+                    
                     resetLogin();
                     $result = json_encode(searchPeopleDA($_GET['name']));
                     break;
                 }
                 case "chkt": {
+                    sanatize($_POST['oid'], "int");
+                    
                     resetLogin();
                     checkoutPackages($_POST['oid']);
                     $result = "true";
@@ -282,6 +347,11 @@ if (loggedIn()) {
                         $result = loggedIn() ? "true" : "false";
                         break;
                     }
+                    
+                    sanatize($_POST['n600'], "string");
+                    sanatize($_POST['first'], "string");
+                    sanatize($_POST['last'], "string");
+                    
                     $result = (login($_POST['first'], $_POST['last'], $_POST['n600']) ? "true" : "false") . ", \"id\": " . $_SESSION['id'];
                     break;
                 }
@@ -291,6 +361,8 @@ if (loggedIn()) {
                     break;
                 }
                 case "gettv": {
+                    sanatize($_POST['did'], "int");
+                    
                     resetLogin();
                     $result = json_encode(getDormTVPackages($_GET['did']));
                     break;
@@ -305,6 +377,11 @@ if (loggedIn()) {
                 $result = "false";
                 break;
             }
+            
+            sanatize($_POST['n600'], "string");
+            sanatize($_POST['first'], "string");
+            sanatize($_POST['last'], "string");
+                    
             $result = (login($_POST['first'], $_POST['last'], $_POST['n600']) ? "true" : "false") . ", \"id\": " . $_SESSION['id'];
             break;
         }

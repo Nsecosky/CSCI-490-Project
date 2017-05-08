@@ -231,6 +231,19 @@ function removePerson(id){
     clearFields();
 }
 
+
+function clearPackages() {
+    $.ajax("res/functions.php?a=clearp", {
+        'dataType': "json"
+    });
+}
+
+function clearPeople() {
+    $.ajax("res/functions.php?a=clears", {
+        'dataType': "json"
+    });
+}
+
 function switchToTab(tabnav, tabcont) {
     $('a[name=nav]').removeClass('NavHighlight');
     $(tabnav).addClass('NavHighlight');$('span').hide();
