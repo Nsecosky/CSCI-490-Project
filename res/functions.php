@@ -4,7 +4,7 @@ error_reporting(E_ERROR);
 session_start();
 //NOTE: Set Up Functions ******************************************************************************************************************
 function dbConnect() {
-    $con = mysqli_connect("localhost", "root", "", "packagesystem");
+    $con = mysqli_connect("localhost", "root", "CSCI490", "packagesystem");
     mysqli_set_charset($con, "utf8");
     return $con;
 }
@@ -193,7 +193,7 @@ if (loggedIn()) {
                 case "addd": {
                     sanatize($_POST['name'], "string");
                     sanatize($_POST['address'], "string");
-                    
+
                     resetLogin();
                     addDorm($_POST['name'], $_POST['address']);
                     $result = "true";
@@ -203,7 +203,7 @@ if (loggedIn()) {
                     sanatize($_POST['name'], "string");
                     sanatize($_POST['address'], "string");
                     sanatize($_POST['id'], "int");
-                    
+
                     resetLogin();
                     editDorm($_POST['name'], $_POST['address'], $_POST['id']);
                     $result = "true";
@@ -211,15 +211,15 @@ if (loggedIn()) {
                 }
                 case "deld": {
                     sanatize($_POST['id'], "int");
-                    
+
                     resetLogin();
                     removeDorm($_POST['id']);
                     $result = "true";
                     break;
                 }
-                case "getdp": {                    
+                case "getdp": {
                     sanatize($_POST['did'], "int");
-                    
+
                     resetLogin();
                     $result = json_encode(getDormPackages($_POST['did']));
                     break;
@@ -241,7 +241,7 @@ if (loggedIn()) {
                 }
                 case "search": {
                     sanatize($_POST['name'], "string");
-                    
+
                     resetLogin();
                     $result = json_encode(searchPeople($_GET['name']));
                     break;
@@ -254,7 +254,7 @@ if (loggedIn()) {
                     sanatize($_POST['did'], "int");
                     sanatize($_POST['room'], "string");
                     sanatize($_POST['access'], "int");
-                    
+
                     if (getPerson($da)['Access'] < $_POST['access']) {
                         $result = "false";
                         break;
@@ -272,7 +272,7 @@ if (loggedIn()) {
                     sanatize($_POST['email'], "string");
                     sanatize($_POST['did'], "int");
                     sanatize($_POST['room'], "string");
-                    
+
                     if (getPerson($da)['Access'] < getPerson($_POST['id'])['Access']) {
                         $result = "false";
                         break;
@@ -284,7 +284,7 @@ if (loggedIn()) {
                 }
                 case "delp": {
                     sanatize($_POST['id'], "int");
-                    
+
                     if (getPerson($da)['Access'] < getPerson($_POST['id'])['Access']) {
                         $result = "false";
                         break;
@@ -301,7 +301,7 @@ if (loggedIn()) {
                 case "addp": {
                     sanatize($_POST['oid'], "int");
                     sanatize($_POST['desc'], "string");
-                    
+
                     resetLogin();
                     addPackage($_POST['oid'], $_POST['desc'], $da);
                     $result = "true";
@@ -311,28 +311,28 @@ if (loggedIn()) {
                     sanatize($_POST['n600'], "string");
                     sanatize($_POST['first'], "string");
                     sanatize($_POST['last'], "string");
-                    
+
                     resetLogin();
                     $result = json_encode(getStudentPackages($_POST['first'], $_POST['last'], $_POST['n600']));
                     break;
                 }
                 case "getds": {
                     sanatize($_POST['did'], "int");
-                    
+
                     resetLogin();
                     $result = json_encode(getDormPeople($_POST['did']));
                     break;
                 }
                 case "dasearch": {
                     sanatize($_GET['name'], "string");
-                    
+
                     resetLogin();
                     $result = json_encode(searchPeopleDA($_GET['name']));
                     break;
                 }
                 case "chkt": {
                     sanatize($_POST['oid'], "int");
-                    
+
                     resetLogin();
                     checkoutPackages($_POST['oid']);
                     $result = "true";
@@ -347,11 +347,11 @@ if (loggedIn()) {
                         $result = loggedIn() ? "true" : "false";
                         break;
                     }
-                    
+
                     sanatize($_POST['n600'], "string");
                     sanatize($_POST['first'], "string");
                     sanatize($_POST['last'], "string");
-                    
+
                     $result = (login($_POST['first'], $_POST['last'], $_POST['n600']) ? "true" : "false") . ", \"id\": " . $_SESSION['id'];
                     break;
                 }
@@ -362,7 +362,7 @@ if (loggedIn()) {
                 }
                 case "gettv": {
                     sanatize($_POST['did'], "int");
-                    
+
                     resetLogin();
                     $result = json_encode(getDormTVPackages($_GET['did']));
                     break;
@@ -377,11 +377,11 @@ if (loggedIn()) {
                 $result = "false";
                 break;
             }
-            
+
             sanatize($_POST['n600'], "string");
             sanatize($_POST['first'], "string");
             sanatize($_POST['last'], "string");
-                    
+
             $result = (login($_POST['first'], $_POST['last'], $_POST['n600']) ? "true" : "false") . ", \"id\": " . $_SESSION['id'];
             break;
         }
